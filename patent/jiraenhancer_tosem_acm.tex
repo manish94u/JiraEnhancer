@@ -905,11 +905,11 @@ Figure~\ref{fig:performance-raincloud-combined} presents the authenticated endpo
 \begin{subfigure}[t]{0.485\textwidth}
 \centering
 \includegraphics[width=\linewidth,height=0.245\textheight,keepaspectratio]{generated/comparative_5000_boxplot.png}
-\caption{Formula-derived composite distributions.}
+\caption{Scoring-model composite distributions.}
 \label{fig:comparative-5000-raincloud}
 \end{subfigure}
-\caption{Two performance views with different evidence status. (a) Terminal confidence for all 70 authenticated live Jira story outcomes. Each radial segment represents one story, ordered by terminal confidence and colored by the selected refinement strategy. (b) Raincloud distribution of formula-derived composite indices over 5,000 generated units per method, showing density, sampled values, IQR, median, and mean. Panel (b) is a sensitivity output of the scoring model, not an observation of comparative performance.}
-\Description{Two side-by-side charts with distinct evidence status. Panel (a) is a radial bar chart of terminal confidence for 70 authenticated live Jira story outcomes. Panel (b) is a raincloud plot of formula-derived composite-index distributions for B0, B1, B2, and B3 over 5,000 generated units per method.}
+\caption{Two performance views with different evidence status. (a) Terminal confidence for all 70 authenticated live Jira story outcomes. Each radial segment represents one story, ordered by terminal confidence and colored by the selected refinement strategy. (b) Raincloud distribution of scoring-model composite indices over 5,000 generated units per method, showing density, sampled values, IQR, median, and mean. Panel (b) is a sensitivity output of the scoring model, not an observation of comparative performance.}
+\Description{Two side-by-side charts with distinct evidence status. Panel (a) is a radial bar chart of terminal confidence for 70 authenticated live Jira story outcomes. Panel (b) is a raincloud plot of scoring-model composite-index distributions for B0, B1, B2, and B3 over 5,000 generated units per method.}
 \label{fig:performance-raincloud-combined}
 \end{figure*}
 
@@ -1119,11 +1119,11 @@ Figure~\ref{fig:confidence-composite-combined} contains two compact diagnostics 
 \begin{subfigure}[t]{0.485\textwidth}
 \centering
 \includegraphics[width=\linewidth]{generated/comparative_composite.png}
-\caption{Formula-derived composite profile.}
+\caption{Scoring-model composite profile.}
 \label{fig:comparative-composite}
 \end{subfigure}
 \caption{Diagnostics with different evidence status. (a) Confidence lift for the older decision-only proxy trace. Pre- and post-refinement means are grouped by attempt index; sample sizes differ by attempt and are not representative of the 70-story live endpoint sample. (b) Composite-index comparison in the formula-generated sensitivity model. B0 is the equation-based manual reference, B1 is the lexical template/rule core, B2 is the generic-LLM-style heuristic core that does not use an LLM, and B3 is the equation-based profile informed by the observed Jira Enhancer confidence and readiness.}
-\Description{Two side-by-side charts. Panel (a) is a line chart comparing mean confidence before and after each prompt attempt on a zero-to-ten scale. Panel (b) is a radial bar chart comparing formula-derived composite index values for B0, B1, B2, and B3.}
+\Description{Two side-by-side charts. Panel (a) is a line chart comparing mean confidence before and after each prompt attempt on a zero-to-ten scale. Panel (b) is a radial bar chart comparing scoring-model composite index values for B0, B1, B2, and B3.}
 \label{fig:confidence-composite-combined}
 \end{figure*}
 
@@ -1183,13 +1183,13 @@ For each method $m$ (\(n=5{,}000\) units per method), the composite index is cal
 = w_Q Q_m + w_{\mathrm{Eff}}\mathrm{Eff}_m + w_G G_m,\qquad
 w_Q+w_{\mathrm{Eff}}+w_G=1,\; w_Q,w_{\mathrm{Eff}},w_G\ge 0.
 \end{equation}
-Equal weighting of all baselines in the reported experiments results in score differences due to method performance and not metric weightings. Let $\Delta_{\mathrm{B3},m}=\bar{X}_{\mathrm{B3}}-\bar{X}_m$, where $m\in\{\mathrm{B0},\mathrm{B1},\mathrm{B2}\}$ denotes a baseline. All subsequent confidence intervals and hypothesis tests are performed on this composite variable. Figure~\ref{fig:performance-raincloud-combined}(b) gives a compact raincloud view of the generated scores. Figures~\ref{fig:comparative-5000-violin}--\ref{fig:comparative-5000-execution-timeline} provide three larger diagnostic views. Each view answers a different question about the scoring formulas.
+Equal weighting of all baselines in the reported experiments results in score differences due to method performance and not metric weightings. Let $\Delta_{\mathrm{B3},m}=\bar{X}_{\mathrm{B3}}-\bar{X}_m$, where $m\in\{\mathrm{B0},\mathrm{B1},\mathrm{B2}\}$ denotes a baseline. All subsequent confidence intervals and hypothesis tests are performed on this composite variable. Figure~\ref{fig:performance-raincloud-combined}(b) gives a compact raincloud view of the generated scores. Figures~\ref{fig:comparative-5000-violin} and~\ref{fig:comparative-5000-radar} provide two larger diagnostic views. Each view answers a different question about the scoring formulas.
 
 The violin plot in Figure~\ref{fig:comparative-5000-violin} shows the shape and spread of each generated distribution. The median and interquartile range are 44.95 [44.26, 45.69] for B0, 50.45 [49.04, 50.89] for B1, 59.33 [59.09, 59.69] for B2, and 77.27 [75.83, 78.05] for B3. The narrow ranges show that the seeded perturbations preserve the separation encoded by the formulas. They do not show variation across independent projects.
 
 Figure~\ref{fig:comparative-5000-radar} separates the composite index into quality, efficiency, and governance. The generated B2 profile records 73.76, 52.33, and 41.97 on these dimensions. The generated B3 profile records 88.18, 66.97, and 68.76. The largest modeled gap is in governance. This result explains how the declared B3 formula produces a higher composite score. It does not measure a live B2 or B3 execution.
 
-Figure~\ref{fig:comparative-5000-execution-timeline} shows the generated time-to-ready values. The mean values for B0--B3 are 187.88, 130.04, 115.37, and 74.49 minutes. The corresponding P90 values are 193.14, 135.96, 117.28, and 77.11 minutes. The shaded band shows one standard deviation of the generated values. It is not a confidence interval. The horizontal axis lists four categorical profiles. It is not a chronological trajectory. Therefore, the plot is a sensitivity check of the timing formulas. It is not evidence of measured time savings or speedup.
+The generated time-to-ready values provide an additional sensitivity check. The mean values for B0--B3 are 187.88, 130.04, 115.37, and 74.49 minutes. The corresponding P90 values are 193.14, 135.96, 117.28, and 77.11 minutes. These values are generated outputs of the timing formulas. They are not evidence of measured time savings or speedup.
 
 \begin{figure*}[tbp]
 \centering
@@ -1205,21 +1205,12 @@ Figure~\ref{fig:comparative-5000-execution-timeline} shows the generated time-to
 \caption{Quality, efficiency, and governance.}
 \label{fig:comparative-5000-radar}
 \end{subfigure}
-
-\medskip
-
-\begin{subfigure}[t]{0.82\textwidth}
-\centering
-\includegraphics[width=\linewidth]{generated/comparative_5000_execution_timeline_main.png}
-\caption{Formula-derived mean and P90 time-to-ready.}
-\label{fig:comparative-5000-execution-timeline}
-\end{subfigure}
-\caption{Three diagnostics from the 5,000-unit formula stress test. Panel (a) shows density, interquartile range, median, and mean. Panel (b) shows the mean component indices. Panel (c) shows the generated mean and P90 time-to-ready. Its shaded band is $\pm 1$ standard deviation, not a confidence interval. These panels audit the scoring model. They do not report observed comparative performance or measured speedups.}
-\Description{A compact three-panel figure. The top row contains a violin plot and a radar plot. A wider time-to-ready plot appears below them. All panels compare the formula-derived B0, B1, B2, and B3 profiles.}
+\caption{Two diagnostics from the 5,000-unit stress test. Panel (a) shows density, interquartile range, median, and mean. Panel (b) shows the mean component indices. Both panels audit the scoring model. They do not report observed comparative performance.}
+\Description{A two-panel figure containing a violin plot and a radar plot. Both panels compare the B0, B1, B2, and B3 scoring profiles.}
 \label{fig:comparative-5000-diagnostics}
 \end{figure*}
 
-All three panels audit deterministic outputs of the declared formulas. The 5,000 rows per profile are seeded perturbations of reused runtime-derived units. They are not 5,000 independent epics or executed treatments. The plots also do not replace the blinded matched comparison. In that comparison, the B3--B2 package-score difference was 0.10 points, with a 95\% confidence interval of $[-0.13,0.36]$ and a Holm-adjusted $p$-value of 0.485.
+Both panels audit deterministic outputs of the declared formulas. The 5,000 rows per profile are seeded perturbations of reused runtime-derived units. They are not 5,000 independent epics or executed treatments. The plots also do not replace the blinded matched comparison. In that comparison, the B3--B2 package-score difference was 0.10 points, with a 95\% confidence interval of $[-0.13,0.36]$ and a Holm-adjusted $p$-value of 0.485.
 
 \FloatBarrier
 
@@ -1277,7 +1268,7 @@ Table~\ref{tab:cross-dataset-comparative} shows that the formulas produce the sa
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{generated/comparative_cross_dataset_multiplot.png}
-\caption{Cross-input sensitivity view. Panel (A) reports formula-derived B0--B3 composite scores for internal generated units and public issue text. Panel (B) overlays the corresponding B2/B3 profiles. No patches or benchmark tests are executed.}
+\caption{Cross-input sensitivity view. Panel (A) reports scoring-model B0--B3 composite scores for internal generated units and public issue text. Panel (B) overlays the corresponding B2/B3 profiles. No patches or benchmark tests are executed.}
 \Description{Multi-panel chart comparing baseline composite scores across internal and public benchmark datasets, with a radar overlay for B2 and B3 dimensions.}
 \label{fig:cross-dataset-comparative}
 \end{figure*}
