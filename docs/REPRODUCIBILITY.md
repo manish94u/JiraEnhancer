@@ -67,6 +67,13 @@ B0--B3 distribution figures use formula-expanded sensitivity units. Those units
 inspect the declared scoring model. They are not independent production
 observations and should not be used as population-level evidence.
 
+The target also rebuilds the B2/B3 arm-selection figure. It reads the sanitized
+99-step posterior trace in `patent/artifacts/b2_b3_pilot/`. The trace contains
+arm identifiers, rewards, and posterior values. It contains no source packet,
+generated text, or held-out input identifier. This figure shows how selection
+weights changed. It is not a learning curve for human-rated quality or delivery
+performance.
+
 Architecture figures are committed directly because they are design diagrams.
 Their editable sources are included with the figure assets when available.
 
@@ -116,10 +123,10 @@ personal identifiers, private reviewer workbooks, and raw enterprise issue
 text.
 
 The matched-review scripts may be inspected and run with a compatible workbook
-supplied by the reviewer. The original workbooks cannot be redistributed. Model
-assisted B2/B3 pilot outputs are likewise limited to release-approved aggregate
-records; raw prompts and enterprise source packets are outside the public
-artifact boundary.
+supplied by the reviewer. The original workbooks cannot be redistributed. The
+B2/B3 pilot release contains aggregate results and a sanitized posterior trace.
+Raw prompts, generated outputs, evaluator narratives, and enterprise source
+packets remain outside the public artifact boundary.
 
 These restrictions mean that reviewers can verify the released calculations
 and rerun the offline mechanisms, but cannot recreate every empirical extraction

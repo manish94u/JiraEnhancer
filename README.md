@@ -15,10 +15,12 @@ This is a reviewer-facing artifact. It contains the implementation, tests, API c
 ├── openapi/                        # external, internal, and event contracts
 ├── patent/
 │   ├── artifacts/tosem/            # de-identified and synthetic reviewer artifacts
+│   ├── artifacts/b2_b3_pilot/      # aggregate pilot data and sanitized posterior trace
 │   ├── generated/                  # manuscript figures and selected result tables
 │   ├── images/                     # architecture and module figures
 │   ├── reviewer_study/public_results/
 │   ├── reproduce_public_figures.py
+│   ├── generate_b2_b3_learning_figure.py
 │   ├── run_rl_epoch_simulation.py
 │   ├── run_source_bound_transaction_experiment.py
 │   ├── verify_public_artifact.py
@@ -42,7 +44,7 @@ The paper combines several forms of evidence. They answer different questions an
 | 1,000-epoch policy replay | De-identified outcome rows | Fully executable offline | Diagnostic Thompson-sampling behavior over recorded outcome profiles |
 | 5,000-unit B0–B3 analysis | Anonymized formula-expanded units | Fully executable offline | Sensitivity of the declared scoring model; not 5,000 independent field observations |
 | SWE-bench Lite analysis | Public issue text | Executable after dataset download | Cross-dataset scoring sensitivity; not patch generation or SWE-bench resolution performance |
-| B2/B3 model-assisted pilot | Aggregate results and learned-state summary only | Archived diagnostic, not one-click model replay | A limited one-shot-versus-governed text comparison under the recorded model conditions |
+| B2/B3 model-assisted pilot | Aggregate scores, learned-state summary, and sanitized posterior trace | Aggregate verification and learning-figure reproduction; not a model replay | A limited one-shot-versus-governed text comparison under the recorded model conditions |
 
 The raw enterprise inputs are withheld because they contain issue text, URLs, account data, and operational metadata. The completed human-review workbooks are withheld because they contain reviewer-level records and comments. The public files preserve the aggregate evidence used by the manuscript without publishing those records.
 
@@ -79,7 +81,7 @@ To run only the manuscript-sized fault schedule, use:
 make fault-injection
 ```
 
-Generated files are written below `outputs/reproduced/`. Archived publication outputs remain unchanged.
+Generated files are written below `outputs/reproduced/`. Archived publication outputs remain unchanged. The public figure target also rebuilds the learned arm-selection curve from its sanitized posterior trace.
 
 ## Run the application with synthetic data
 
@@ -206,11 +208,19 @@ This replay uses Thompson sampling over de-identified observed outcome profiles.
 ### 5. Rebuild the public figures
 
 ```bash
-python patent/reproduce_public_figures.py \
-  --output-dir outputs/reproduced/figures
+make public-figures
 ```
 
-The script reads only files under `patent/artifacts/tosem/` and selected public aggregate tables. It regenerates the de-identified confidence view and the formula-derived comparison figures without reading `runtime/`.
+This target reads only released files under `patent/artifacts/`. It regenerates the de-identified confidence view, the scoring-model comparison figures, and the learned arm-selection curve. It does not read `runtime/`.
+
+To rebuild only the learned-selection curve, use:
+
+```bash
+PYTHONPATH=src python patent/generate_b2_b3_learning_figure.py \
+  --output outputs/reproduced/figures/b2_b3_arm_learning.png
+```
+
+The curve is rebuilt from a sanitized 99-step posterior trace. It contains no input identifier or source text. The figure shows learned selection weights, not human-rated quality or delivery performance.
 
 The editable architecture source is `patent/images/system_architecture.drawio`. The four module diagrams and control-flow image are provided as publication-resolution PNG files.
 
@@ -272,7 +282,7 @@ Never commit `.env`. Live writeback should first be tested against a non-product
 
 - Restricted enterprise records cannot be reconstructed from the public artifact.
 - Human-review aggregates cannot be recalculated from raw workbooks because reviewer-level files are not released.
-- The B2/B3 model-assisted pilot depends on archived model outputs and is not a one-command model replay.
+- The B2/B3 pilot figure can be rebuilt from the released posterior trace. The underlying model generations cannot be replayed from public data because the enterprise source packets and generated text are restricted.
 - Model service versions, stochastic generation, and external dataset versions may affect a fresh rerun.
 - Formula-expanded 5,000-unit rows are diagnostic pseudo-replications. They are not independent observations.
 - Public benchmark results assess the scoring model on issue text. They do not assess code generation or patch correctness.

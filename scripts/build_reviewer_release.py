@@ -29,6 +29,7 @@ TOP_LEVEL_FILES = (
 
 PATENT_FILES = (
     "analyze_tosem_live_evidence.py",
+    "generate_b2_b3_learning_figure.py",
     "generate_cross_dataset_comparison.py",
     "generate_patent_results.py",
     "jiraenhancer_tosem_acm.pdf",
@@ -53,6 +54,7 @@ IMAGE_FILES = (
 )
 
 GENERATED_FILES = (
+    "b2_b3_arm_learning.png",
     "comparative_5000_boxplot.png",
     "comparative_5000_execution_timeline_main.png",
     "comparative_5000_method_summary.csv",
@@ -151,7 +153,7 @@ def build(destination: Path) -> dict[str, object]:
         _copy_file(Path("patent/generated") / name, destination)
 
     _copy_filtered_tree(Path("patent/artifacts/tosem"), destination, {".csv", ".json", ".md"})
-    _copy_filtered_tree(Path("patent/artifacts/b2_b3_pilot"), destination, {".json", ".md"})
+    _copy_filtered_tree(Path("patent/artifacts/b2_b3_pilot"), destination, {".csv", ".json", ".md"})
     _copy_filtered_tree(Path("patent/reviewer_study/public_results"), destination, {".csv", ".json", ".md", ".tex"})
     _copy_file(Path("patent/reviewer_study/build_four_mode_audit.py"), destination)
 

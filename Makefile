@@ -59,6 +59,8 @@ public-figures:
 	PYTHONPATH=src $(PYTHON) patent/reproduce_public_figures.py \
 		--artifact-dir $(PUBLIC_ARTIFACT_DIR) \
 		--output-dir $(PUBLIC_FIGURE_DIR)
+	PYTHONPATH=src $(PYTHON) patent/generate_b2_b3_learning_figure.py \
+		--output $(PUBLIC_FIGURE_DIR)/b2_b3_arm_learning.png
 
 # This optional diagnostic downloads the public SWE-bench Lite test split on
 # first use. Its formula-expanded rows are sensitivity outputs, not independent
