@@ -1,0 +1,4 @@
+method,packages,stories,model_calls,model_calls_per_package,successful_model_calls,cumulative_model_seconds,cumulative_model_seconds_per_package,median_invocation_seconds,template_top_up_stories,planner_top_up_stories
+B1,14,70,0,0.0,0,0.0,0.0,0.0,24,0
+B2,14,70,14,1.0,14,2087.2309999999998,149.08792857142856,127.719,0,0
+B3,14,70,173,12.357142857142858,173,19906.39,1421.885,87.451,0,0

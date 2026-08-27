@@ -1,0 +1,17 @@
+analysis,dimension,targets,raters,icc_2_1_absolute,pairwise_exact_agreement,pairwise_within_one_agreement
+primary_reviewers_3_5,scope_fidelity,42,3,1.0,1.0,1.0
+primary_reviewers_3_5,coverage_completeness,42,3,1.0,1.0,1.0
+primary_reviewers_3_5,story_distinctness,42,3,1.0,1.0,1.0
+primary_reviewers_3_5,acceptance_testability,42,3,1.0,1.0,1.0
+primary_reviewers_3_5,dependency_risk_treatment,42,3,1.0,1.0,1.0
+primary_reviewers_3_5,granularity_actionability,42,3,0.9883819778974214,0.9841269841269841,1.0
+primary_reviewers_3_5,implementation_readiness,42,3,0.986040177051413,0.9682539682539683,1.0
+primary_reviewers_3_5,composite,42,3,0.9990190354965595,0.9682539682539683,1.0
+sensitivity_all_five,scope_fidelity,42,5,0.9689461155594028,0.9666666666666667,1.0
+sensitivity_all_five,coverage_completeness,42,5,0.991822080382966,0.9809523809523809,1.0
+sensitivity_all_five,story_distinctness,42,5,0.9959740769835036,0.9904761904761905,1.0
+sensitivity_all_five,acceptance_testability,42,5,0.994908729665963,0.9904761904761905,1.0
+sensitivity_all_five,dependency_risk_treatment,42,5,0.9727446916669925,0.919047619047619,1.0
+sensitivity_all_five,granularity_actionability,42,5,0.97224807513326,0.9619047619047619,1.0
+sensitivity_all_five,implementation_readiness,42,5,0.9671803081849111,0.930952380952381,0.9976190476190476
+sensitivity_all_five,composite,42,5,0.9935915379882545,0.8595238095238096,1.0

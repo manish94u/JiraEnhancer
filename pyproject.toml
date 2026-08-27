@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jira-enhancer"
+version = "0.1.0"
+description = "Filesystem-backed MVP for Jira AI enrichment"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "Proprietary"}
+authors = [
+  {name = "OpenAI Codex"}
+]
+
+[project.optional-dependencies]
+reviewer = [
+  "Pillow>=10.0",
+  "matplotlib>=3.7",
+  "numpy>=1.24",
+  "openpyxl>=3.1",
+  "pandas>=2.0",
+  "scipy>=1.10",
+]
+benchmark = [
+  "datasets>=2.18",
+  "pyarrow>=14.0",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"jira_enhancer.data" = ["*.json"]

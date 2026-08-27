@@ -1,0 +1,91 @@
+{
+  "DEMO-18324": {
+    "key": "DEMO-18324",
+    "summary": "Add AI-owned enrichment summary field writeback",
+    "description": "Allow the enrichment pipeline to write only to the AI Implementation Brief and AI Enrichment Summary fields.",
+    "acceptance_criteria": [
+      "Only AI-owned fields may be updated.",
+      "A stale Jira issue must block writeback.",
+      "Approval is required when confidence is below threshold."
+    ],
+    "dependencies": [
+      "Jira field registry",
+      "Approval service"
+    ],
+    "edge_cases": [
+      "Issue updated after approval",
+      "Conflicting source evidence"
+    ],
+    "comments": [
+      "Need a deterministic audit trail.",
+      "Keep MVP filesystem-backed."
+    ],
+    "worklogs": [
+      "Investigated field mappings.",
+      "Drafted writeback policy."
+    ],
+    "links": {
+      "confluence_pages": ["20026531262"],
+      "bitbucket_prs": ["18821"]
+    },
+    "epic": "DEMO-18000",
+    "release": "2026.06",
+    "sprint": "SPRINT-42"
+  },
+  "DEMO-18325": {
+    "key": "DEMO-18325",
+    "summary": "Add targeted user input fallback",
+    "description": "When Confluence and Bitbucket evidence are insufficient, request structured reviewer input and re-run enrichment.",
+    "acceptance_criteria": [
+      "Questions must be targeted.",
+      "Reviewer identity and timestamp must be stored."
+    ],
+    "dependencies": [
+      "Approval UI"
+    ],
+    "edge_cases": [
+      "Reviewer input conflicts with Jira description"
+    ],
+    "comments": [
+      "This should not become a free-form chat channel."
+    ],
+    "worklogs": [
+      "Outlined fallback questions."
+    ],
+    "links": {
+      "confluence_pages": [],
+      "bitbucket_prs": []
+    },
+    "epic": "DEMO-18000",
+    "release": "2026.06",
+    "sprint": "SPRINT-42"
+  },
+  "DEMO-18326": {
+    "key": "DEMO-18326",
+    "summary": "Persist run state in MVP filesystem schema",
+    "description": "Use deterministic filesystem paths for run, draft, evidence, approval, and event persistence.",
+    "acceptance_criteria": [
+      "State must survive process restart.",
+      "Replay from dead-letter must be supported."
+    ],
+    "dependencies": [
+      "Filesystem store"
+    ],
+    "edge_cases": [
+      "Duplicate run idempotency key"
+    ],
+    "comments": [
+      "Need file-level locking."
+    ],
+    "worklogs": [
+      "Mapped logical objects to files."
+    ],
+    "links": {
+      "confluence_pages": ["20026531262"],
+      "bitbucket_prs": ["18822"]
+    },
+    "epic": "DEMO-18000",
+    "release": "2026.06",
+    "sprint": "SPRINT-43"
+  }
+}

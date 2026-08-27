@@ -1,0 +1,23 @@
+eventEnvelope:
+  required:
+    - event_id
+    - event_type
+    - run_id
+    - occurred_at
+    - producer
+    - payload
+  properties:
+    event_id:
+      type: string
+    event_type:
+      type: string
+    run_id:
+      type: string
+    issue_key:
+      type: string
+    occurred_at:
+      type: string
+    producer:
+      type: string
+    payload:
+      type: object

@@ -1,0 +1,25 @@
+{
+  "18821": {
+    "id": "18821",
+    "title": "Add AI-owned field registry and writeback constraints",
+    "repository": "demo-project",
+    "branch": "feature/DEMO-18324-ai-writeback",
+    "changed_files": [
+      "services/writeback.py",
+      "shared/contracts.py",
+      "tests/test_writeback.py"
+    ],
+    "reviewers": ["tech.lead", "qa.reviewer"]
+  },
+  "18822": {
+    "id": "18822",
+    "title": "Add filesystem storage adapter",
+    "repository": "demo-project",
+    "branch": "feature/DEMO-18326-fs-store",
+    "changed_files": [
+      "shared/filesystem_store.py",
+      "tests/test_store.py"
+    ],
+    "reviewers": ["storage.owner"]
+  }
+}

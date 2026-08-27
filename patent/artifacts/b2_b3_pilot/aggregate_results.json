@@ -1,0 +1,93 @@
+{
+  "comparison": "B2 one-shot versus learned B3",
+  "mapping": {
+    "condition_x": "B3",
+    "condition_y": "B2",
+    "revealed_after_both_evaluations": true
+  },
+  "held_out_input_ids": ["E01", "E05", "E08"],
+  "evaluator_count": 2,
+  "evaluation_records_per_condition": 6,
+  "evaluator_totals": [
+    {"evaluator_id": "evaluator_1", "B3": 93, "B2": 76, "maximum_per_condition": 96},
+    {"evaluator_id": "evaluator_2", "B3": 94, "B2": 72, "maximum_per_condition": 96}
+  ],
+  "condition_totals": {
+    "B3": {
+      "score": 187,
+      "maximum": 192,
+      "percentage": 97.3958,
+      "mean_per_epic_evaluator": 31.1667,
+      "word_count": 4939,
+      "criterion_scores_out_of_24": {
+        "source_fidelity": 23,
+        "story_boundaries": 24,
+        "measurable_acceptance": 24,
+        "dependencies_interfaces": 24,
+        "failure_recovery": 22,
+        "nonfunctional_operations": 22,
+        "evidence_assumptions_questions": 24,
+        "security_compatibility": 24
+      },
+      "counts_summed_across_two_evaluators": {
+        "unsupported_additions": 0,
+        "missing_source_requirements": 0,
+        "ambiguous_acceptance_criteria": 4,
+        "human_followup_prompts_required": 40
+      },
+      "counts_mean_per_evaluator_across_three_epics": {
+        "unsupported_additions": 0.0,
+        "missing_source_requirements": 0.0,
+        "ambiguous_acceptance_criteria": 2.0,
+        "human_followup_prompts_required": 20.0
+      }
+    },
+    "B2": {
+      "score": 148,
+      "maximum": 192,
+      "percentage": 77.0833,
+      "mean_per_epic_evaluator": 24.6667,
+      "word_count": 2956,
+      "criterion_scores_out_of_24": {
+        "source_fidelity": 20,
+        "story_boundaries": 22,
+        "measurable_acceptance": 19,
+        "dependencies_interfaces": 18,
+        "failure_recovery": 18,
+        "nonfunctional_operations": 16,
+        "evidence_assumptions_questions": 15,
+        "security_compatibility": 20
+      },
+      "counts_summed_across_two_evaluators": {
+        "unsupported_additions": 4,
+        "missing_source_requirements": 13,
+        "ambiguous_acceptance_criteria": 21,
+        "human_followup_prompts_required": 50
+      },
+      "counts_mean_per_evaluator_across_three_epics": {
+        "unsupported_additions": 2.0,
+        "missing_source_requirements": 6.5,
+        "ambiguous_acceptance_criteria": 10.5,
+        "human_followup_prompts_required": 25.0
+      }
+    }
+  },
+  "difference": {
+    "score_points": 39,
+    "percentage_points": 20.3125,
+    "mean_score_per_epic_evaluator": 6.5,
+    "word_count_ratio_B3_over_B2": 1.6708
+  },
+  "per_epic_scores_summed_across_two_evaluators": {
+    "E01": {"B3": 64, "B2": 53, "maximum_per_condition": 64},
+    "E05": {"B3": 59, "B2": 41, "maximum_per_condition": 64},
+    "E08": {"B3": 64, "B2": 54, "maximum_per_condition": 64}
+  },
+  "agreement": {
+    "both_evaluators_preferred_B3_on_all_three_epics": true,
+    "paired_evaluator_epic_judgments_favoring_B3": 6,
+    "paired_evaluator_epic_judgments_total": 6
+  },
+  "interpretation": "B3 is the clear winner in this held-out diagnostic. The result does not isolate the causal effect of RL because model, reasoning effort, number of passes, and output length differ between conditions.",
+  "significance_test_performed": false
+}

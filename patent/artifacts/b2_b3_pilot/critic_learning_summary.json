@@ -1,0 +1,98 @@
+{
+  "held_out_input_ids": [
+    "E01",
+    "E05",
+    "E08"
+  ],
+  "learning_model": "gpt-5.6-sol",
+  "learning_reasoning_effort": "ultra",
+  "learning_signal": "source_grounded_gap_detection_in_existing_b3_training_artifacts",
+  "legacy_state_used": false,
+  "limitations": [
+    "Rewards measure how well each arm detects grounded gaps in existing training artifacts; they are not direct human ratings of regenerated outputs.",
+    "The same model family performed the offline critic audits and the final B3 generation.",
+    "The production runtime bandit state was not modified.",
+    "Held-out inputs E01, E05, and E08 were not used in the critic-learning state."
+  ],
+  "observation_count": 99,
+  "observations_per_arm": 11,
+  "prompt_stats": {
+    "ambiguity_resolution": {
+      "alpha": 11.8125,
+      "beta": 1.1875,
+      "critic_observations": 11,
+      "mean_reward": 0.9659090909090908,
+      "posterior_mean": 0.9086538461538461
+    },
+    "dependency_heavy": {
+      "alpha": 10.5,
+      "beta": 2.5,
+      "critic_observations": 11,
+      "mean_reward": 0.7272727272727273,
+      "posterior_mean": 0.8076923076923077
+    },
+    "failure_recovery_paths": {
+      "alpha": 11.8125,
+      "beta": 1.1875,
+      "critic_observations": 11,
+      "mean_reward": 0.9659090909090909,
+      "posterior_mean": 0.9086538461538461
+    },
+    "interface_data_contracts": {
+      "alpha": 11.5625,
+      "beta": 1.4375,
+      "critic_observations": 11,
+      "mean_reward": 0.9204545454545454,
+      "posterior_mean": 0.8894230769230769
+    },
+    "low_external_context": {
+      "alpha": 10.6875,
+      "beta": 2.3125,
+      "critic_observations": 11,
+      "mean_reward": 0.7613636363636362,
+      "posterior_mean": 0.8221153846153846
+    },
+    "missing_acceptance_criteria": {
+      "alpha": 11.9375,
+      "beta": 1.0625,
+      "critic_observations": 11,
+      "mean_reward": 0.9886363636363636,
+      "posterior_mean": 0.9182692307692307
+    },
+    "nonfunctional_constraints": {
+      "alpha": 10.5625,
+      "beta": 2.4375,
+      "critic_observations": 11,
+      "mean_reward": 0.7386363636363638,
+      "posterior_mean": 0.8125
+    },
+    "operational_readiness": {
+      "alpha": 11.5,
+      "beta": 1.5,
+      "critic_observations": 11,
+      "mean_reward": 0.9090909090909091,
+      "posterior_mean": 0.8846153846153846
+    },
+    "security_privacy_boundaries": {
+      "alpha": 6.75,
+      "beta": 6.25,
+      "critic_observations": 11,
+      "mean_reward": 0.04545454545454545,
+      "posterior_mean": 0.5192307692307693
+    }
+  },
+  "relevance_only_state_used": false,
+  "training_input_ids": [
+    "E02",
+    "E03",
+    "E04",
+    "E06",
+    "E07",
+    "E09",
+    "E10",
+    "E11",
+    "E12",
+    "E13",
+    "E14"
+  ]
+}

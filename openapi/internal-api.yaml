@@ -1,0 +1,29 @@
+openapi: 3.0.3
+info:
+  title: Jira Enhancer MVP Internal API
+  version: 0.1.0
+paths:
+  /internal/v1/scope/resolve:
+    post:
+      operationId: resolveScope
+  /internal/v1/jira/scan:
+    post:
+      operationId: scanIssue
+  /internal/v1/issues/score:
+    post:
+      operationId: scoreIssue
+  /internal/v1/evidence/resolve:
+    post:
+      operationId: resolveEvidence
+  /internal/v1/enrich:
+    post:
+      operationId: enrichIssue
+  /internal/v1/policy/evaluate:
+    post:
+      operationId: evaluatePolicy
+  /internal/v1/approval/request:
+    post:
+      operationId: requestApproval
+  /internal/v1/jira/writeback:
+    post:
+      operationId: writebackIssue

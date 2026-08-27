@@ -1,0 +1,89 @@
+openapi: 3.0.3
+info:
+  title: Jira Enhancer MVP API
+  version: 0.1.0
+paths:
+  /api/v1/runs:
+    post:
+      operationId: createRun
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [scopeType, scopeValue, requestor]
+              properties:
+                scopeType:
+                  type: string
+                  enum: [issue, sprint, epic, release]
+                scopeValue:
+                  type: string
+                requestor:
+                  type: string
+      responses:
+        "202":
+          description: Run accepted
+  /api/v1/runs/{runId}:
+    get:
+      operationId: getRun
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Run details
+  /api/v1/runs/{runId}/items/{issueKey}:
+    get:
+      operationId: getRunItem
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: issueKey
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Run item details
+  /api/v1/runs/{runId}/items/{issueKey}/approval:
+    post:
+      operationId: recordApproval
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: issueKey
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Approval recorded
+  /api/v1/runs/{runId}/items/{issueKey}/writeback:
+    post:
+      operationId: writeback
+      parameters:
+        - name: runId
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: issueKey
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Writeback completed

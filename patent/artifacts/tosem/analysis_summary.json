@@ -1,0 +1,84 @@
+{
+  "bootstrap_replicates": 50000,
+  "bootstrap_seed": 20260809,
+  "confidence_after_mean": 9.6286,
+  "confidence_after_sd": 0.4867,
+  "confidence_before_mean": 7.4571,
+  "confidence_before_sd": 0.5565,
+  "delta_ci_high": 2.4,
+  "delta_ci_low": 1.9429,
+  "delta_iqr_high": 3.0,
+  "delta_iqr_low": 1.0,
+  "delta_mean": 2.1714,
+  "delta_median": 2.5,
+  "delta_sd": 0.9627,
+  "duplicate_safe_existing": 1,
+  "exact_two_sided_sign_p": 1.6940658945086007e-21,
+  "latest_link_ci_high": 1.0,
+  "latest_link_ci_low": 0.921348,
+  "latest_link_rate": 1.0,
+  "latest_linked": 45,
+  "latest_n": 45,
+  "n_live": 70,
+  "n_waves": 2,
+  "negative_deltas": 0,
+  "new_issue_attempts": 69,
+  "new_issue_ci_high": 1.0,
+  "new_issue_ci_low": 0.947263,
+  "new_issue_rate": 1.0,
+  "new_issues_created": 69,
+  "payload_audited": 44,
+  "payload_coverage_ci_high": 1.0,
+  "payload_coverage_ci_low": 0.919704,
+  "payload_coverage_rate": 1.0,
+  "payload_covered": 44,
+  "positive_delta_ci_high": 1.0,
+  "positive_delta_ci_low": 0.947977,
+  "positive_delta_rate": 1.0,
+  "positive_deltas": 70,
+  "prompt_summary": [
+    {
+      "confidence_delta_mean": 1.6667,
+      "n": 12,
+      "prompt_strategy": "dependency_heavy",
+      "reward_mean": 0.4667,
+      "terminal_confidence_mean": 9.3333
+    },
+    {
+      "confidence_delta_mean": 1.875,
+      "n": 8,
+      "prompt_strategy": "low_external_context",
+      "reward_mean": 0.4875,
+      "terminal_confidence_mean": 9.625
+    },
+    {
+      "confidence_delta_mean": 2.34,
+      "n": 50,
+      "prompt_strategy": "missing_acceptance_criteria",
+      "reward_mean": 0.534,
+      "terminal_confidence_mean": 9.7
+    }
+  ],
+  "wave_summary": [
+    {
+      "confidence_after_mean": 9.0,
+      "confidence_before_mean": 8.0,
+      "confidence_delta_ci95_high": 1.0,
+      "confidence_delta_ci95_low": 1.0,
+      "confidence_delta_mean": 1.0,
+      "n": 25,
+      "reward_mean": 0.4,
+      "wave": "W1"
+    },
+    {
+      "confidence_after_mean": 9.9778,
+      "confidence_before_mean": 7.1556,
+      "confidence_delta_ci95_high": 2.9556,
+      "confidence_delta_ci95_low": 2.6889,
+      "confidence_delta_mean": 2.8222,
+      "n": 45,
+      "reward_mean": 0.5822,
+      "wave": "W2"
+    }
+  ]
+}

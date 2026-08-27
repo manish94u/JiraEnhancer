@@ -1,0 +1,7 @@
+# Offline reviewer environment. This installs Jira Enhancer in editable mode
+# together with the analysis and figure dependencies declared in pyproject.toml.
+-e .[reviewer]
+
+# The optional public benchmark is larger and may require a network download.
+# Install it separately with:
+#   python3 -m pip install -e '.[reviewer,benchmark]'

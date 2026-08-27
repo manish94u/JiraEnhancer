@@ -1,0 +1,93 @@
+# Local secrets and machine-specific configuration
+.env
+.env.*
+!.env.example
+.codex.cline.toml
+.DS_Store
+.idea/
+.vscode/
+
+# Python environments, caches, and packaging output
+.venv*/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+build/
+dist/
+
+# Runtime state and local execution output
+runtime/
+reviewer_runtime/
+outputs/
+out/
+tmp/
+backups/
+*.log
+
+# Private or identifiable study material. Only the deliberate,
+# de-identified patent/artifacts/tosem package is releaseable.
+patent/reviewer_study/.artifact_work/
+patent/reviewer_study/completed/
+patent/reviewer_study/completed_*/
+patent/reviewer_study/private/
+patent/reviewer_study/private_*/
+patent/reviewer_study/results_*/
+patent/out_tosem/
+patent/tmp/
+patent/presentation/outputs/
+patent/presentation/tmp/
+patent/presentation/node_modules/
+patent/generated/.cache/
+patent/generated/.mplcache/
+
+# Raw enterprise-derived generated exports. Public releases use the
+# de-identified files under patent/artifacts/tosem instead.
+patent/generated/b1_core_run_details.csv
+patent/generated/b2_core_run_details.csv
+patent/generated/comparative_5000_epic_metrics.csv
+patent/generated/comparative_5000_top10.csv
+patent/generated/comparative_epic_metrics.csv
+patent/generated/performance_issue_summary.csv
+patent/generated/performance_item_metrics.csv
+patent/generated/rl_decisions.csv
+patent/generated/rl_learning_outcomes.csv
+patent/generated/rl_proxy_outcomes.csv
+patent/generated/tosem_live_story_creation_by_epic.csv
+patent/generated/tosem_live_story_creation_rl.csv
+patent/generated/tosem_live_story_creation_rows.csv
+patent/generated/tosem_live_story_creation_summary.json
+
+# LaTeX intermediate files (the source, committed figures, and an intentional
+# final PDF may still be versioned).
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.fdb_latexmk
+*.fls
+*.lof
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.xdv
+
+# Editor and backup files
+*~
+*.bak
+*.bak_*
+*.orig
+*.rej
+*.swp
+*.swo
