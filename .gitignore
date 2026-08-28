@@ -39,6 +39,7 @@ patent/reviewer_study/completed_*/
 patent/reviewer_study/private/
 patent/reviewer_study/private_*/
 patent/reviewer_study/results_*/
+patent/reviewer_study/node_modules/
 patent/out_tosem/
 patent/tmp/
 patent/presentation/outputs/

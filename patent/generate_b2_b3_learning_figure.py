@@ -37,6 +37,7 @@ DEFAULT_CURVE = SCRIPT_DIR / "artifacts/b2_b3_pilot/arm_learning_curve.csv"
 DEFAULT_SUMMARY = SCRIPT_DIR / "artifacts/b2_b3_pilot/critic_learning_summary.json"
 DEFAULT_EXPLOITATION = SCRIPT_DIR / "artifacts/b2_b3_pilot/exploitation_summary.json"
 DEFAULT_OUTPUT = SCRIPT_DIR / "generated/b2_b3_arm_learning.png"
+DEFAULT_REWARD_OUTPUT = SCRIPT_DIR / "generated/b2_b3_critic_reward_heatmap.png"
 
 CURVE_FIELDS = ("sequence", "prompt_id", "reward", "alpha", "beta", "posterior_mean")
 
@@ -67,6 +68,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--summary-json", type=Path, default=DEFAULT_SUMMARY)
     parser.add_argument("--exploitation-json", type=Path, default=DEFAULT_EXPLOITATION)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--reward-output", type=Path, default=DEFAULT_REWARD_OUTPUT)
     parser.add_argument(
         "--observations",
         type=Path,
@@ -275,18 +277,18 @@ def render_figure(
     plt.rcParams.update(
         {
             "font.family": "DejaVu Sans",
-            "font.size": 11.0,
-            "axes.titlesize": 11.5,
-            "axes.labelsize": 11.0,
-            "xtick.labelsize": 11.0,
-            "ytick.labelsize": 11.0,
-            "legend.fontsize": 11.0,
+            "font.size": 8.4,
+            "axes.titlesize": 9.0,
+            "axes.labelsize": 8.4,
+            "xtick.labelsize": 8.0,
+            "ytick.labelsize": 8.0,
+            "legend.fontsize": 7.8,
         }
     )
     fig, (ax_curve, ax_bar) = plt.subplots(
         1,
         2,
-        figsize=(7.15, 4.25),
+        figsize=(7.15, 3.55),
         gridspec_kw={"width_ratios": (1.14, 1.0)},
     )
     fig.patch.set_facecolor("white")
@@ -311,7 +313,7 @@ def render_figure(
         linewidth=1.8,
         linestyle="--",
         drawstyle="steps-post",
-        label="Other six arms (mean)",
+        label="Other arms (mean)",
     )
     ax_curve.axhline(0.5, color="#A7ADB5", linewidth=0.9, linestyle=":", zorder=0)
     ax_curve.set_xlim(0, len(rows))
@@ -320,7 +322,7 @@ def render_figure(
     ax_curve.set_yticks((0.5, 0.6, 0.7, 0.8, 0.9))
     ax_curve.set_xlabel("Critic observation sequence")
     ax_curve.set_ylabel("Beta posterior mean")
-    ax_curve.set_title("(a) Learned posterior trajectories", fontweight="bold", pad=8)
+    ax_curve.set_title("(a) Posterior trajectories", fontweight="bold", pad=5)
     ax_curve.grid(axis="y", color="#D7DBE0", linewidth=0.7)
     ax_curve.spines[["top", "right"]].set_visible(False)
     ax_curve.legend(
@@ -328,8 +330,8 @@ def render_figure(
         frameon=False,
         ncol=1,
         borderaxespad=0.25,
-        labelspacing=0.35,
-        handlelength=1.8,
+        labelspacing=0.25,
+        handlelength=1.6,
     )
 
     ordered = sorted(final_means, key=final_means.get, reverse=True)
@@ -341,11 +343,7 @@ def render_figure(
     ax_bar.set_xlim(0.45, 0.96)
     ax_bar.set_xticks((0.5, 0.6, 0.7, 0.8, 0.9))
     ax_bar.set_xlabel("Final posterior mean")
-    ax_bar.set_title(
-        "(b) Final weights for all fixed arms\nSelected after relevance + governance filters",
-        fontweight="bold",
-        pad=8,
-    )
+    ax_bar.set_title("(b) Final posterior means", fontweight="bold", pad=5)
     ax_bar.grid(axis="x", color="#D7DBE0", linewidth=0.7)
     ax_bar.set_axisbelow(True)
     ax_bar.spines[["top", "right", "left"]].set_visible(False)
@@ -357,20 +355,17 @@ def render_figure(
             f"{value:.3f}",
             va="center",
             ha="left" if value < 0.944 else "right",
-            fontsize=11.0,
+            fontsize=7.8,
             color="#222222",
         )
 
-    fig.suptitle("Fixed prompt arms; learned selection weights", fontsize=14.0, fontweight="bold", y=0.985)
-    fig.text(
-        0.5,
-        0.935,
-        "The nine prompt texts remain fixed. Offline critic rewards update only their Beta posteriors.",
-        ha="center",
-        va="top",
-        fontsize=11.0,
+    fig.suptitle(
+        "Posterior learning for bounded prompt-policy arms",
+        fontsize=10.2,
+        fontweight="bold",
+        y=0.985,
     )
-    fig.subplots_adjust(left=0.105, right=0.988, top=0.80, bottom=0.16, wspace=0.64)
+    fig.subplots_adjust(left=0.095, right=0.99, top=0.84, bottom=0.17, wspace=0.55)
 
     output_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(
@@ -379,6 +374,76 @@ def render_figure(
         facecolor="white",
         bbox_inches="tight",
         pad_inches=0.04,
+        metadata={"Software": "JiraEnhancer reviewer artifact generator"},
+    )
+    plt.close(fig)
+
+
+def render_reward_heatmap(
+    rows: Sequence[dict[str, float | int | str]],
+    final_means: dict[str, float],
+    selected: Sequence[str],
+    output_path: Path,
+) -> None:
+    """Render all archived critic rewards without implying live attempt telemetry."""
+
+    ordered = sorted(final_means, key=final_means.get, reverse=True)
+    rewards_by_arm: dict[str, list[float]] = {prompt_id: [] for prompt_id in ordered}
+    for row in rows:
+        rewards_by_arm[str(row["prompt_id"])].append(float(row["reward"]))
+    observation_counts = {len(values) for values in rewards_by_arm.values()}
+    if observation_counts != {11}:
+        raise ValueError(f"Expected 11 critic observations per arm, found {sorted(observation_counts)}")
+
+    matrix = [rewards_by_arm[prompt_id] for prompt_id in ordered]
+    fig, ax = plt.subplots(figsize=(3.55, 2.72))
+    image = ax.imshow(
+        matrix,
+        aspect="auto",
+        interpolation="nearest",
+        cmap="RdYlBu",
+        vmin=-0.5,
+        vmax=1.0,
+    )
+    ax.set_xticks(range(11), [str(index) for index in range(1, 12)])
+    ax.set_yticks(range(len(ordered)), [DISPLAY_LABELS[prompt_id] for prompt_id in ordered])
+    ax.set_xlabel("Audit observation within each arm", fontsize=7.8)
+    ax.tick_params(axis="x", labelsize=7.0, length=0)
+    ax.tick_params(axis="y", labelsize=7.1, length=0)
+    for tick, prompt_id in zip(ax.get_yticklabels(), ordered, strict=True):
+        if prompt_id in selected:
+            tick.set_fontweight("bold")
+
+    ax.set_xticks([value - 0.5 for value in range(1, 11)], minor=True)
+    ax.set_yticks([value - 0.5 for value in range(1, len(ordered))], minor=True)
+    ax.grid(which="minor", color="white", linewidth=0.65)
+    ax.tick_params(which="minor", bottom=False, left=False)
+    for spine in ax.spines.values():
+        spine.set_color("#6B7280")
+        spine.set_linewidth(0.7)
+
+    colorbar = fig.colorbar(image, ax=ax, fraction=0.045, pad=0.025)
+    colorbar.set_label("Critic reward", fontsize=7.4)
+    colorbar.set_ticks([-0.5, 0.0, 0.5, 1.0])
+    colorbar.ax.tick_params(labelsize=6.8, length=2)
+    colorbar.outline.set_linewidth(0.6)
+    fig.text(
+        0.51,
+        0.985,
+        "Bold labels: strategies selected on held-out packets",
+        ha="center",
+        va="top",
+        fontsize=7.2,
+    )
+    fig.subplots_adjust(left=0.285, right=0.91, top=0.91, bottom=0.18)
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(
+        output_path,
+        dpi=300,
+        facecolor="white",
+        bbox_inches="tight",
+        pad_inches=0.025,
         metadata={"Software": "JiraEnhancer reviewer artifact generator"},
     )
     plt.close(fig)
@@ -395,9 +460,11 @@ def main() -> None:
     if any(prompt_id not in final_means for prompt_id in selected):
         raise ValueError("Exploitation summary refers to an unknown prompt arm")
     render_figure(rows, final_means, selected, args.output)
-    print(f"Validated {len(rows)} critic updates across {len(final_means)} fixed prompt arms.")
+    render_reward_heatmap(rows, final_means, selected, args.reward_output)
+    print(f"Validated {len(rows)} critic updates across {len(final_means)} bounded prompt-policy arms.")
     print(f"Selected held-out arms: {', '.join(selected)}")
     print(f"Wrote {args.output}")
+    print(f"Wrote {args.reward_output}")
 
 
 if __name__ == "__main__":

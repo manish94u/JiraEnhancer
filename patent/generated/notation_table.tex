@@ -5,7 +5,7 @@
 \setlength{\LTpost}{4pt}
 \renewcommand{\arraystretch}{0.92}
 \begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.31\textwidth}>{\raggedright\arraybackslash}p{0.64\textwidth}@{}}
-\caption{Comprehensive notation used in the formal models, algorithms, operational equations, and evaluation.}\label{tab:notation}\\
+\caption{Comprehensive notation used in the formal models, algorithms, and evaluation.}\label{tab:notation}\\
 \toprule
 Symbol & Definition \\
 \midrule
@@ -51,13 +51,13 @@ $\lambda_{\rho},\lambda_{\mathrm{Amb}}$ & Non-negative objective weights for ris
 $\mathrm{SP}(s),B_{\mathrm{sprint}}$ & Story-point estimate for candidate $s$ and sprint story-point budget. \\
 $\operatorname{dep}(s_i,s_j),\operatorname{team}(s),g,\operatorname{cap}_g,\operatorname{ord}(s)$ & Dependency indicator, assigned team, team index, team-capacity bound, and release-order position. \\
 $f(\cdot),\xi_{\mathrm{scope}},\xi_{\mathrm{integration}},\xi_{\mathrm{risk}},\xi_{\mathrm{unknown}}$ & Story-point mapping and normalized complexity priors were used for the initial assignment. \\
-$\mathcal{W}_{\mathrm{create}}$ & Result of the controlled generation operation on $S_{\mathrm{eligible}}$. \\
+$\mathcal{W}_{\mathrm{create}}$ & Result of the controlled creation operation on $S_{\mathrm{eligible}}$. \\
 
 \addlinespace[2pt]
 \multicolumn{2}{@{}l}{\textbf{Readiness, confidence, and calibration}}\\
 $\mathbf{x}=(x_d,x_a,x_p,x_e,x_h,x_g)$ & Binary vector of evidence for the description, acceptance criteria, dependencies, external evidence, activity history, and edge cases. \\
-$R_{\mathrm{src}}(\mathbf{x})$ & Contribution of the ready candidate, represented as a weighted sum of the evidence coverage vector $\mathbf{x}$. \\
-$B_{\mathrm{gen}},P_{\mathrm{gap}}$ & Bonus and penalty for the generated content depending on whether there is evidence or evidence contradiction. \\
+$R_{\mathrm{src}}(\mathbf{x})$ & Base evidence score computed as a weighted sum of the evidence coverage vector $\mathbf{x}$. \\
+$B_{\mathrm{gen}},P_{\mathrm{gap}}$ & Bounded generated-content bonus and evidence-gap penalty. \\
 $z_i,w_i,b_{\max}$ & The quality facet of the generated content and the weight of the facet; the bounded generated bonus total. \\
 $\eta_d,\eta_a,\eta_p,\eta_e$ & Gap-penalty weights (non-negative) for missing description, acceptance criteria, dependencies, and external evidence. \\
 $\delta_C,\gamma_{\mathrm{ceiling}}$ & Bounded confidence update and the evidence-based confidence ceiling. \\
@@ -66,7 +66,7 @@ $\operatorname{ECE},\operatorname{Brier}$ & Expected calibration error and Brier
 
 \addlinespace[2pt]
 \multicolumn{2}{@{}l}{\textbf{Prompt policy, reward, and convergence}}\\
-$p_k,k,K_{\mathrm{arm}}$ & Prompt pack associated with the arm $k$, the arm index, and the number of prompt-policy arms. \\
+$p_k,k$ & Prompt pack associated with arm $k$ and the arm index. \\
 $\theta_k,\widetilde\theta_{k,t}$ & Success probability of the underlying arm and its Thompson sample at attempt $t$. \\
 $\alpha_k,\beta_k$ & Soft counts of successes and failures for the Beta posterior of arm $k$. \\
 $n_k,\bar r_k$ & Number of recorded outcomes and running mean reward for arm $k$. \\
@@ -78,7 +78,7 @@ $C^{\mathrm{before}}_{10,t},C^{\mathrm{after}}_{10,t}$ & Displayed confidence be
 $d_t,w_t$ & Recorded reviewer decision and writeback status for the selected arm. \\
 $r_t,q_t$ & Signed reward clipped to $[-1,1]$ and its fractional Beta success credit $q_t=(r_t+1)/2$. \\
 $T,t,k_t$ & Horizon of attempts, attempt number, and arm chosen at attempt $t$. \\
-$\ell_t,\ell(t)$ & Confidence gap at attempt $t$ and its continuous interpolation. \\
+$\ell_t,\ell_0,\ell(t),\ell(0)$ & Confidence gap at attempt $t$, its algorithmic initial value, its continuous interpolation, and the corresponding continuous-time initial gap. \\
 $\kappa,\widehat\kappa_t$ & Effective lag-convergence rate and its attempt-level estimate. \\
 $d_{\ell}(t),d_{\max}$ & Lag disturbance and its assumed absolute bound. \\
 $\mathbb{E}[\cdot],\Pr(\cdot),\arg\max$ & Expectation, probability, and maximizing-argument operators. \\
@@ -107,14 +107,11 @@ $o_s,\mathcal{B}_{\mathrm{batch}},\operatorname{status}(\mathcal{B}_{\mathrm{bat
 $\mathrm{B0},\mathrm{B1},\mathrm{B2},\mathrm{B3},m$ & Manual reference, template/rule core, one-shot drafting control, Jira Enhancer, and method index. \\
 $Q_m,\mathrm{Eff}_m,G_m,\mathrm{Composite}_m,\mathrm{Time}_m$ & Quality, efficiency, governance, composite, and time indices for method $m$. \\
 $w_Q,w_{\mathrm{Eff}},w_G$ & Fixed non-negative composite-index weights that sum to one. \\
-$\Delta_{\mathrm{B3},m},\Delta$ & Mean composite difference between B3 and baseline method $m\in\{\mathrm{B0},\mathrm{B1},\mathrm{B2}\}$, and a generic resampled mean difference. \\
-$H_0,H_1,\mu_m$ & Null/alternative hypotheses and mean composite for method $m$. \\
+$\Delta$ & Formula-derived composite difference to B3 within an input set. \\
 $Q_{\mathrm{omni}}$ & Matched-study permutation omnibus statistic. \\
-$H_{\mathrm{KW}},F_{\mathrm{ANOVA}},U_{\mathrm{MW}}$ & Kruskal--Wallis, one-way ANOVA, and Mann--Whitney statistics. \\
-$r_{rb},\delta_{\mathrm{Cliff}}$ & Paired rank-biserial and Cliff's effect sizes. \\
-$X,Y,x_i,y_j,n_x,n_y,\bar X,\bar Y$ & Two comparison samples, indexed observations, sample sizes, and sample means. \\
+$r_{rb}$ & Paired rank-biserial effect size. \\
 $n,\mathrm{SD},\mathrm{IQR},\mathrm{P90}$ & Generic sample size, sample standard deviation, interquartile range, and 90th percentile. \\
-$p,p_{\mathrm{Holm}},\alpha_{\mathrm{sig}},M_{\mathrm{cmp}}$ & Raw or reported probability value, Holm-adjusted probability value, familywise significance level, and number of pairwise comparisons. \\
+$p,p_{\mathrm{Holm}}$ & Raw or Holm-adjusted probability value. \\
 $\mathrm{CI},\mathrm{ICC}(2,1)$ & Confidence interval and two-way random-effects absolute-agreement intraclass correlation. \\
 $\texttt{service\_mode}$ & Connector operating mode: \texttt{full-context} or \texttt{reduced-context}. \\
 \end{longtable}

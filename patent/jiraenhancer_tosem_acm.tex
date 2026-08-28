@@ -215,7 +215,7 @@ Figure~\ref{fig:system-architecture} presents the complete system architecture, 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{images/system_architecture_embedded.png}
-\caption{Human-AI collaboration architecture. The Jira, Confluence, and Bitbucket provide evidence in the form of issues, requirements, design, code, and reviews. The orchestrator controls evidence-based story creation, bounded prompt arm selection, governance checks, audit storage, and controlled writeback of Jira issues. The tags define the sequence of runtime contracts that starts from the context extraction and human actions and proceeds with scoring, policy check, approved candidate generation, and mutation.}
+\caption{Human-AI collaboration architecture. Jira, Confluence, and Bitbucket provide evidence in the form of issues, requirements, design, code, and reviews. The orchestrator controls evidence-based story creation, bounded prompt arm selection, governance checks, audit storage, and controlled writeback of Jira issues. The labels and arrows define the sequence of runtime contracts that starts from the context extraction and human actions and proceeds with scoring, policy check, approved candidate generation, and mutation.}
 \Description{Architecture diagram showing Jira, Confluence, and Bitbucket feeding a Jira Enhancer platform with orchestration, semantic enrichment, prompt policy, governance, persistence, and writeback components.}
 \label{fig:system-architecture}
 \end{figure*}
@@ -223,7 +223,7 @@ Figure~\ref{fig:system-architecture} presents the complete system architecture, 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=\textwidth]{images/system_control_flow_embedded.png}
-\caption{Sequence of the runtime contracts according to Fig.~\ref{fig:system-architecture}. The Jira, requirements, code, and review input is fed into the orchestrator. Safe prompt selection and scoring generate the candidates, policy check and tracing storage precede the creation of approved candidates; writeback is the last step of the process.}
+\caption{Sequence of the runtime contracts according to Fig.~\ref{fig:system-architecture}. Jira, requirements, code, and review input is fed into the orchestrator. Safe prompt selection and scoring generate the candidates, policy check and tracing storage precede the creation of approved candidates; writeback is the last step of the process.}
 \Description{Control-flow diagram showing ordered handoffs from context retrieval and user action through prompt selection, draft scoring, policy decision, persistence, and approved writeback.}
 \label{fig:system-control-flow}
 \end{figure*}
@@ -1055,15 +1055,15 @@ These findings give a bounded answer to RQ4. Jira Enhancer produced substantiall
 
 We ran a later diagnostic to examine the learned prompt-selection policy. This test asked a narrower question than the matched human study. It compared one-shot B2 with a B3 configuration that used learned, governance-filtered arm selection.
 
-The nine prompt arms were fixed before learning. The learning stage changed their posterior weights, not their text. Each arm was scored once on 11 non-held-out training packets. This produced 99 critic observations. The critic checked four properties: detection of a source-grounded gap, usefulness of the proposed correction, non-redundancy, and grounding precision. The three held-out packets were excluded from this stage.
+The diagnostic evaluated nine versioned, bounded prompt-policy arms. Each arm represented a refinement strategy. The selected strategy was combined with the current packet evidence and refinement state. Each arm was scored once on 11 non-held-out training packets. This produced 99 critic observations. Learning updated the Beta posterior used for later selection. The critic checked four properties: detection of a source-grounded gap, usefulness of the proposed correction, non-redundancy, and grounding precision. The three held-out packets were excluded from this stage.
 
 Each arm began with a $\operatorname{Beta}(1,1)$ prior. A bounded critic reward $r\in[-1,1]$ was converted to fractional success by $(r+1)/2$. The resulting value updated the arm's posterior. During each held-out refinement pass, governance and relevance checks formed the eligible safe-arm set. The controller selected the remaining eligible arm with the highest posterior mean. Exploration was set to zero, and a selected arm was not reused for the same packet. The controller applied exactly three arms to each packet. Ambiguity resolution, failure and recovery, and interface contracts were selected for all three packets. Their order differed for one packet. Figure~\ref{fig:b2-b3-arm-learning} shows the recorded posterior trajectory and final arm weights.
 
 \begin{figure*}[t]
 \centering
 \includegraphics[width=0.97\textwidth]{generated/b2_b3_arm_learning.png}
-\caption{Learning trace for the fixed prompt arms in the held-out diagnostic. Panel (a) shows the posterior means after the 99 archived critic observations. The three colored lines are the arms later selected during held-out exploitation. The grey line summarizes the other six arms. Panel (b) shows the final posterior mean for every arm after 11 observations per arm. The held-out packets were not used for learning. The curve describes learned selection weights; it is not a curve of human-rated quality or delivery performance.}
-\Description{A two-panel learning figure. The left panel shows posterior means across 99 critic observations for the three arms selected during held-out exploitation and the mean of the other arms. The right panel shows final posterior means for all nine fixed prompt arms and highlights the three selected arms.}
+\caption{Learning trace for nine bounded prompt-policy arms in the held-out diagnostic. Panel (a) shows posterior means across the 99 archived critic observations. The three colored lines are the arms later selected during held-out exploitation. The grey line summarizes the other six arms. Panel (b) shows the final posterior mean for every arm after 11 observations per arm. The held-out packets were not used for learning. The curve describes posterior learning; it is not a curve of human-rated quality or delivery performance.}
+\Description{A two-panel learning figure. The left panel shows posterior means across 99 critic observations for the three arms selected during held-out exploitation and the mean of the other arms. The right panel shows final posterior means for all nine bounded arms and highlights the three selected arms.}
 \label{fig:b2-b3-arm-learning}
 \end{figure*}
 
@@ -1146,9 +1146,9 @@ Figure~\ref{fig:rl-learning-combined}(a) needs careful interpretation. Since the
 
 Figure~\ref{fig:rl-learning-combined}(b) is not a substitute for 1,000 live Jira mutations. It is a purely offline numerical experiment that samples outcomes from the confidence-shaping model based on 70 terminal records. After 1,000 epochs, the replayed agent obtained cumulative reward 576.44, with a final 50-epoch rolling reward of 0.5837 and a final 50-epoch rolling loss of 0.00. All three refinement strategies crossed $C_{10}=8$ and reached $C_{10}=9.00$ or higher. The stated convergence epochs were 24 for dependency-aware planning, 36 for evidence-context enrichment, and 58 for acceptance-criteria enrichment. Their final posterior means were 0.7843, 0.7847, and 0.7905, respectively, with balanced selection shares. These statistics support the numerical properties of the replay design under its reward scheme, but they do not establish convergence or a causal benefit of the implemented policy. Such claims require evidence from observed sequential attempts and varied terminal outcomes, including rejection, regeneration, conflict, and low confidence.
 
-Figure~\ref{fig:confidence-composite-combined}(a) shows an older decision-only proxy trace rather than the 70 terminal live records. The figure groups confidence before and after refinement by attempt index, with denominators decreasing from 17 and 16 observations at attempts 1 and 2, respectively, to only two or three at later attempts. It is therefore a descriptive diagnostic of the retained trace, not a balanced longitudinal estimate.
+Figure~\ref{fig:confidence-composite-combined}(a) uses the latest archived arm-learning trace. It contains 99 critic observations from 11 non-held-out packets. Each of the nine bounded strategies was evaluated once on every packet. The heatmap shows the recorded reward for each strategy--packet pair. The three bold strategy labels identify the arms later selected during held-out refinement. The held-out packets were excluded from learning.
 
-At attempt 2, mean confidence changed from 2.00 to 7.69 across 16 retained proxy observations. Several later attempt indices show little change, but their much smaller denominators prevent this pattern from being attributed to prompt quality or diminishing returns. Future runs should retain every attempt for every story and analyze the repeated measures with clustering at story and epic levels.
+This panel exposes the learning signal behind the posterior curves in Figure~\ref{fig:b2-b3-arm-learning}. It is an offline model-critic diagnostic. It is not live attempt telemetry, a human quality rating, or evidence of delivery performance. The posterior trace and held-out selection log are kept separate to avoid training--evaluation leakage.
 
 Taken together, the live block establishes authenticated workflow feasibility and provides paired endpoint telemetry. It does not yet include post-delivery success labels; accordingly, ECE and Brier score are defined in Section~\ref{sec:readiness-confidence-model} but are not estimated using approval as a surrogate outcome because doing so would conflate governance acceptance with delivered quality.
 
@@ -1161,15 +1161,15 @@ The B0--B3 block represents a deterministic stress test of the design space rath
 
 This diagnostic block checks whether the scoring and composite-index models remain stable when the observed runtime units are perturbed in a controlled fashion. It allows sensitivity analysis, mechanism analysis, and implementation regression testing. Nevertheless, it cannot measure the performance of manual teams or generic LLMs, nor it can evaluate the causal effect of Jira Enhancer on that performance \cite{R55}. The matching experiment mentioned above gives the independently executed B1, B2, and B3 artifacts required to answer RQ4; the produced profiles are still different from the observed null B3--B2 quality contrast.
 
-Figure~\ref{fig:confidence-composite-combined} contains two compact diagnostics next to each other while keeping their different evidentiary value. Panel~(a) is the decision-only proxy trace, and Panel~(b) is the formula-derived sensitivity profile.
+Figure~\ref{fig:confidence-composite-combined} contains two compact diagnostics next to each other while keeping their different evidentiary value. Panel~(a) is the archived model-critic reward trace, and Panel~(b) is the formula-derived sensitivity profile.
 
 \begin{figure*}[t]
 \centering
 \begin{subfigure}[t]{0.485\textwidth}
 \centering
-\includegraphics[width=\linewidth]{generated/rl_confidence_lift.png}
-\caption{Attempt-level confidence lift.}
-\label{fig:rl-confidence-lift}
+\includegraphics[width=\linewidth]{generated/b2_b3_critic_reward_heatmap.png}
+\caption{Recorded critic rewards by strategy.}
+\label{fig:b2-b3-critic-rewards}
 \end{subfigure}\hfill
 \begin{subfigure}[t]{0.485\textwidth}
 \centering
@@ -1177,8 +1177,8 @@ Figure~\ref{fig:confidence-composite-combined} contains two compact diagnostics 
 \caption{Scoring-model composite profile.}
 \label{fig:comparative-composite}
 \end{subfigure}
-\caption{Diagnostics with different evidence status. (a) Confidence lift for the older decision-only proxy trace. Pre- and post-refinement means are grouped by attempt index; sample sizes differ by attempt and are not representative of the 70-story live endpoint sample. (b) Composite-index comparison in the formula-generated sensitivity model. B0 is the equation-based manual reference, B1 is the lexical template/rule core, B2 is the generic-LLM-style heuristic core that does not use an LLM, and B3 is the equation-based profile informed by the observed Jira Enhancer confidence and readiness.}
-\Description{Two side-by-side charts. Panel (a) is a line chart comparing mean confidence before and after each prompt attempt on a zero-to-ten scale. Panel (b) is a radial bar chart comparing scoring-model composite index values for B0, B1, B2, and B3.}
+\caption{Diagnostics with different evidence status. Panel (a) shows all 99 rewards from the offline model-critic audit. It contains 11 non-held-out observations for each of nine bounded strategies. Bold labels mark the strategies later selected for held-out refinement. Panel (b) compares composite indices in the formula-generated sensitivity model. B0 is the equation-based manual reference, B1 is the lexical template/rule core, B2 is the generic-LLM-style heuristic core that does not use an LLM, and B3 is the equation-based profile informed by the observed Jira Enhancer confidence and readiness.}
+\Description{Two side-by-side charts. Panel (a) is a heatmap of 99 critic rewards arranged by bounded strategy and non-held-out audit observation. Panel (b) is a radial bar chart comparing scoring-model composite index values for B0, B1, B2, and B3.}
 \label{fig:confidence-composite-combined}
 \end{figure*}
 
@@ -1242,11 +1242,11 @@ For each method $m$ (\(n=5{,}000\) units per method), the composite index is cal
 = w_Q Q_m + w_{\mathrm{Eff}}\mathrm{Eff}_m + w_G G_m,\qquad
 w_Q+w_{\mathrm{Eff}}+w_G=1,\; w_Q,w_{\mathrm{Eff}},w_G\ge 0.
 \end{equation}
-Equal weighting of all baselines in the reported experiments results in score differences due to method performance and not metric weightings. Let $\Delta_{\mathrm{B3},m}=\bar{X}_{\mathrm{B3}}-\bar{X}_m$, where $m\in\{\mathrm{B0},\mathrm{B1},\mathrm{B2}\}$ denotes a baseline. All subsequent confidence intervals and hypothesis tests are performed on this composite variable. Figure~\ref{fig:performance-raincloud-combined}(b) gives a compact raincloud view of the generated scores. Figures~\ref{fig:comparative-5000-violin} and~\ref{fig:comparative-5000-radar} provide two larger diagnostic views. Each view answers a different question about the scoring formulas.
+Equal weights are used for all four generated profiles. Figure~\ref{fig:performance-raincloud-combined}(b) gives a compact raincloud view of the generated scores. Figures~\ref{fig:comparative-5000-violin} and~\ref{fig:comparative-5000-components} provide two larger diagnostic views. Each view answers a different question about the scoring formulas.
 
 The violin plot in Figure~\ref{fig:comparative-5000-violin} shows the shape and spread of each generated distribution. The median and interquartile range are 44.95 [44.26, 45.69] for B0, 50.45 [49.04, 50.89] for B1, 59.33 [59.09, 59.69] for B2, and 77.27 [75.83, 78.05] for B3. The narrow ranges show that the seeded perturbations preserve the separation encoded by the formulas. They do not show variation across independent projects.
 
-Figure~\ref{fig:comparative-5000-radar} separates the composite index into quality, efficiency, and governance. The generated B2 profile records 73.76, 52.33, and 41.97 on these dimensions. The generated B3 profile records 88.18, 66.97, and 68.76. The largest modeled gap is in governance. This result explains how the declared B3 formula produces a higher composite score. It does not measure a live B2 or B3 execution.
+Figure~\ref{fig:comparative-5000-components} separates the composite index into quality, efficiency, and governance. All methods use the same 0--100 axis, so each component can be compared directly. The generated B2 profile records 73.76, 52.33, and 41.97 on these dimensions. The generated B3 profile records 88.18, 66.97, and 68.76. The largest modeled gap is in governance. This result explains how the declared B3 formula produces a higher composite score. It does not measure a live B2 or B3 execution.
 
 The generated time-to-ready values provide an additional sensitivity check. The mean values for B0--B3 are 187.88, 130.04, 115.37, and 74.49 minutes. The corresponding P90 values are 193.14, 135.96, 117.28, and 77.11 minutes. These values are generated outputs of the timing formulas. They are not evidence of measured time savings or speedup.
 
@@ -1260,55 +1260,18 @@ The generated time-to-ready values provide an additional sensitivity check. The 
 \end{subfigure}\hfill
 \begin{subfigure}[t]{0.485\textwidth}
 \centering
-\includegraphics[width=\linewidth]{generated/comparative_5000_radar_main.png}
-\caption{Quality, efficiency, and governance.}
-\label{fig:comparative-5000-radar}
+\includegraphics[width=\linewidth]{generated/comparative_5000_component_profile_main.png}
+\caption{Component indices on a common scale.}
+\label{fig:comparative-5000-components}
 \end{subfigure}
 \caption{Two diagnostics from the 5,000-unit stress test. Panel (a) shows density, interquartile range, median, and mean. Panel (b) shows the mean component indices. Both panels audit the scoring model. They do not report observed comparative performance.}
-\Description{A two-panel figure containing a violin plot and a radar plot. Both panels compare the B0, B1, B2, and B3 scoring profiles.}
+\Description{A two-panel figure containing a violin plot and a horizontal component-profile dot plot. Both panels compare the B0, B1, B2, and B3 scoring profiles.}
 \label{fig:comparative-5000-diagnostics}
 \end{figure*}
 
 Both panels audit deterministic outputs of the declared formulas. The 5,000 rows per profile are seeded perturbations of reused runtime-derived units. They are not 5,000 independent epics or executed treatments. The plots also do not replace the blinded matched comparison. In that comparison, the B3--B2 package-score difference was 0.10 points, with a 95\% confidence interval of $[-0.13,0.36]$ and a Holm-adjusted $p$-value of 0.485.
 
 \FloatBarrier
-
-\subsection{Generator-Separation Diagnostics}
-
-We define the primary inferential target on composite index:
-\begin{align}
-H_0 &: \mu_{\mathrm{B0}} = \mu_{\mathrm{B1}} = \mu_{\mathrm{B2}} = \mu_{\mathrm{B3}}, \\
-H_1 &: \exists\, m_1,m_2\in\{\mathrm{B0},\mathrm{B1},\mathrm{B2},\mathrm{B3}\}\text{ such that }\mu_{m_1}\ne\mu_{m_2}.
-\end{align}
-
-Based on the generated dataset ($n=20{,}000$, with $n=5{,}000$ per profile), we calculate the following implementation diagnostics: the Kruskal--Wallis test statistic and one-way ANOVA:
-\begin{itemize}
-  \item Kruskal--Wallis \(H_{\mathrm{KW}}=18744.32\), \(p<10^{-300}\).
-  \item One-way ANOVA \(F_{\mathrm{ANOVA}}=930378.49\), \(p<10^{-300}\).
-\end{itemize}
-Both tests reject $H_0$ for the generated data. However, the rows are deterministic perturbations of a much smaller base dataset, and all four profiles have the same units. Thus, the calculated $p$-values measure the degree of separation produced by the algorithm itself; they provide no grounds for population inference and do not prove superiority over real-world samples.
-
-For completeness, the generated dataset also provides Mann--Whitney $U_{\mathrm{MW}}$, Holm correction, bootstrap 95\% confidence intervals, and Cliff's $\delta_{\mathrm{Cliff}}$ \cite{R95,R96,R97,R98}. These measures remain here to enable auditing of the existing generator rather than turn deterministic pseudo-replications into empirical observations. Pairwise hypothesis tests for matched-input experiments should use paired or hierarchical analysis, with effect sizes \cite{R74} reported separately from significance tests.
-
-Given samples $X=\{x_i\}_{i=1}^{n_x}$ and $Y=\{y_j\}_{j=1}^{n_y}$, Cliff's effect size is:
-\begin{equation}
-\delta_{\mathrm{Cliff}}
-=
-\frac{
-\#\{(i,j):x_i>y_j\} - \#\{(i,j):x_i<y_j\}
-}{n_x n_y}.
-\end{equation}
-The confidence intervals for bootstrap \cite{R97} are produced by resampling $X$ and $Y$ with replacement, calculating $\Delta=\bar{X}-\bar{Y}$ for every replicate, and taking the 2.5th and 97.5th percentiles as confidence interval endpoints. Holm adjustment \cite{R96} orders raw $p$-values for pairwise tests and tests for the hypothesis that the $i$th ordered value is less than $\alpha_{\mathrm{sig}}/(M_{\mathrm{cmp}}-i+1)$ for a family of $M_{\mathrm{cmp}}$ comparisons. This adjustment is more conservative compared to raw pairwise testing and supplements false-discovery-rate control \cite{R73} for large comparison families.
-
-\begin{table}[htbp]
-\centering
-\small
-\caption{Pairwise separation diagnostics of formula-computed composite indices ($n=5{,}000$ generated units per profile). These numbers are diagnostics of the generated model and not population-level tests of the baselines.}
-\label{tab:comparative-significance-5000}
-\resizebox{\columnwidth}{!}{\input{generated/comparative_5000_significance_table.tex}}
-\end{table}
-
-These diagnostic results confirm that the implemented algorithm generates distinct profiles as was promised. They do not answer RQ4 empirically; that requires actual baseline executions and independent outcome assessment.
 
 \subsection{Public Issue-Text Sensitivity Check (SWE-bench Lite)}
 
@@ -1326,22 +1289,21 @@ Table~\ref{tab:cross-dataset-comparative} shows that the formulas produce the sa
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{generated/comparative_cross_dataset_multiplot.png}
-\caption{Cross-input sensitivity view. Panel (A) reports scoring-model B0--B3 composite scores for internal generated units and public issue text. Panel (B) overlays the corresponding B2/B3 profiles. No patches or benchmark tests are executed.}
-\Description{Multi-panel chart comparing baseline composite scores across internal and public benchmark datasets, with a radar overlay for B2 and B3 dimensions.}
+\includegraphics[width=0.94\textwidth]{generated/comparative_cross_dataset_multiplot.png}
+\caption{Cross-input sensitivity view. Panel (A) reports scoring-model B0--B3 composite indices for internal generated units and public issue text. Panel (B) overlays the corresponding B0--B3 component profiles on a 0--100 radar scale. Each numeric pair is reported as internal/public issue text. No patches or benchmark tests are executed.}
+\Description{Two-panel chart. Panel A uses grouped bars to compare B0--B3 composite indices for internal generated units and SWE-bench Lite issue text. Panel B uses a radar plot to compare B0--B3 quality, efficiency, governance, and composite indices. Clear labels around the radar show each internal and public value pair.}
 \label{fig:cross-dataset-comparative}
 \end{figure*}
 
-Figure~\ref{fig:cross-dataset-comparative} visualizes the same formula behavior. Similar polygon shapes show that the scoring generator responds consistently to the two text sources.
+Figure~\ref{fig:cross-dataset-comparative} shows the same scoring-model behavior in two forms. The radar profiles include all four methods, keep the same B3--B2 pattern across the four indices, and display each value directly. This is a sensitivity result, not a cross-dataset effectiveness test.
 
 \begin{table}[t]
 \centering
 \small
-\caption{Formula-derived SWE-bench Lite issue-text sensitivity results: all-method profiles, the B2--B3 difference, and pairwise separation diagnostics. These values are scoring-model outputs, not issue-resolution benchmark scores or executed patch results.}
+\caption{Formula-derived SWE-bench Lite issue-text sensitivity results: all-method profiles and the B2--B3 difference. These values are scoring-model outputs, not issue-resolution benchmark scores or executed patch results.}
 \label{tab:public-benchmark-results}
 \label{tab:public-benchmark-method-summary}
 \label{tab:public-benchmark-before-after}
-\label{tab:public-benchmark-significance}
 \textbf{Panel A: All-method profile summary}\par\smallskip
 \resizebox{\columnwidth}{!}{\input{generated/public_benchmark_swebench_lite_method_summary_table.tex}}
 
@@ -1349,14 +1311,9 @@ Figure~\ref{fig:cross-dataset-comparative} visualizes the same formula behavior.
 \textbf{Panel B: B2--B3 difference}\par\smallskip
 \resizebox{\columnwidth}{!}{\input{generated/public_benchmark_swebench_lite_before_after_table.tex}}
 
-\vspace{0.35em}
-\textbf{Panel C: Pairwise separation diagnostics}\par\smallskip
-\resizebox{\columnwidth}{!}{\input{generated/public_benchmark_swebench_lite_significance_table.tex}}
 \end{table}
 
 The scoring model assigns mean composites of 60.93 to B2 and 77.89 to B3, a difference of +16.96 points (27.84\% relative to B2). This is a sensitivity delta, not a measured before/after improvement.
-
-All formula-derived B3 profiles are separated from the other profiles after Holm correction (\(p<10^{-90}\) in this generated sample), with large Cliff's \(\delta_{\mathrm{Cliff}}\). As above, these statistics diagnose generator separation and do not strengthen external validity of the deployed method.
 
 \paragraph{Relationship to the executed matched comparison.}
 The matched study carries out the prespecified primary B2--B3 comparison and the secondary B1--B3 comparison on common inputs. B0 is absent because no independently authored manual package was available for the same tasks. Although the generated sensitivity model encodes a large B3--B2 separation, the observed composite difference is not statistically distinguishable from zero. This is an important negative finding. Formula-derived rankings can stress-test the implementation, but they cannot replace blinded human assessment. A future external replication should add a genuine manual baseline, new domains, a cost-matched B2 condition, and downstream delivery outcomes.
@@ -1388,9 +1345,9 @@ The user-driven workflow preserves collaboration state between steps when failur
 
 The evidence blocks can confirm different claims: 70 authenticated endpoints demonstrate feasibility of a successful path; independent ratings cover 69 full-text stories and 14 epic packages; five reviewers compared 42 B1, B2, and B3 packages with 210 stories; fault injection demonstrates safety of writeback; and replaying, 5,000-unit, and public issue-text blocks verify declared numerical behavior. The study does not measure cross-project and longitudinal delivery benefits, which remain important in light of unreliability, human values, and unavailability of standardized evaluation of AI in software engineering \cite{R59,R81,R60}.
 
-Learned prompt-arm selection is another part of B3's novelty. B3 does not use an unrestricted prompt loop. It represents prompt packs as fixed, bounded policy arms. A contextual bandit selects only from arms that pass the governance checks \cite{R84,R86}. The arm text does not change during learning. Instead, the controller updates the posterior weight used for later selection. The selected arm, refinement result, and posterior update are recorded for auditing, as shown in Table~\ref{tab:policy-arms} and Algorithm~\ref{alg:rl-policy-update}. This design supports adaptive selection without giving the learning layer permission to modify Jira. Final mutation still requires validation, policy checks, and human approval.
+Learned prompt-arm selection is another part of B3's novelty. B3 does not use an unrestricted prompt loop. It organizes refinement strategies as versioned, bounded policy arms. At runtime, the selected strategy is combined with the current evidence, gap signals, confidence, and attempt state. A contextual bandit selects only from arms that pass the governance checks \cite{R84,R86}. Learning updates the Beta posterior used for later selection. The selected arm, refinement result, and posterior update are recorded for auditing, as shown in Table~\ref{tab:policy-arms} and Algorithm~\ref{alg:rl-policy-update}. This design supports adaptive selection without giving the learning layer permission to modify Jira. Final mutation still requires validation, policy checks, and human approval.
 
-The matched experiment evaluated B3 with a frozen pre-study policy. It did not isolate the RL component. The later diagnostic recorded a separate learning trace. It used 99 critic observations from 11 non-held-out packets and excluded the three evaluation packets. Figure~\ref{fig:b2-b3-arm-learning} shows how the posterior weights changed. The diagnostic then used governance-filtered, zero-exploration selection on the held-out packets. This result demonstrates that the complete learned-selection configuration can be tested and audited. It still does not show that learning alone caused the observed B3--B2 difference.
+The matched experiment evaluated B3 with a frozen pre-study policy. It did not isolate the RL component. The later diagnostic recorded a separate learning trace. It used 99 critic observations from 11 non-held-out packets and excluded the three evaluation packets. Figure~\ref{fig:b2-b3-arm-learning} shows how the posterior means evolved. The diagnostic then used governance-filtered, zero-exploration selection on the held-out packets. This result demonstrates that the complete learned-selection configuration can be tested and audited. It still does not show that learning alone caused the observed B3--B2 difference.
 
 B3 controls learning, confidence, governance, approval, recovery, and conflict-free writeback. The score of B3's blinded artifact did not differ significantly from B2's, but B3 took less assessment time, had a descriptively better revision profile, and was the only one that could proceed through a source-bound mutation pathway tested under stale state, retry, draft drift, policy drift, and target drift. This evidence supports the bounded advantage of end-to-end workflows.
 
@@ -1409,7 +1366,7 @@ The study produced six practical lessons. Each lesson is limited to the evidence
 
   \item \textbf{Recovery should preserve human decisions.} Generation and writeback can fail at different stages. A useful workflow should keep the selected stories and partial outcomes visible. The reviewer should be able to revise, retry, or stop. Silent regeneration would weaken oversight and auditability.
 
-  \item \textbf{Adaptive claims need complete trajectories and cost evidence.} The live data retain terminal endpoints but not every refinement attempt. They cannot show a complete live learning trajectory. The later diagnostic retains 99 offline critic observations. These observations show how the selection weights changed, but they are model-assessed signals rather than human or delivery outcomes. B3 also used more model work than B2 in both comparisons. Faster package assessment is therefore not evidence of lower total compute cost. Future studies should retain every attempt and report cost-normalized outcomes.
+  \item \textbf{Adaptive claims need complete trajectories and cost evidence.} The live data retain terminal endpoints but not every refinement attempt. They cannot show a complete live learning trajectory. The later diagnostic retains 99 offline critic observations. These observations show how the posterior estimates changed, but they are model-assessed signals rather than human or delivery outcomes. B3 also used more model work than B2 in both comparisons. Faster package assessment is therefore not evidence of lower total compute cost. Future studies should retain every attempt and report cost-normalized outcomes.
 \end{enumerate}
 
 Together, these lessons support a bounded conclusion. B3 provides a governed path from evidence to an approved mutation under the evaluated conditions. The study does not prove superior prose, delivery quality, productivity, compute efficiency, or generalizability across projects.

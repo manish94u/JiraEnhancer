@@ -1375,7 +1375,12 @@ def _write_comparative_composite_png(path: Path, method_summary_rows: list[dict[
     plt.close()
 
 
-def _write_laplace_convergence_surface(path: Path, csv_path: Path) -> None:
+def _write_laplace_convergence_surface(
+    path: Path,
+    csv_path: Path,
+    *,
+    force_pil: bool = False,
+) -> None:
     t_values = [6.0 * idx / 79 for idx in range(80)]
     kappa_values = [0.05 + (1.2 - 0.05) * idx / 79 for idx in range(80)]
     lag_grid = [[math.exp(-kappa * t) for t in t_values] for kappa in kappa_values]
@@ -1392,7 +1397,7 @@ def _write_laplace_convergence_surface(path: Path, csv_path: Path) -> None:
             )
     _write_csv(csv_path, csv_rows, ["attempt_time", "kappa", "normalized_lag"])
 
-    if plt is None:
+    if force_pil or plt is None:
         scale = 2
         width, height = 1280 * scale, 820 * scale
         image = Image.new("RGB", (width, height), "#fbfcfd")
@@ -2216,85 +2221,111 @@ def _write_violin_png(path: Path, rows: list[dict[str, Any]], *, compact: bool =
     image.convert("RGB").save(path)
 
 
-def _write_radar_png(path: Path, method_summary_rows: list[dict[str, Any]], *, compact: bool = False) -> None:
+def _write_component_profile_png(
+    path: Path, method_summary_rows: list[dict[str, Any]], *, compact: bool = False
+) -> None:
+    """Compare component indices on a common Cartesian scale.
+
+    A dot plot is used instead of a radar polygon because position on a shared
+    axis supports direct comparison and does not encode differences as area.
+    """
+
     methods = ["B0_manual", "B1_template_rules", "B2_generic_llm", "B3_jira_enhancer"]
-    labels = ["Quality", "Efficiency", "Governance"]
-    angles = [0, 2 * math.pi / 3, 4 * math.pi / 3, 0]
+    method_labels = {
+        "B0_manual": "B0",
+        "B1_template_rules": "B1",
+        "B2_generic_llm": "B2",
+        "B3_jira_enhancer": "B3",
+    }
+    metrics = [
+        ("Quality", "quality_index"),
+        ("Efficiency", "efficiency_index"),
+        ("Governance", "governance_index"),
+    ]
     lookup = {str(row["method"]): row for row in method_summary_rows}
     if plt is None:
-        width, height = (760, 560) if compact else (900, 760)
-        image = Image.new("RGB", (width, height), "white")
-        draw = ImageDraw.Draw(image)
-        if not compact:
-            _draw_title(draw, "Radar Profile of Baseline Method Indices (n=5000)", width)
-        center = (width / 2, 230 if compact else height / 2 + 10)
-        radius = 170 if compact else 250
-        label_font = _font(27 if compact else 14, bold=compact)
-        legend_font = _font(21 if compact else 12)
-        colors = {
-            "B0_manual": "#7b8794",
-            "B1_template_rules": "#4f7cac",
-            "B2_generic_llm": "#c06c37",
-            "B3_jira_enhancer": "#0b6e4f",
-        }
+        raise RuntimeError("The component-profile figure requires matplotlib (included in .[reviewer]).")
 
-        def pt(angle: float, value: float) -> tuple[float, float]:
-            return (
-                center[0] + math.cos(angle - math.pi / 2) * radius * value / 100.0,
-                center[1] + math.sin(angle - math.pi / 2) * radius * value / 100.0,
-            )
+    colors = {
+        "B0_manual": "#7B8794",
+        "B1_template_rules": "#4F7CAC",
+        "B2_generic_llm": "#C06C37",
+        "B3_jira_enhancer": "#0B6E4F",
+    }
+    markers = {
+        "B0_manual": "o",
+        "B1_template_rules": "s",
+        "B2_generic_llm": "^",
+        "B3_jira_enhancer": "D",
+    }
+    offsets = {
+        "B0_manual": 0.24,
+        "B1_template_rules": 0.08,
+        "B2_generic_llm": -0.08,
+        "B3_jira_enhancer": -0.24,
+    }
+    metric_y = {"Quality": 2.0, "Efficiency": 1.0, "Governance": 0.0}
 
-        for ring in [20, 40, 60, 80, 100]:
-            ring_points = [pt(angle, ring) for angle in angles[:-1]]
-            draw.polygon(ring_points, outline="#d1d5db")
-        for angle, label in zip(angles[:-1], labels):
-            axis_end = pt(angle, 100)
-            draw.line((center, axis_end), fill="#9ca3af", width=1)
-            label_pos = pt(angle, 112)
-            draw.text(label_pos, label, fill="#1f2937", font=label_font, anchor="mm")
-        legend_y = height - (72 if compact else 120)
-        for idx, method in enumerate(methods):
-            row = lookup.get(method)
-            if not row:
-                continue
-            vals = [
-                float(row["quality_index"]),
-                float(row["efficiency_index"]),
-                float(row["governance_index"]),
-            ]
-            points = [pt(angle, value) for angle, value in zip(angles[:-1], vals)]
-            draw.polygon(points, outline=colors[method])
-            draw.line(points + [points[0]], fill=colors[method], width=4)
-            lx = (96 if compact else 230) + (idx % 2) * (350 if compact else 260)
-            ly = legend_y + (idx // 2) * (34 if compact else 28)
-            draw.line((lx, ly, lx + 24, ly), fill=colors[method], width=4)
-            draw.text((lx + 32, ly), method.replace("_", " "), fill="#1f2937", font=legend_font, anchor="lm")
-        image.save(path)
-        return
-    plt.figure(figsize=(5.0, 4.1) if compact else (6.8, 6.2))
-    ax = plt.subplot(111, polar=True)
+    fig, ax = plt.subplots(figsize=(3.55, 2.58) if compact else (6.6, 4.4))
     for method in methods:
         row = lookup.get(method)
         if not row:
             continue
-        vals = [
-            float(row["quality_index"]),
-            float(row["efficiency_index"]),
-            float(row["governance_index"]),
-        ]
-        vals.append(vals[0])
-        ax.plot(angles, vals, linewidth=2, label=method.replace("_", " "))
-        ax.fill(angles, vals, alpha=0.08)
-    ax.set_xticks(angles[:-1])
-    ax.set_xticklabels(labels, fontsize=13 if compact else None)
-    ax.set_yticks([20, 40, 60, 80, 100])
-    ax.set_ylim(0, 100)
+        x_values = [float(row[field]) for _, field in metrics]
+        y_values = [metric_y[label] + offsets[method] for label, _ in metrics]
+        ax.scatter(
+            x_values,
+            y_values,
+            s=25 if compact else 42,
+            color=colors[method],
+            marker=markers[method],
+            edgecolors="white",
+            linewidths=0.45,
+            zorder=3,
+            label=method_labels[method],
+        )
+        for x_value, y_value in zip(x_values, y_values, strict=True):
+            ax.annotate(
+                f"{x_value:.2f}",
+                (x_value, y_value),
+                xytext=(4, 0),
+                textcoords="offset points",
+                va="center",
+                ha="left",
+                fontsize=6.7 if compact else 8.5,
+                color="#263238",
+            )
+
+    ax.set_xlim(0, 100)
+    ax.set_ylim(-0.55, 2.55)
+    ax.set_xticks([0, 20, 40, 60, 80, 100])
+    ax.set_yticks([2, 1, 0], ["Quality", "Efficiency", "Governance"])
+    ax.set_xlabel("Component index (0–100)", fontsize=7.8 if compact else 10.0)
+    ax.tick_params(axis="x", labelsize=7.2 if compact else 9.0, length=0)
+    ax.tick_params(axis="y", labelsize=7.8 if compact else 9.5, length=0)
+    ax.grid(axis="x", color="#D7DBE0", linewidth=0.65)
+    ax.set_axisbelow(True)
+    ax.spines[["top", "right", "left"]].set_visible(False)
+    ax.spines["bottom"].set_color("#8B949E")
     if not compact:
-        ax.set_title("Radar Profile of Baseline Method Indices (n=5000)")
-    ax.legend(loc="lower center" if compact else "upper right", bbox_to_anchor=(0.5, -0.22) if compact else (1.35, 1.15), fontsize=11 if compact else 8, ncol=2 if compact else 1)
-    ax.tick_params(axis="y", labelsize=11 if compact else None)
-    plt.tight_layout()
-    plt.savefig(path, dpi=160)
+        ax.set_title("Component Profile of Scoring-Model Indices (n=5,000)", fontsize=12)
+    ax.legend(
+        loc="upper center",
+        bbox_to_anchor=(0.5, 1.09 if compact else 1.04),
+        ncol=4,
+        frameon=False,
+        fontsize=7.3 if compact else 9.0,
+        handletextpad=0.25,
+        columnspacing=0.75,
+        borderaxespad=0.0,
+    )
+    fig.subplots_adjust(
+        left=0.235 if compact else 0.16,
+        right=0.975,
+        top=0.84 if compact else 0.88,
+        bottom=0.19 if compact else 0.16,
+    )
+    plt.savefig(path, dpi=300 if compact else 220, facecolor="white")
     plt.close()
 
 
@@ -2334,7 +2365,13 @@ def _timing_summary(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return out
 
 
-def _write_execution_timeline_png(path: Path, timing_rows: list[dict[str, Any]], *, compact: bool = False) -> None:
+def _write_execution_timeline_png(
+    path: Path,
+    timing_rows: list[dict[str, Any]],
+    *,
+    compact: bool = False,
+    force_pil: bool = False,
+) -> None:
     order = ["B0_manual", "B1_template_rules", "B2_generic_llm", "B3_jira_enhancer"]
     labels = []
     mean_vals = []
@@ -2350,7 +2387,7 @@ def _write_execution_timeline_png(path: Path, timing_rows: list[dict[str, Any]],
         p90_vals.append(float(row["p90_time_to_ready_minutes"]))
 
     x = list(range(len(labels)))
-    if plt is None:
+    if force_pil or plt is None:
         width, height = (1100, 440) if compact else (1100, 650)
         image = Image.new("RGB", (width, height), "white")
         draw = ImageDraw.Draw(image)
@@ -2594,6 +2631,7 @@ def main() -> None:
     _write_laplace_convergence_surface(
         GENERATED_ROOT / "laplace_convergence_surface.png",
         GENERATED_ROOT / "laplace_convergence_surface.csv",
+        force_pil=True,
     )
 
     baseline_units = _derive_baseline_units(item_rows)
@@ -2801,16 +2839,27 @@ def main() -> None:
     _write_top10_latex_table(GENERATED_ROOT / "comparative_5000_top10_table.tex", top10_5000)
     _write_boxplot_png(GENERATED_ROOT / "comparative_5000_boxplot.png", comparative_rows_5000)
     _write_violin_png(GENERATED_ROOT / "comparative_5000_violin.png", comparative_rows_5000)
-    _write_radar_png(GENERATED_ROOT / "comparative_5000_radar.png", method_summary_5000)
-    _write_execution_timeline_png(GENERATED_ROOT / "comparative_5000_execution_timeline.png", timing_5000)
+    _write_component_profile_png(
+        GENERATED_ROOT / "comparative_5000_component_profile.png", method_summary_5000
+    )
+    _write_execution_timeline_png(
+        GENERATED_ROOT / "comparative_5000_execution_timeline.png",
+        timing_5000,
+        force_pil=True,
+    )
     _write_violin_png(GENERATED_ROOT / "comparative_5000_violin_main.png", comparative_rows_5000, compact=True)
-    _write_radar_png(GENERATED_ROOT / "comparative_5000_radar_main.png", method_summary_5000, compact=True)
+    _write_component_profile_png(
+        GENERATED_ROOT / "comparative_5000_component_profile_main.png",
+        method_summary_5000,
+        compact=True,
+    )
     _write_execution_timeline_png(
         GENERATED_ROOT / "comparative_5000_execution_timeline_main.png",
         timing_5000,
         compact=True,
+        force_pil=True,
     )
-    _write_comparative_composite_png(GENERATED_ROOT / "comparative_composite.png", comparative_method_summary)
+    _write_comparative_composite_png(GENERATED_ROOT / "comparative_composite.png", method_summary_5000)
 
     _write_json(
         GENERATED_ROOT / "analysis_summary.json",
@@ -2867,7 +2916,7 @@ def main() -> None:
                 "comparative_5000_top10_table_tex": "generated/comparative_5000_top10_table.tex",
                 "comparative_5000_boxplot_png": "generated/comparative_5000_boxplot.png",
                 "comparative_5000_violin_png": "generated/comparative_5000_violin.png",
-                "comparative_5000_radar_png": "generated/comparative_5000_radar.png",
+                "comparative_5000_component_profile_png": "generated/comparative_5000_component_profile.png",
                 "comparative_5000_execution_timeline_png": "generated/comparative_5000_execution_timeline.png",
             },
         },

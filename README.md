@@ -38,19 +38,20 @@ The paper combines several forms of evidence. They answer different questions an
 | Evidence | Public input | Reproduction level | What it supports |
 |---|---|---|---|
 | Unit and workflow tests | Synthetic fixtures | Fully executable offline | Application behavior and workflow contracts |
-| Source-bound transaction experiment | Fixed-seed synthetic fault schedule | Fully executable offline | Mutation safety under the declared injected faults |
-| Authenticated Jira outcome summary | 70 de-identified terminal outcomes and a 45-item audit | Hash and statistic verification | Observed endpoint counts and confidence changes in the reported deployment waves |
-| Matched blinded review | Aggregate de-identified result tables | Result inspection; raw workbooks are restricted | Artifact ratings, review time, and revision decisions for the reported study |
+| Source-bound transaction experiment | Fixed-seed synthetic fault schedule with 9 scenarios, 2,000 trials, and 4 control arrangements (72,000 observations) | Fully executable offline | Mutation safety under the declared injected faults |
+| Authenticated Jira outcome summary | 70 de-identified successful-path endpoints (69 created issues and one safe duplicate) and a 45-item audit | Hash and statistic verification | Feasibility, endpoint counts, and system-produced confidence changes in the reported deployment waves; not confidence calibration or downstream quality |
+| B3-only authenticated-output assessment | Restricted reviewer workbooks; aggregate results in the manuscript | Aggregate result inspection only | Absolute assessment of 69 full-text stories and 14 epic packages by two reviewers, with three masked repeats per reviewer; no B1/B2 baseline |
+| Matched blinded review | Aggregate de-identified result tables for 42 matched B1/B2/B3 packages, 14 inputs, and 210 stories | Result inspection; raw workbooks are restricted | Ratings, assessment time, and revision decisions from five reviewers; Reviewers 3--5 form the primary comparison because Reviewers 1--2 had prior B3 exposure. B3 assessment time was lower than B2, while their aggregate quality difference was not statistically significant. B2 and B3 used the same model but 14 versus 173 calls, so the study is not compute-matched |
 | 1,000-epoch policy replay | De-identified outcome rows | Fully executable offline | Diagnostic Thompson-sampling behavior over recorded outcome profiles |
-| 5,000-unit B0–B3 analysis | Anonymized formula-expanded units | Fully executable offline | Sensitivity of the declared scoring model; not 5,000 independent field observations |
+| 5,000-unit B0–B3 analysis | Anonymized formula-expanded units | Released-row verification plus figure and statistic recomputation | Sensitivity of the declared scoring model; row generation is not publicly reproducible, and the rows are not independent field observations |
 | SWE-bench Lite analysis | Public issue text | Executable after dataset download | Cross-dataset scoring sensitivity; not patch generation or SWE-bench resolution performance |
-| B2/B3 model-assisted pilot | Aggregate scores, learned-state summary, and sanitized posterior trace | Aggregate verification and learning-figure reproduction; not a model replay | A limited one-shot-versus-governed text comparison under the recorded model conditions |
+| B2/B3 held-out learned-selection diagnostic | Three packets, aggregate scores, learned-state summary, and sanitized posterior trace | Aggregate inspection, posterior-trace validation, and figure reproduction; not a model replay | Six model-evaluator judgments comparing one-pass B2 (`gpt-5.6-luna`, medium) with learned-arm B3 (`gpt-5.6-sol`, ultra, up to three refinements); B3 output was 67% longer, so the result is descriptive and does not isolate policy learning |
 
 The raw enterprise inputs are withheld because they contain issue text, URLs, account data, and operational metadata. The completed human-review workbooks are withheld because they contain reviewer-level records and comments. The public files preserve the aggregate evidence used by the manuscript without publishing those records.
 
 ## Requirements
 
-- Python 3.10 or newer
+- Python 3.11 or newer
 - A POSIX shell for the Makefile examples
 - A LaTeX distribution with `latexmk` for rebuilding the manuscript
 - Network access only for the optional SWE-bench Lite download or live connectors
@@ -81,7 +82,7 @@ To run only the manuscript-sized fault schedule, use:
 make fault-injection
 ```
 
-Generated files are written below `outputs/reproduced/`. Archived publication outputs remain unchanged. The public figure target also rebuilds the learned arm-selection curve from its sanitized posterior trace.
+The reviewer-check outputs are written below `outputs/reproduced/`. The optional public benchmark writes manuscript-ready tables and figures under `patent/generated/`, and `make paper` writes LaTeX build files under `patent/out_tosem/`. The public figure target also rebuilds the learned arm-selection curve from its sanitized posterior trace.
 
 ## Run the application with synthetic data
 
@@ -102,7 +103,7 @@ PYTHONPATH=src python -m jira_enhancer \
   --requestor reviewer@example.org
 ```
 
-The global `--storage-root` option must appear before the subcommand. The command prints a `run_id`. Use it in the following commands:
+The global `--storage-root` option must appear before the subcommand. The JSON output contains a `runId`. Use that value in the following commands:
 
 ```bash
 PYTHONPATH=src python -m jira_enhancer --storage-root ./reviewer_runtime \
@@ -116,7 +117,7 @@ PYTHONPATH=src python -m jira_enhancer --storage-root ./reviewer_runtime \
   writeback --run-id RUN_ID --issue-key DEMO-18324
 ```
 
-In mock mode, writeback updates only the local filesystem-backed Jira fixture.
+In mock mode, writeback mutates an in-memory Jira copy for the current process. Run, approval, and writeback audit records persist below `--storage-root`, but a new invocation reloads the bundled fixture.
 
 Start the local UI and API with:
 
@@ -125,7 +126,7 @@ PYTHONPATH=src python -m jira_enhancer \
   --storage-root ./reviewer_runtime serve --host 127.0.0.1 --port 8080
 ```
 
-Open <http://127.0.0.1:8080/>. The UI can create a run, inspect candidates, record approval or rejection, request regeneration or user input, execute approved writeback, and replay a run.
+Open <http://127.0.0.1:8080/>. The UI can create a run, inspect candidates, record approval or rejection, request regeneration or user input, execute approved writeback, replay a run, and suggest or create approved stories from an epic. The prompt-learning view is available at <http://127.0.0.1:8080/ui/rl>.
 
 ## Workflow
 
@@ -134,24 +135,27 @@ The implementation keeps reasoning separate from mutation:
 1. The scope resolver expands an issue, epic, sprint, or release.
 2. The scanner reads issue fields and linked evidence.
 3. The scorer records readiness, confidence, warnings, and policy flags.
-4. The prompt service filters policy arms by governance predicates and selects an eligible arm.
+4. When `JIRA_ENHANCER_RL_ENABLED=true`, the prompt service filters policy arms by governance predicates and selects an eligible arm. RL is disabled by default.
 5. The reasoning layer creates or refines a candidate draft.
-6. Validation checks schema, contradictions, required fields, and duplicate targets.
+6. Candidate validation checks missing or placeholder acceptance and next-step fields, dependency/evidence alignment, and limited scope contradictions. Duplicate targets are canonicalized.
 7. A reviewer records an explicit decision.
 8. A source-bound causal envelope binds the source revision, draft, policy, reviewer decision, target set, and idempotency key.
-9. Writeback proceeds only if the envelope still matches the current state.
+9. Writeback separately checks the run and issue, approved draft, policy snapshot and target fields, source hash or revision, transaction identifier, and idempotency identifier. It proceeds only if the envelope still matches the current state.
 
 The RL component adapts prompt selection. It does not bypass validation, policy, approval, or transaction checks.
 
 ## API contracts
 
-The HTTP contracts are in [`openapi/`](openapi/). Principal endpoints include:
+Selected HTTP contract documents are in [`openapi/`](openapi/). The implementation provides these principal endpoints:
 
 - `POST /api/v1/runs`
 - `GET /api/v1/runs/{runId}`
 - `GET /api/v1/runs/{runId}/items/{issueKey}`
 - `POST /api/v1/runs/{runId}/items/{issueKey}/approval`
+- `POST /api/v1/runs/{runId}/approval`
+- `POST /api/v1/runs/{runId}/items/{issueKey}/interaction-answer`
 - `POST /api/v1/runs/{runId}/items/{issueKey}/writeback`
+- `POST /api/v1/runs/{runId}/writeback`
 - `POST /api/v1/replay/{runId}`
 - `POST /api/v1/epics/{epicKey}/stories/suggest`
 - `POST /api/v1/epics/{epicKey}/stories/create`
@@ -203,7 +207,7 @@ PYTHONPATH=src python patent/run_rl_epoch_simulation.py \
   --seed 42
 ```
 
-This replay uses Thompson sampling over de-identified observed outcome profiles. The 1,000 epochs are offline policy steps. They are not 1,000 live Jira mutations.
+This replay uses Thompson sampling over de-identified observed outcome profiles. The released rows preserve the source replay order, while their neutral story identifiers come from a deterministic sort. This makes the fixed-seed sampling trace reproducible without disclosing the original identifiers. The 1,000 epochs are offline policy steps. They are not 1,000 live Jira mutations.
 
 ### 5. Rebuild the public figures
 
@@ -211,16 +215,17 @@ This replay uses Thompson sampling over de-identified observed outcome profiles.
 make public-figures
 ```
 
-This target reads only released files under `patent/artifacts/`. It regenerates the de-identified confidence view, the scoring-model comparison figures, and the learned arm-selection curve. It does not read `runtime/`.
+This target reads only released files under `patent/artifacts/`. It regenerates the de-identified confidence view, the scoring-model comparison figures, the arm-posterior curve, and the critic-reward heatmap. It does not read `runtime/`.
 
 To rebuild only the learned-selection curve, use:
 
 ```bash
 PYTHONPATH=src python patent/generate_b2_b3_learning_figure.py \
-  --output outputs/reproduced/figures/b2_b3_arm_learning.png
+  --output outputs/reproduced/figures/b2_b3_arm_learning.png \
+  --reward-output outputs/reproduced/figures/b2_b3_critic_reward_heatmap.png
 ```
 
-The curve is rebuilt from a sanitized 99-step posterior trace. It contains no input identifier or source text. The figure shows learned selection weights, not human-rated quality or delivery performance.
+Both figures are rebuilt from a sanitized 99-step posterior trace. It contains no input identifier or source text. The figures show posterior learning and model-critic rewards. They do not show human-rated quality or delivery performance.
 
 The editable architecture source is `patent/images/system_architecture.drawio`. The four module diagrams and control-flow image are provided as publication-resolution PNG files.
 
@@ -239,7 +244,7 @@ The directory contains method summaries, paired contrasts, dimension summaries, 
 Install the benchmark extras and run:
 
 ```bash
-python -m pip install -e '.[benchmark]'
+python -m pip install -e '.[reviewer,benchmark]'
 python patent/run_public_benchmark_eval.py
 python patent/generate_cross_dataset_comparison.py
 ```
@@ -248,7 +253,7 @@ The first run downloads `princeton-nlp/SWE-bench_Lite` from Hugging Face. This a
 
 ## Build the manuscript
 
-The repository includes the exact LaTeX source, bibliography, included tables, and figures needed by the manuscript.
+The repository includes the exact LaTeX source, the `patent/references_2020_plus.bib` bibliography, and every table and figure needed by the 47-page manuscript.
 
 ```bash
 cd patent
@@ -256,18 +261,18 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error \
   -outdir=out_tosem jiraenhancer_tosem_acm.tex
 ```
 
-The prebuilt reviewer copy is `patent/jiraenhancer_tosem_acm.pdf`.
+The current 47-page reviewer copy is `patent/jiraenhancer_tosem_acm.pdf`.
 
 ## Optional live connectors
 
-Live mode is not needed to review or reproduce the public artifact. It can connect to Jira, Confluence, and Bitbucket through REST adapters. Copy the placeholder file and supply credentials through the environment:
+Live mode is not needed to review or reproduce the public artifact. It can connect to Jira, Confluence, and Bitbucket through REST adapters. The application does not load `.env` automatically. Use `.env.example` as a checklist and export the required values in the shell:
 
 ```bash
-cp .env.example .env
 export JIRA_ENHANCER_CONNECTOR_MODE=live
 export JIRA_BASE_URL=https://jira.example.com
 export JIRA_USERNAME=user@example.com
 export JIRA_TOKEN='replace-with-a-local-secret'
+export JIRA_STORY_POINTS_FIELD=customfield_12344
 export CONFLUENCE_BASE_URL=https://confluence.example.com
 export CONFLUENCE_USERNAME=user@example.com
 export CONFLUENCE_TOKEN='replace-with-a-local-secret'
@@ -277,6 +282,8 @@ export BITBUCKET_TOKEN='replace-with-a-local-secret'
 ```
 
 Never commit `.env`. Live writeback should first be tested against a non-production project with restricted field mappings and a least-privilege service account.
+
+The examples above keep `JIRA_ENHANCER_REASONING_MODE=heuristic`, which is deterministic and requires no model service. A model-backed reasoning mode needs its own configured provider or local Codex environment and is outside the core offline review path.
 
 ## Reproducibility limitations
 
@@ -298,8 +305,19 @@ Never commit `.env`. Live writeback should first be tested against a non-product
 
 If a credential is ever committed locally, deleting the file in a later commit is not sufficient. Rotate the credential and publish from clean history.
 
+Build a reviewed public tree from the explicit allowlist with:
+
+```bash
+python scripts/build_reviewer_release.py \
+  --destination ../JiraEnhancer-reviewer-release
+```
+
+The destination must be empty and outside the private source tree. The builder does not copy Git history and writes `RELEASE_FILE_MANIFEST.json` with a SHA-256 digest for every released file.
+
 ## License and citation
 
 No open-source license is granted by this repository at present. The code and artifact are supplied for scholarly review and reproducibility inspection. Contact the authors before redistribution or reuse.
 
-Please cite the manuscript title above. Formal publication metadata will be added after acceptance.
+Until publication metadata is assigned, use this provisional citation:
+
+> Manish Kumar Agrawal, Sandeep Kumar, Ashok Shukla, Subham Kumar, Abhishek Gupta, and Nandagopal Srinivasan. 2026. *Jira Enhancer: A Governance-Aware Human–AI Collaboration System for Epic-to-Story Decomposition in Software Engineering.* Manuscript submitted to ACM Transactions on Software Engineering and Methodology.

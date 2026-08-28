@@ -55,7 +55,9 @@ IMAGE_FILES = (
 
 GENERATED_FILES = (
     "b2_b3_arm_learning.png",
+    "b2_b3_critic_reward_heatmap.png",
     "comparative_5000_boxplot.png",
+    "comparative_5000_component_profile_main.png",
     "comparative_5000_execution_timeline_main.png",
     "comparative_5000_method_summary.csv",
     "comparative_5000_radar_main.png",

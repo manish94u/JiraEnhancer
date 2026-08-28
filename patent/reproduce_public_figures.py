@@ -32,7 +32,7 @@ ALL_FIGURES = (
     "confidence",
     "raincloud",
     "violin",
-    "radar",
+    "component",
     "timeline",
     "composite",
     "laplace",
@@ -98,7 +98,7 @@ def main() -> None:
     comparative_path = artifact_dir / "comparative_5000_units.csv"
     if "confidence" in selected:
         _require(outcomes_path)
-    if selected.intersection({"raincloud", "violin", "radar", "timeline", "composite"}):
+    if selected.intersection({"raincloud", "violin", "component", "timeline", "composite"}):
         _require(comparative_path)
 
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -110,7 +110,8 @@ def main() -> None:
 
     renderers: dict[str, Callable[[], None]] = {
         "confidence": lambda: plots._save_pil_live_story_confidence_radial_chart(
-            output_dir / "performance_confidence_readiness.png", outcomes
+            output_dir / "performance_confidence_readiness.png",
+            sorted(outcomes, key=lambda row: str(row["story_id"])),
         ),
         "raincloud": lambda: plots._write_boxplot_png(
             output_dir / "comparative_5000_boxplot.png", comparative
@@ -118,11 +119,14 @@ def main() -> None:
         "violin": lambda: plots._write_violin_png(
             output_dir / "comparative_5000_violin_main.png", comparative, compact=True
         ),
-        "radar": lambda: plots._write_radar_png(
-            output_dir / "comparative_5000_radar_main.png", method_summary, compact=True
+        "component": lambda: plots._write_component_profile_png(
+            output_dir / "comparative_5000_component_profile_main.png", method_summary, compact=True
         ),
         "timeline": lambda: plots._write_execution_timeline_png(
-            output_dir / "comparative_5000_execution_timeline_main.png", timing_summary, compact=True
+            output_dir / "comparative_5000_execution_timeline_main.png",
+            timing_summary,
+            compact=True,
+            force_pil=True,
         ),
         "composite": lambda: plots._write_comparative_composite_png(
             output_dir / "comparative_composite.png", method_summary
@@ -130,13 +134,14 @@ def main() -> None:
         "laplace": lambda: plots._write_laplace_convergence_surface(
             output_dir / "laplace_convergence_surface.png",
             output_dir / "laplace_convergence_surface.csv",
+            force_pil=True,
         ),
     }
     expected_outputs = {
         "confidence": ["performance_confidence_readiness.png"],
         "raincloud": ["comparative_5000_boxplot.png"],
         "violin": ["comparative_5000_violin_main.png"],
-        "radar": ["comparative_5000_radar_main.png"],
+        "component": ["comparative_5000_component_profile_main.png"],
         "timeline": ["comparative_5000_execution_timeline_main.png"],
         "composite": ["comparative_composite.png"],
         "laplace": ["laplace_convergence_surface.png", "laplace_convergence_surface.csv"],
@@ -170,7 +175,7 @@ def main() -> None:
         if path.is_file() and (
             path == outcomes_path and "confidence" in selected
             or path == comparative_path
-            and selected.intersection({"raincloud", "violin", "radar", "timeline", "composite"})
+            and selected.intersection({"raincloud", "violin", "component", "timeline", "composite"})
         ):
             result["inputs"][path.name] = _sha256(path)
 

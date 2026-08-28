@@ -6,9 +6,11 @@ from pathlib import Path
 try:
     import matplotlib.pyplot as plt
     import numpy as np
+    from matplotlib.lines import Line2D
 except ModuleNotFoundError:
     plt = None
     np = None
+    Line2D = None
 
 from PIL import Image, ImageDraw
 
@@ -34,6 +36,18 @@ METHOD_LABELS = {
     "B1_template_rules": "B1",
     "B2_generic_llm": "B2",
     "B3_jira_enhancer": "B3",
+}
+
+RADAR_METHOD_STYLES = {
+    "B0_manual": {"color": "#6B7280", "marker": "o", "label": "B0"},
+    "B1_template_rules": {"color": "#4C78A8", "marker": "s", "label": "B1"},
+    "B2_generic_llm": {"color": "#D27432", "marker": "^", "label": "B2"},
+    "B3_jira_enhancer": {"color": "#08775B", "marker": "D", "label": "B3"},
+}
+
+RADAR_DATASET_STYLES = {
+    "internal_5000": {"linestyle": "-", "linewidth": 2.0, "filled": True},
+    "swebench_lite_test": {"linestyle": (0, (4, 2)), "linewidth": 1.6, "filled": False},
 }
 
 
@@ -90,7 +104,7 @@ def _write_csv(rows: list[dict[str, float | str]]) -> None:
         "delta_to_b3_composite",
     ]
     with OUT_CSV.open("w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer = csv.DictWriter(f, fieldnames=fieldnames, lineterminator="\n")
         writer.writeheader()
         for row in rows:
             writer.writerow(row)
@@ -123,41 +137,55 @@ def _write_latex_table(rows: list[dict[str, float | str]]) -> None:
     OUT_TEX.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
-def _radar(ax: plt.Axes, rows: list[dict[str, float | str]]) -> None:
-    categories = ["Quality", "Efficiency", "Governance", "Composite"]
-    angles = np.linspace(0, 2 * np.pi, len(categories), endpoint=False)
-    angles = np.concatenate([angles, [angles[0]]])
+def _annotated_radar(ax: plt.Axes, rows: list[dict[str, float | str]]) -> dict[tuple[str, str], list[float]]:
+    """Overlay B0-B3 profiles; callers place grouped numeric labels around the radar."""
 
-    style = {
-        ("B2_generic_llm", "internal_5000"): ("#d17b0f", "B2 (Internal)"),
-        ("B3_jira_enhancer", "internal_5000"): ("#0b6e4f", "B3 (Internal)"),
-        ("B2_generic_llm", "swebench_lite_test"): ("#e7b46a", "B2 (SWE-bench Lite)"),
-        ("B3_jira_enhancer", "swebench_lite_test"): ("#5c9f8d", "B3 (SWE-bench Lite)"),
-    }
+    metrics = [
+        ("Quality", "quality_index"),
+        ("Efficiency", "efficiency_index"),
+        ("Governance", "governance_index"),
+        ("Composite", "composite_index"),
+    ]
+    angles = np.linspace(0, 2 * np.pi, len(metrics), endpoint=False)
+    closed_angles = np.concatenate([angles, [angles[0]]])
+    row_lookup = {(str(row["method"]), str(row["dataset"])): row for row in rows}
+    plotted: dict[tuple[str, str], list[float]] = {}
 
-    for row in rows:
-        key = (str(row["method"]), str(row["dataset"]))
-        if key not in style:
-            continue
-        color, label = style[key]
-        values = np.array(
-            [
-                float(row["quality_index"]),
-                float(row["efficiency_index"]),
-                float(row["governance_index"]),
-                float(row["composite_index"]),
-            ]
-        )
-        values = np.concatenate([values, [values[0]]])
-        ax.plot(angles, values, color=color, linewidth=2.0, label=label)
-        ax.fill(angles, values, color=color, alpha=0.12)
+    for method, method_style in RADAR_METHOD_STYLES.items():
+        for dataset, dataset_style in RADAR_DATASET_STYLES.items():
+            key = (method, dataset)
+            row = row_lookup[key]
+            values = [float(row[field]) for _, field in metrics]
+            plotted[key] = values
+            closed_values = np.array(values + [values[0]])
+            color = str(method_style["color"])
+            facecolor = color if bool(dataset_style["filled"]) else "white"
+            ax.plot(
+                closed_angles,
+                closed_values,
+                color=color,
+                linewidth=float(dataset_style["linewidth"]),
+                linestyle=dataset_style["linestyle"],
+                marker=str(method_style["marker"]),
+                markersize=5.0,
+                markerfacecolor=facecolor,
+                markeredgecolor=color,
+                markeredgewidth=1.0,
+                label="_nolegend_",
+                zorder=3 if bool(dataset_style["filled"]) else 4,
+            )
 
-    ax.set_xticks(angles[:-1])
-    ax.set_xticklabels(categories, fontsize=16)
-    ax.set_ylim(0, 100)
+    ax.set_theta_offset(np.pi / 2)
+    ax.set_theta_direction(-1)
+    ax.set_xticks(angles)
+    ax.set_xticklabels(["", "", "", ""])
+    ax.set_ylim(0, 110)
     ax.set_yticks([20, 40, 60, 80, 100])
-    ax.set_yticklabels(["20", "40", "60", "80", "100"], fontsize=14)
-    ax.grid(alpha=0.35)
+    ax.set_yticklabels(["20", "40", "60", "80", "100"], fontsize=9.5, color="#536471")
+    ax.set_rlabel_position(32)
+    ax.grid(color="#D7DBE0", linewidth=0.70)
+    ax.spines["polar"].set_color("#8B949E")
+    return plotted
 
 
 def _plot(rows: list[dict[str, float | str]]) -> None:
@@ -166,26 +194,31 @@ def _plot(rows: list[dict[str, float | str]]) -> None:
 
     rows_idx = {(str(r["dataset"]), str(r["method"])): r for r in rows}
     if plt is None or np is None:
-        width, height = 1450, 760
+        width, height = 1800, 720
         image = Image.new("RGB", (width, height), "white")
         draw = ImageDraw.Draw(image)
-        title_font = plot_util._font(40, bold=True)
-        subtitle_font = plot_util._font(31)
-        title = "Cross-Dataset Comparative View"
-        title_width, _ = plot_util._text_size(draw, title, title_font)
-        draw.text(((width - title_width) / 2, 16), title, fill="#172026", font=title_font)
-        subtitle = "Internal 5,000-Unit and SWE-bench Lite Test"
-        subtitle_width, _ = plot_util._text_size(draw, subtitle, subtitle_font)
-        draw.text(((width - subtitle_width) / 2, 64), subtitle, fill="#536471", font=subtitle_font)
+        panel_font = plot_util._font(31, bold=True)
+        label_font = plot_util._font(28)
+        value_font = plot_util._font(22)
 
-        bar_area = (132, 164, 780, 634)
+        bar_area = (118, 100, 750, 590)
         plot_util._draw_y_axis(draw, bar_area, 0, 100, "Composite Index")
         left, top, right, bottom = bar_area
         group_w = (right - left) / len(method_order)
         bar_w = 42
-        colors = {"internal_5000": "#0b6e4f", "swebench_lite_test": "#d17b0f"}
-        label_font = plot_util._font(29, bold=True)
-        value_font = plot_util._font(25, bold=True)
+        colors = {"internal_5000": "#4F7CAC", "swebench_lite_test": "#B87733"}
+
+        def draw_vertical_value(center_x: float, center_y: float, text: str) -> None:
+            layer = Image.new("RGBA", (96, 34), (255, 255, 255, 0))
+            layer_draw = ImageDraw.Draw(layer)
+            layer_draw.text((48, 17), text, fill="white", font=value_font, anchor="mm")
+            rotated = layer.rotate(90, expand=True, resample=Image.Resampling.BICUBIC)
+            image.paste(
+                rotated,
+                (int(center_x - rotated.width / 2), int(center_y - rotated.height / 2)),
+                rotated,
+            )
+
         for idx, method in enumerate(method_order):
             center = left + (idx + 0.5) * group_w
             for d_idx, dataset in enumerate(dataset_order):
@@ -194,106 +227,278 @@ def _plot(rows: list[dict[str, float | str]]) -> None:
                 x1 = x0 + bar_w
                 y0 = bottom - value / 100.0 * (bottom - top)
                 draw.rectangle((x0, y0, x1, bottom), fill=colors[dataset])
-                draw.text(((x0 + x1) / 2, y0 - 22), f"{value:.1f}", fill="#1f2937", font=value_font, anchor="mm")
+                draw_vertical_value((x0 + x1) / 2, (y0 + bottom) / 2, f"{value:.1f}")
             draw.text((center, bottom + 18), METHOD_LABELS[method], fill="#1f2937", font=label_font, anchor="ma")
-        draw.text((left, 118), "(A) Composite: Internal vs Public", fill="#1f2937", font=plot_util._font(30, bold=True))
-        dataset_legend_font = plot_util._font(23)
-        draw.rounded_rectangle(
-            (150, 690, 785, 744),
-            radius=8,
-            fill="#ffffff",
-            outline="#d8dee4",
-            width=2,
-        )
+        draw.text((78, 22), "(A) Composite index by input source", fill="#1f2937", font=panel_font)
+        dataset_legend_font = plot_util._font(24)
         for idx, dataset in enumerate(dataset_order):
-            dataset_legend_x = 168 + idx * 310
-            legend_y = 706
+            dataset_legend_x = 130 + idx * 330
+            legend_y = 660
             draw.rectangle((dataset_legend_x, legend_y, dataset_legend_x + 24, legend_y + 18), fill=colors[dataset])
-            draw.text((dataset_legend_x + 34, legend_y - 3), DATASET_LABELS[dataset], fill="#1f2937", font=dataset_legend_font)
-
-        radar_center = (1110, 402)
-        radar_radius = 192
-        categories = ["Quality", "Efficiency", "Governance", "Composite"]
-        angles = [2 * 3.141592653589793 * idx / len(categories) for idx in range(len(categories))]
-        style = {
-            ("B2_generic_llm", "internal_5000"): ("#d17b0f", "B2 (Internal)"),
-            ("B3_jira_enhancer", "internal_5000"): ("#0b6e4f", "B3 (Internal)"),
-            ("B2_generic_llm", "swebench_lite_test"): ("#e7b46a", "B2 (SWE-bench Lite)"),
-            ("B3_jira_enhancer", "swebench_lite_test"): ("#5c9f8d", "B3 (SWE-bench Lite)"),
-        }
-
-        def pt(angle: float, value: float) -> tuple[float, float]:
-            return (
-                radar_center[0] + math.cos(angle - math.pi / 2) * radar_radius * value / 100.0,
-                radar_center[1] + math.sin(angle - math.pi / 2) * radar_radius * value / 100.0,
-            )
+            legend_label = "Internal generated units" if dataset == "internal_5000" else "SWE-bench Lite issue text"
+            draw.text((dataset_legend_x + 34, legend_y - 3), legend_label, fill="#1f2937", font=dataset_legend_font)
 
         import math
 
+        radar_center = (1360, 395)
+        radar_radius = 155
+        metrics = [
+            ("Quality", "quality_index"),
+            ("Efficiency", "efficiency_index"),
+            ("Governance", "governance_index"),
+            ("Composite", "composite_index"),
+        ]
+        angles = [-math.pi / 2 + 2 * math.pi * idx / len(metrics) for idx in range(len(metrics))]
+        draw.text((960, 22), "(B) B0-B3 component profiles", fill="#1f2937", font=panel_font)
+
+        def radar_point(angle: float, value: float) -> tuple[float, float]:
+            return (
+                radar_center[0] + math.cos(angle) * radar_radius * value / 110.0,
+                radar_center[1] + math.sin(angle) * radar_radius * value / 110.0,
+            )
+
+        def draw_marker(x: float, y: float, marker: str, color: str, filled: bool) -> None:
+            fill = color if filled else "white"
+            if marker == "o":
+                draw.ellipse((x - 8, y - 8, x + 8, y + 8), fill=fill, outline=color, width=2)
+                return
+            if marker == "s":
+                draw.rectangle((x - 8, y - 8, x + 8, y + 8), fill=fill, outline=color, width=2)
+                return
+            if marker == "^":
+                points = [(x, y - 8), (x - 9, y + 7), (x + 9, y + 7)]
+            else:
+                points = [(x, y - 9), (x - 9, y), (x, y + 9), (x + 9, y)]
+            draw.polygon(points, fill=fill, outline=color)
+
         for ring in [20, 40, 60, 80, 100]:
-            draw.polygon([pt(angle, ring) for angle in angles], outline="#d1d5db")
-        for angle, label in zip(angles, categories):
-            draw.line((radar_center, pt(angle, 100)), fill="#9ca3af", width=1)
-            draw.text(pt(angle, 116), label, fill="#1f2937", font=plot_util._font(27, bold=True), anchor="mm")
-        for row in rows:
-            key = (str(row["method"]), str(row["dataset"]))
-            if key not in style:
-                continue
-            color, _ = style[key]
-            values = [
-                float(row["quality_index"]),
-                float(row["efficiency_index"]),
-                float(row["governance_index"]),
-                float(row["composite_index"]),
-            ]
-            points = [pt(angle, value) for angle, value in zip(angles, values)]
-            draw.line(points + [points[0]], fill=color, width=4)
-        draw.text((842, 118), "(B) B2 vs B3 Radar", fill="#1f2937", font=plot_util._font(30, bold=True))
-        legend_x, legend_y = 842, 662
-        for idx, (_, (color, label)) in enumerate(style.items()):
-            lx = legend_x + (idx % 2) * 286
-            ly = legend_y + (idx // 2) * 36
-            draw.line((lx, ly, lx + 30, ly), fill=color, width=6)
-            draw.text((lx + 42, ly), label, fill="#1f2937", font=plot_util._font(25), anchor="lm")
+            draw.polygon([radar_point(angle, ring) for angle in angles], outline="#D7DBE0")
+            ring_x, ring_y = radar_point(angles[1] - 0.18, ring)
+            draw.text((ring_x, ring_y), str(ring), fill="#536471", font=plot_util._font(20), anchor="mm")
+        for (metric_label, _), angle in zip(metrics, angles, strict=True):
+            end = radar_point(angle, 100)
+            draw.line((radar_center, end), fill="#D7DBE0", width=2)
+
+        plotted: dict[tuple[str, str], list[float]] = {}
+        for method, method_style in RADAR_METHOD_STYLES.items():
+            for dataset, dataset_style in RADAR_DATASET_STYLES.items():
+                key = (method, dataset)
+                values = [float(rows_idx[(dataset, method)][field]) for _, field in metrics]
+                plotted[key] = values
+                points = [radar_point(angle, value) for angle, value in zip(angles, values, strict=True)]
+                draw.line(
+                    points + [points[0]],
+                    fill=str(method_style["color"]),
+                    width=4 if bool(dataset_style["filled"]) else 2,
+                )
+                for point in points:
+                    draw_marker(
+                        point[0],
+                        point[1],
+                        str(method_style["marker"]),
+                        str(method_style["color"]),
+                        bool(dataset_style["filled"]),
+                    )
+
+        metric_group_positions = [
+            (1360, 135, "mm"),
+            (1585, 300, "lm"),
+            (1360, 575, "mm"),
+            (1135, 300, "rm"),
+        ]
+        group_title_font = plot_util._font(24, bold=True)
+        for metric_idx, ((metric_label, _), (x_pos, y_pos, anchor)) in enumerate(
+            zip(metrics, metric_group_positions, strict=True)
+        ):
+            draw.text((x_pos, y_pos), metric_label, fill="#1F2937", font=group_title_font, anchor=anchor)
+            for row_idx, method in enumerate(method_order):
+                internal = plotted[(method, "internal_5000")][metric_idx]
+                public = plotted[(method, "swebench_lite_test")][metric_idx]
+                method_style = RADAR_METHOD_STYLES[method]
+                draw.text(
+                    (x_pos, y_pos + 29 + row_idx * 25),
+                    f"{method_style['label']}  {internal:.1f} / {public:.1f}",
+                    fill=str(method_style["color"]),
+                    font=value_font,
+                    anchor=anchor,
+                )
+
+        legend_x, legend_y = 1010, 80
+        for idx, method in enumerate(method_order):
+            method_style = RADAR_METHOD_STYLES[method]
+            lx = legend_x + idx * 155
+            draw_marker(lx, legend_y, str(method_style["marker"]), str(method_style["color"]), True)
+            draw.text(
+                (lx + 18, legend_y),
+                str(method_style["label"]),
+                fill="#1f2937",
+                font=dataset_legend_font,
+                anchor="lm",
+            )
+        draw.text(
+            (1360, 108),
+            "filled/solid: internal   hollow/thin: public text   values: internal / public",
+            fill="#536471",
+            font=plot_util._font(20),
+            anchor="mm",
+        )
 
         OUT_PLOT.parent.mkdir(parents=True, exist_ok=True)
         image.save(OUT_PLOT)
         return
 
-    fig = plt.figure(figsize=(13, 5.2))
-    gs = fig.add_gridspec(1, 2, width_ratios=[1.2, 1.0])
+    fig = plt.figure(figsize=(11.2, 4.8))
+    gs = fig.add_gridspec(1, 2, width_ratios=[0.95, 1.35], wspace=0.16)
 
     ax1 = fig.add_subplot(gs[0, 0])
     x = np.arange(len(method_order))
-    w = 0.36
-    colors = {"internal_5000": "#0b6e4f", "swebench_lite_test": "#d17b0f"}
+    w = 0.32
+    colors = {"internal_5000": "#4F7CAC", "swebench_lite_test": "#B87733"}
 
     for i, dataset in enumerate(dataset_order):
         vals = [float(rows_idx[(dataset, method)]["composite_index"]) for method in method_order]
-        shift = -w / 2 if i == 0 else w / 2
-        bars = ax1.bar(x + shift, vals, width=w, label=DATASET_LABELS[dataset], color=colors[dataset], alpha=0.88)
+        shift = -0.18 if i == 0 else 0.18
+        legend_label = "Internal generated units" if dataset == "internal_5000" else "SWE-bench Lite issue text"
+        bars = ax1.bar(x + shift, vals, width=w, label=legend_label, color=colors[dataset], alpha=0.90)
         for b in bars:
             h = b.get_height()
-            ax1.text(b.get_x() + b.get_width() / 2, h + 0.5, f"{h:.1f}", ha="center", va="bottom", fontsize=14)
+            ax1.text(
+                b.get_x() + b.get_width() / 2,
+                h * 0.50,
+                f"{h:.1f}",
+                ha="center",
+                va="center",
+                fontsize=10.8,
+                color="white",
+                fontweight="semibold",
+                rotation=90,
+                rotation_mode="anchor",
+                clip_on=True,
+            )
 
     ax1.set_xticks(x)
-    ax1.set_xticklabels([METHOD_LABELS[m] for m in method_order], fontsize=15)
-    ax1.set_ylabel("Composite Index", fontsize=16)
-    ax1.set_title("(A) Composite Across Internal vs Public Benchmark", fontsize=17)
-    ax1.tick_params(axis="y", labelsize=14)
+    ax1.set_xticklabels([METHOD_LABELS[m] for m in method_order], fontsize=13.0)
+    ax1.set_ylabel("Composite index", fontsize=13.0)
+    ax1.set_title("(A) Composite index by input source", fontsize=14.8, loc="left", y=1.06)
+    ax1.tick_params(axis="y", labelsize=12.0, length=0)
     ax1.set_ylim(0, 100)
-    ax1.grid(axis="y", alpha=0.28)
-    ax1.legend(fontsize=14, loc="upper left")
+    ax1.grid(axis="y", color="#D7DBE0", linewidth=0.75)
+    ax1.set_axisbelow(True)
+    ax1.spines[["top", "right", "left"]].set_visible(False)
+    ax1.spines["bottom"].set_color("#8B949E")
+    ax1.legend(fontsize=10.5, loc="upper left", frameon=False)
 
-    ax2 = fig.add_subplot(gs[0, 1], projection="polar")
-    _radar(ax2, rows)
-    ax2.set_title("(B) B2 vs B3 Radar (Internal + SWE-bench Lite)", pad=22, fontsize=17)
-    ax2.legend(loc="upper right", bbox_to_anchor=(1.35, 1.15), fontsize=14)
+    panel2 = fig.add_subplot(gs[0, 1])
+    panel2.set_axis_off()
 
-    fig.suptitle("Cross-Dataset Comparative View: Internal 5,000-Unit and SWE-bench Lite Test", y=1.04, fontsize=18)
-    fig.tight_layout()
+    fig.subplots_adjust(left=0.075, right=0.985, top=0.77, bottom=0.12)
+    panel_box = panel2.get_position()
+    radar_box = [
+        panel_box.x0 + panel_box.width * 0.26,
+        panel_box.y0 + panel_box.height * 0.27,
+        panel_box.width * 0.48,
+        panel_box.height * 0.50,
+    ]
+    ax2 = fig.add_axes(radar_box, projection="polar")
+    plotted = _annotated_radar(ax2, rows)
+
+    panel2.text(0.5, 1.17, "(B) B0-B3 component profiles", ha="center", va="bottom", fontsize=15.0)
+    method_handles = [
+        Line2D(
+            [0],
+            [0],
+            color=str(style["color"]),
+            linewidth=2.0,
+            marker=str(style["marker"]),
+            markersize=5.8,
+            markerfacecolor=str(style["color"]),
+            markeredgecolor=str(style["color"]),
+            label=str(style["label"]),
+        )
+        for style in RADAR_METHOD_STYLES.values()
+    ]
+    method_legend = panel2.legend(
+        handles=method_handles,
+        loc="upper center",
+        bbox_to_anchor=(0.5, 1.13),
+        ncol=4,
+        frameon=False,
+        fontsize=10.2,
+        handletextpad=0.35,
+        columnspacing=0.90,
+        borderaxespad=0.0,
+    )
+    panel2.add_artist(method_legend)
+    source_handles = [
+        Line2D(
+            [0],
+            [0],
+            color="#374151",
+            linewidth=2.0,
+            linestyle="-",
+            marker="o",
+            markersize=5.2,
+            markerfacecolor="#374151",
+            markeredgecolor="#374151",
+            label="Internal (solid/filled)",
+        ),
+        Line2D(
+            [0],
+            [0],
+            color="#374151",
+            linewidth=1.6,
+            linestyle=(0, (4, 2)),
+            marker="o",
+            markersize=5.2,
+            markerfacecolor="white",
+            markeredgecolor="#374151",
+            label="Public text (dashed/hollow)",
+        ),
+    ]
+    panel2.legend(
+        handles=source_handles,
+        loc="upper center",
+        bbox_to_anchor=(0.5, 1.075),
+        ncol=2,
+        frameon=False,
+        fontsize=10.2,
+        handletextpad=0.45,
+        columnspacing=1.20,
+        borderaxespad=0.0,
+    )
+    metric_groups = [
+        ("Quality", 0.50, 0.99, "center"),
+        ("Efficiency", 0.83, 0.65, "left"),
+        ("Governance", 0.50, 0.22, "center"),
+        ("Composite", 0.17, 0.65, "right"),
+    ]
+    for metric_idx, (metric_label, x_pos, y_pos, alignment) in enumerate(metric_groups):
+        panel2.text(
+            x_pos,
+            y_pos,
+            metric_label,
+            ha=alignment,
+            va="center",
+            fontsize=11.5,
+            fontweight="semibold",
+            color="#1F2937",
+        )
+        for row_idx, method in enumerate(method_order):
+            internal = plotted[(method, "internal_5000")][metric_idx]
+            public = plotted[(method, "swebench_lite_test")][metric_idx]
+            method_style = RADAR_METHOD_STYLES[method]
+            panel2.text(
+                x_pos,
+                y_pos - 0.052 - row_idx * 0.050,
+                f"{method_style['label']}  {internal:.1f} / {public:.1f}",
+                ha=alignment,
+                va="center",
+                fontsize=10.8,
+                color=str(method_style["color"]),
+                bbox={"boxstyle": "round,pad=0.08", "facecolor": "white", "edgecolor": "none", "alpha": 0.97},
+            )
     OUT_PLOT.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(OUT_PLOT, dpi=220, bbox_inches="tight")
+    fig.savefig(OUT_PLOT, dpi=300, facecolor="white")
     plt.close(fig)
 
 

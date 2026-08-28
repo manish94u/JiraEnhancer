@@ -5,12 +5,17 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "jira-enhancer"
 version = "0.1.0"
-description = "Filesystem-backed MVP for Jira AI enrichment"
+description = "Governance-aware Jira enrichment and RL-guided epic-to-story decomposition"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = {text = "Proprietary"}
 authors = [
-  {name = "OpenAI Codex"}
+  {name = "Manish Kumar Agrawal"},
+  {name = "Sandeep Kumar"},
+  {name = "Ashok Shukla"},
+  {name = "Subham Kumar"},
+  {name = "Abhishek Gupta"},
+  {name = "Nandagopal Srinivasan"}
 ]
 
 [project.optional-dependencies]

@@ -30,7 +30,7 @@ def _write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
     if not rows:
         raise ValueError(f"Cannot write an empty table: {path}")
     with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=list(rows[0]))
+        writer = csv.DictWriter(handle, fieldnames=list(rows[0]), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
@@ -352,12 +352,22 @@ def main() -> None:
     _write_latex_table(GENERATED / "tosem_live_evidence_statistics_table.tex", summary)
 
     run_to_wave = {run_id: f"W{index}" for index, run_id in enumerate(ordered_runs, start=1)}
-    sorted_outcomes = sorted(outcomes, key=lambda row: (run_to_wave[row["run_id"]], row["issue_key"]))
+    indexed_outcomes = list(enumerate(outcomes))
+    sorted_outcomes = sorted(
+        indexed_outcomes,
+        key=lambda item: (run_to_wave[item[1]["run_id"]], item[1]["issue_key"]),
+    )
+    story_id_by_source_index = {
+        source_index: f"S{story_index:03d}"
+        for story_index, (source_index, _row) in enumerate(sorted_outcomes, start=1)
+    }
     anonymous_outcomes = []
-    for index, row in enumerate(sorted_outcomes, start=1):
+    for source_index, row in indexed_outcomes:
         anonymous_outcomes.append(
             {
-                "story_id": f"S{index:03d}",
+                # Keep neutral identifiers stable while preserving the source
+                # order used by the fixed-seed offline replay.
+                "story_id": story_id_by_source_index[source_index],
                 "wave": run_to_wave[row["run_id"]],
                 "prompt_strategy": row["prompt_id"],
                 "attempt_index": row["attempt_index"],

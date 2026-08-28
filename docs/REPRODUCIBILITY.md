@@ -6,7 +6,7 @@ workbooks for the core reviewer workflow.
 
 ## Environment
 
-Use Python 3.10 or newer. Create an isolated environment, then install the
+Use Python 3.11 or newer. Create an isolated environment, then install the
 reviewer dependencies:
 
 ```bash
@@ -16,8 +16,11 @@ python3 -m pip install --upgrade pip
 python3 -m pip install -r requirements-reviewer.txt
 ```
 
-All commands below run from the repository root. Generated files go under
-`outputs/reproduced/`, which Git ignores.
+All commands below run from the repository root. The offline reviewer targets
+write regenerated outputs under `outputs/reproduced/`, which Git ignores. The
+optional public benchmark writes manuscript-ready outputs under
+`patent/generated/`. The manuscript build writes intermediates and its compiled
+copy under `patent/out_tosem/`.
 
 ## Five-minute offline check
 
@@ -31,11 +34,11 @@ make public-artifact
 bundled mock issue `DEMO-18324`. It explicitly disables live connectors, model
 calls, and the local Codex configuration. No credentials are needed.
 
-`make public-artifact` verifies the released SHA-256 hashes. It also checks the
-public schemas for identifiers. Finally, it recomputes the reported counts and
-descriptive statistics from the de-identified CSV files. This verifies the
-released package. It does not recreate de-identification from private source
-telemetry.
+`make public-artifact` verifies only the released package under
+`patent/artifacts/tosem/`. It checks SHA-256 hashes and public schemas for
+identifiers. It also recomputes the reported counts and descriptive statistics
+from the de-identified CSV files. This verifies the released package. It does
+not recreate de-identification from private source telemetry.
 
 ## Fault-injection experiment
 
@@ -59,8 +62,14 @@ make public-figures
 ```
 
 The command rebuilds the public figure subset in
-`outputs/reproduced/public_figures/`. It reads only the released files in
-`patent/artifacts/tosem/` and writes a manifest with output hashes.
+`outputs/reproduced/public_figures/`. The confidence and scoring figures read
+released files in `patent/artifacts/tosem/`. The arm-learning and critic-reward
+figures read the sanitized trace in `patent/artifacts/b2_b3_pilot/`. No target
+reads `runtime/`. `reproduce_public_figures.py` writes the public-figure
+manifest with output hashes. The separate B2/B3 arm-learning command writes its
+two PNG files after that manifest is created. The timeline and Laplace figures
+use the committed Pillow renderer so their layout does not change when
+Matplotlib is installed.
 
 The terminal-confidence figure uses de-identified workflow telemetry. The
 B0--B3 distribution figures use formula-expanded sensitivity units. Those units
@@ -95,15 +104,15 @@ of deployed systems.
 ## Build the manuscript
 
 A TeX distribution with `latexmk` is required. The build uses committed figures
-and the bibliography in `patent/`:
+and `patent/references_2020_plus.bib`:
 
 ```bash
 make paper
 ```
 
 The compiled PDF and intermediate files are written to
-`patent/out_tosem/`, which Git ignores. The committed reviewer PDF remains
-unchanged.
+`patent/out_tosem/`, which Git ignores. The repository also includes the current
+47-page reviewer PDF at `patent/jiraenhancer_tosem_acm.pdf`.
 
 To remove LaTeX intermediate files:
 
@@ -122,8 +131,9 @@ released inputs. It excludes credentials, connector logs, runtime stores,
 personal identifiers, private reviewer workbooks, and raw enterprise issue
 text.
 
-The matched-review scripts may be inspected and run with a compatible workbook
-supplied by the reviewer. The original workbooks cannot be redistributed. The
+The released four-mode audit builder may be inspected and run with compatible
+review inputs supplied by the reviewer. Other matched-review processing scripts
+and the original workbooks cannot be redistributed. The
 B2/B3 pilot release contains aggregate results and a sanitized posterior trace.
 Raw prompts, generated outputs, evaluator narratives, and enterprise source
 packets remain outside the public artifact boundary.
@@ -131,3 +141,18 @@ packets remain outside the public artifact boundary.
 These restrictions mean that reviewers can verify the released calculations
 and rerun the offline mechanisms, but cannot recreate every empirical extraction
 from the confidential source systems.
+
+## Build the clean reviewer release
+
+The private development tree contains credentials and restricted runtime data.
+Do not publish its Git history. Build a new public tree from the reviewed
+allowlist instead:
+
+```bash
+python scripts/build_reviewer_release.py \
+  --destination ../JiraEnhancer-reviewer-release
+```
+
+The destination must be empty and outside the private source tree. The builder
+creates `RELEASE_FILE_MANIFEST.json` with a SHA-256 digest for every copied file.
+Initialize and publish Git history only from that clean destination.

@@ -6,7 +6,7 @@ This directory contains the release-approved records from a small held-out diagn
 
 B2 used `gpt-5.6-luna` with medium reasoning effort. It made one independent generation pass for each packet. It had no critic, repair, follow-up, or revision pass.
 
-B3 used `gpt-5.6-sol` with ultra reasoning effort. It created an initial draft and then made exactly three governed refinement passes. The prompt arms were fixed. The learning stage updated their posterior selection weights.
+B3 used `gpt-5.6-sol` with ultra reasoning effort. It created an initial draft and then made exactly three governed refinement passes. The diagnostic used versioned, bounded prompt-policy arms. At each pass, the selected strategy was combined with the current evidence and refinement state. Learning updated the Beta posterior used for later selection.
 
 Nine arms were audited on 11 non-held-out packets. This produced 99 critic observations. A governance and relevance filter formed a safe candidate set for each held-out packet. B3 then selected the highest posterior means with exploration set to zero.
 
@@ -23,7 +23,7 @@ The evaluators identified 13 missing source requirements in B2 and none in B3. T
 - `exploitation_summary.json` contains the held-out arm sequences.
 - `arm_learning_curve.csv` contains a sanitized reconstruction of the 99 posterior updates. It excludes input identifiers and source text.
 
-The figure script reads the sanitized CSV and the two public summary files. It does not read private packets or generated text.
+The figure script reads the sanitized CSV and the two public summary files. It produces the posterior curve and the critic-reward heatmap. It does not read private packets or generated text.
 
 ## Interpretation boundary
 
