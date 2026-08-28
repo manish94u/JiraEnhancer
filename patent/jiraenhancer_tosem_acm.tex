@@ -604,13 +604,15 @@ Thompson sampling uses the updated posterior during future prompt-arm selection.
 
 \begin{algorithm}[H]
 \DontPrintSemicolon
-\small
+\footnotesize
 \caption{End-to-End RL-Governed Epic-to-Story Inference Pipeline}
 \label{alg:e2e-inference}
 \KwIn{Epic $E$, connectors $\mathcal{X}$ (Jira/Confluence/Bitbucket), policy state $\mathcal{P}$, thresholds $(\tau_c,\tau_e)$, max attempts $T$}
 \KwOut{Created story set $S_{\mathrm{create}}$, audit trace $\mathcal{T}_{\mathrm{audit}}$}
+\tcp{Retrieve available context, scale the threshold, and initialize the trace.}
 $\tau_{10}\leftarrow 10\tau_c$; $\mathcal{C} \leftarrow$ RetrieveContext$(E,\mathcal{X})$; $\mathcal{T}_{\mathrm{audit}}\leftarrow\emptyset$\;
 $S_{\mathrm{cand}} \leftarrow$ GenerateCandidates$(E,\mathcal{C})$\;
+\tcp{For each candidate, select a governance-safe arm, enrich, rescore, and validate.}
 \ForEach{$s \in S_{\mathrm{cand}}$}{
   $t \leftarrow 1$; $\ell_0 \leftarrow \tau_{10}$; $A_s \leftarrow 0$\;
   \While{$t \le T$}{
@@ -618,17 +620,18 @@ $S_{\mathrm{cand}} \leftarrow$ GenerateCandidates$(E,\mathcal{C})$\;
     $s \leftarrow$ EnrichWithPrompt$(s,k_t,\mathcal{C})$\;
     $(R_s,C_s) \leftarrow$ ScoreReadinessConfidence$(s,\mathcal{C})$\;
     $C_{10,t}\leftarrow 10C_s$; $\ell_t \leftarrow \max(0,\tau_{10}-C_{10,t})$\;
-    $\widehat{\kappa}_t \leftarrow$ EstimateLaplaceRate$(\ell_{t-1},\ell_t)$\;
+    $\widehat{\kappa}_t \leftarrow$ EstimateLaplaceRate$(\ell_{t-1},\ell_t)$\; \tcp*[r]{Diagnostic only}
     $V_s \leftarrow$ ConsistencyValidate$(s)$\;
     LogAttempt$(\mathcal{T}_{\mathrm{audit}},E,s,t,k_t,R_s,C_s,\ell_t,\widehat{\kappa}_t,V_s)$\;
     \If{$(C_s \ge \tau_c)$ \textbf{and} $(V_s=1)$}{\textbf{break}}
     $t \leftarrow t + 1$\;
   }
+  \tcp{Determine escalation; policy and explicit human approval remain separate gates.}
   $I_{\mathrm{esc}}(s) \leftarrow \mathbb{1}[C_s < \tau_e] \lor I_{\mathrm{ctx}}(s)$\;
   $(g_{\Pi}(s),A_s) \leftarrow$ PolicyAndHumanGate$(s,I_{\mathrm{esc}}(s))$\;
   $I_{\mathrm{create}}(s) \leftarrow \mathbb{1}[C_s \ge \tau_c \land A_s=1 \land V_s=1 \land g_{\Pi}(s)=1 \land s\in\mathcal{F}_{\mathrm{dup}}]$\;
   \If{$I_{\mathrm{create}}(s)=1$}{
-    \If{HashCheckAndIdempotencyPass$(s)$}{
+    \If{HashCheckAndIdempotencyPass$(s)$}{ \tcp*[r]{Source and duplicate safety}
       Writeback$(s)$; AddToCreateSet$(S_{\mathrm{create}},s)$\;
     }
   }
@@ -638,14 +641,17 @@ $S_{\mathrm{cand}} \leftarrow$ GenerateCandidates$(E,\mathcal{C})$\;
 
 \begin{algorithm}[H]
 \DontPrintSemicolon
-\small
+\footnotesize
 \caption{RL Prompt Policy Update (Bandit + Governance-Aware Reward)}
 \label{alg:rl-policy-update}
 \KwIn{Selected-arm state $(\alpha_{k_t},\beta_{k_t},n_{k_t},\bar r_{k_t})$ and recorded outcome $(C^{\mathrm{before}}_{10,t},C^{\mathrm{after}}_{10,t},d_t,w_t)$}
 \KwOut{Updated selected-arm state $(\alpha_{k_t},\beta_{k_t},n_{k_t},\bar r_{k_t})$}
+\tcp{This is an update signal; offline replay does not establish a causal benefit.}
+\tcp{Build the signed reward from confidence, reviewer decision, and writeback status.}
 $r_t \leftarrow (C^{\mathrm{after}}_{10,t}-C^{\mathrm{before}}_{10,t})/10$\;
 $r_t \leftarrow r_t+0.2\mathbb{1}[d_t=\texttt{approve}]-0.2\mathbb{1}[d_t\in\{\texttt{reject},\texttt{regenerate}\}]$\;
 $r_t \leftarrow r_t+0.1\mathbb{1}[w_t=\texttt{written}]-0.1\mathbb{1}[w_t=\texttt{conflict}]$\;
+\tcp{Bound the reward, update the selected arm, and retain audit statistics.}
 $r_t \leftarrow \operatorname{clip}(r_t,-1,1)$\;
 $q_t \leftarrow (r_t+1)/2$\;
 $(\alpha_{k_t},\beta_{k_t}) \leftarrow (\alpha_{k_t}+q_t,\beta_{k_t}+1-q_t)$\;
@@ -704,21 +710,24 @@ Algorithm~\ref{alg:ablation-exec} shows how the four modes are executed for the 
 
 \begin{algorithm}[H]
 \DontPrintSemicolon
-\small
+\footnotesize
 \caption{Ablation-Mode Execution for B0/B1/B2/B3 Comparison}
 \label{alg:ablation-exec}
 \KwIn{Epic unit $E_u$, mode $m \in \{\mathrm{B0},\mathrm{B1},\mathrm{B2},\mathrm{B3}\}$}
 \KwOut{Metric row $(Q_m,\mathrm{Eff}_m,G_m,\mathrm{Composite}_m,\mathrm{Time}_m)$}
+\tcp{Mode schema only; not every evidence block executes every condition.}
 \eIf{$m=\mathrm{B0}$}{
-  ExecuteManualReferenceCore$(E_u)$\;
+  ExecuteManualReferenceCore$(E_u)$\; \tcp*[r]{Independent manual package required}
 }{
   ExecuteTemplateCore$(E_u)$ if $m=\mathrm{B1}$\;
   ExecuteGenericLLMCore$(E_u)$ if $m=\mathrm{B2}$\;
   ExecuteFullJiraEnhancerCore$(E_u)$ if $m=\mathrm{B3}$\;
 }
+\tcp{Disable B3-only components in baseline modes.}
 \If{$m\neq\mathrm{B3}$}{
   Disable components excluded from mode $m$ (critic loop / context packer / validator / governed writeback)\;
 }
+\tcp{Use one scorer; each row retains its measured or analytical status.}
 Collect metrics using the same scorer and schema across all modes\;
 Compute $Q_m$ (quality), $\mathrm{Eff}_m$ (efficiency), $G_m$ (governance), $\mathrm{Composite}_m$, and $\mathrm{Time}_m$\;
 \Return{$(Q_m,\mathrm{Eff}_m,G_m,\mathrm{Composite}_m,\mathrm{Time}_m)$}\;
