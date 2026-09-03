@@ -17,11 +17,16 @@ diagnostic, and scoring sensitivity analyses.
 `main/JiraEnhancer_TOSEM_HumanAI_SI_Main_Manuscript.pdf` is the 46-page
 manuscript submitted for review.
 
-## Code and public reviewer material
+## Code and reviewer material
 
-The public GitHub repository is:
+The project repository is:
 
 <https://github.com/manish94u/JiraEnhancer>
+
+We have deliberately kept the repository private during the submission
+process. If the editor or reviewers need access, please contact the authors
+through the submission system. We will change the repository visibility to
+public for review.
 
 It contains the implementation, automated tests, API contracts, manuscript
 figures, public or de-identified evidence, and scripts used for the published
