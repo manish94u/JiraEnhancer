@@ -42,10 +42,9 @@ The paper combines several forms of evidence. They answer different questions an
 | Authenticated Jira outcome summary | 70 de-identified successful-path endpoints (69 created issues and one safe duplicate) and a 45-item audit | Hash and statistic verification | Feasibility, endpoint counts, and system-produced confidence changes in the reported deployment waves; not confidence calibration or downstream quality |
 | B3-only authenticated-output assessment | Restricted reviewer workbooks; aggregate results in the manuscript | Aggregate result inspection only | Absolute assessment of 69 full-text stories and 14 epic packages by two reviewers, with three masked repeats per reviewer; no B1/B2 baseline |
 | Matched blinded review | Aggregate de-identified result tables for 42 matched B1/B2/B3 packages, 14 inputs, and 210 stories | Result inspection; raw workbooks are restricted | Ratings, assessment time, and revision decisions from five reviewers; Reviewers 3--5 form the primary comparison because Reviewers 1--2 had prior B3 exposure. B3 assessment time was lower than B2, while their aggregate quality difference was not statistically significant. B2 and B3 used the same model but 14 versus 173 calls, so the study is not compute-matched |
-| 1,000-epoch policy replay | De-identified outcome rows | Fully executable offline | Diagnostic Thompson-sampling behavior over recorded outcome profiles |
 | 5,000-unit B0–B3 analysis | Anonymized formula-expanded units | Released-row verification plus figure and statistic recomputation | Sensitivity of the declared scoring model; row generation is not publicly reproducible, and the rows are not independent field observations |
 | SWE-bench Lite analysis | Public issue text | Executable after dataset download | Cross-dataset scoring sensitivity; not patch generation or SWE-bench resolution performance |
-| B2/B3 held-out learned-selection diagnostic | Three packets, aggregate scores, learned-state summary, and sanitized posterior trace | Aggregate inspection, posterior-trace validation, and figure reproduction; not a model replay | Six model-evaluator judgments comparing one-pass B2 (`gpt-5.6-luna`, medium) with learned-arm B3 (`gpt-5.6-sol`, ultra, up to three refinements); B3 output was 67% longer, so the result is descriptive and does not isolate policy learning |
+| B2/B3 held-out learned-selection diagnostic | Three packets, aggregate scores, learned-state summary, and sanitized posterior trace | Aggregate inspection, posterior-trace validation, and figure reproduction | Six model-evaluator judgments comparing one-pass B2 with learned-arm B3. Both used `gpt-5.6-sol` with ultra reasoning. B3 used up to three refinements and produced output that was 67% longer, so the comparison does not isolate the effect of policy learning |
 
 The raw enterprise inputs are withheld because they contain issue text, URLs, account data, and operational metadata. The completed human-review workbooks are withheld because they contain reviewer-level records and comments. The public files preserve the aggregate evidence used by the manuscript without publishing those records.
 
@@ -197,19 +196,7 @@ PYTHONPATH=src python patent/run_source_bound_transaction_experiment.py \
 
 The experiment applies the same transaction payload and fault schedule to four control arrangements. It writes trial rows, summaries, paired comparisons, an SVG, a LaTeX table, metadata, and checksums. These are scenario-balanced synthetic fault outcomes. They are not estimates of production incident prevalence.
 
-### 4. Reproduce the offline RL replay
-
-```bash
-PYTHONPATH=src python patent/run_rl_epoch_simulation.py \
-  --outcomes patent/artifacts/tosem/anonymized_live_story_outcomes.csv \
-  --output-dir outputs/reproduced/rl_replay \
-  --epochs 1000 \
-  --seed 42
-```
-
-This replay uses Thompson sampling over de-identified observed outcome profiles. The released rows preserve the source replay order, while their neutral story identifiers come from a deterministic sort. This makes the fixed-seed sampling trace reproducible without disclosing the original identifiers. The 1,000 epochs are offline policy steps. They are not 1,000 live Jira mutations.
-
-### 5. Rebuild the public figures
+### 4. Rebuild the public figures
 
 ```bash
 make public-figures
@@ -229,7 +216,7 @@ Both figures are rebuilt from a sanitized 99-step posterior trace. It contains n
 
 The editable architecture source is `patent/images/system_architecture.drawio`. The four module diagrams and control-flow image are provided as publication-resolution PNG files.
 
-### 6. Inspect the matched-review aggregates
+### 5. Inspect the matched-review aggregates
 
 Public aggregate results are under:
 
@@ -239,7 +226,7 @@ patent/reviewer_study/public_results/
 
 The directory contains method summaries, paired contrasts, dimension summaries, reliability diagnostics, and resource accounting. It excludes raw ratings, comments, identity mappings, private allocation keys, and workbooks. Therefore, the public release supports inspection of the reported aggregates, not a fresh unblinding from raw human-review records.
 
-### 7. Run the optional SWE-bench Lite sensitivity diagnostic
+### 6. Run the optional SWE-bench Lite sensitivity diagnostic
 
 Install the benchmark extras and run:
 
@@ -253,7 +240,7 @@ The first run downloads `princeton-nlp/SWE-bench_Lite` from Hugging Face. This a
 
 ## Build the manuscript
 
-The repository includes the exact LaTeX source, the `patent/references_2020_plus.bib` bibliography, and every table and figure needed by the 47-page manuscript.
+The repository includes the exact LaTeX source, the `patent/references_2020_plus.bib` bibliography, and every table and figure needed by the 46-page manuscript.
 
 ```bash
 cd patent
@@ -261,7 +248,7 @@ latexmk -pdf -interaction=nonstopmode -halt-on-error \
   -outdir=out_tosem jiraenhancer_tosem_acm.tex
 ```
 
-The current 47-page reviewer copy is `patent/jiraenhancer_tosem_acm.pdf`.
+The current 46-page reviewer copy is `patent/jiraenhancer_tosem_acm.pdf`.
 
 ## Optional live connectors
 
