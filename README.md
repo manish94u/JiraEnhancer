@@ -52,7 +52,6 @@ The raw enterprise inputs are withheld because they contain issue text, URLs, ac
 
 - Python 3.11 or newer
 - A POSIX shell for the Makefile examples
-- A LaTeX distribution with `latexmk` for rebuilding the manuscript
 - Network access only for the optional SWE-bench Lite download or live connectors
 
 The core application uses the Python standard library. Research and figure scripts use the `reviewer` dependency group.
@@ -238,17 +237,7 @@ python patent/generate_cross_dataset_comparison.py
 
 The first run downloads `princeton-nlp/SWE-bench_Lite` from Hugging Face. This analysis sends public issue text through the declared scoring formulas. It does not generate patches or execute the SWE-bench test harness. Its output is a cross-dataset sensitivity check, not comparative software-resolution performance.
 
-## Build the manuscript
 
-The repository includes the exact LaTeX source, the `patent/references_2020_plus.bib` bibliography, and every table and figure needed by the 46-page manuscript.
-
-```bash
-cd patent
-latexmk -pdf -interaction=nonstopmode -halt-on-error \
-  -outdir=out_tosem jiraenhancer_tosem_acm.tex
-```
-
-The current 46-page reviewer copy is `patent/jiraenhancer_tosem_acm.pdf`.
 
 ## Optional live connectors
 
