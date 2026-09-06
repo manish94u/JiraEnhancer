@@ -1,3 +1,0 @@
-test,metric,statistic,p_value,n_total,dataset
-Kruskal-Wallis,composite_index,1120.2985495891,1.4363325576695547e-242,1200,SWE-bench Lite test split
-One-way ANOVA,composite_index,51052.51146480155,0.0,1200,SWE-bench Lite test split

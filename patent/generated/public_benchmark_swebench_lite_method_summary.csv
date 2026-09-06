@@ -1,5 +1,0 @@
-method,n_runs,mean_coverage_score,mean_acceptance_completeness,mean_dependency_capture_rate,mean_rework_rate,mean_time_to_ready_minutes,mean_reviewer_edits_per_story,mean_governance_block_rate,quality_index,efficiency_index,governance_index,composite_index
-B0_manual,300,6.3486,6.0871,0.5604,0.2577,187.03,4.4347,0.092,60.3884,30.6189,35.2115,45.1633
-B1_template_rules,300,6.0319,6.3027,0.4868,0.3267,122.78,4.2287,0.1401,57.7203,48.1954,35.3383,49.2673
-B2_generic_llm,300,9.9969,7.4571,0.5919,0.2927,139.62,3.2712,0.2417,79.3551,48.394,42.7934,60.9263
-B3_jira_enhancer,300,9.1505,9.0522,0.873,0.1519,74.63,2.9612,0.5966,89.9199,66.6545,69.7165,77.8894

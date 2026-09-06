@@ -1,9 +1,0 @@
-dataset,dataset_label,method,method_short,n_runs,quality_index,efficiency_index,governance_index,composite_index,mean_time_to_ready_minutes,delta_to_b3_composite
-internal_5000,"Internal 5,000-unit run",B0_manual,B0,5000,60.1664,30.2826,35.1832,44.9555,187.88,32.0059
-internal_5000,"Internal 5,000-unit run",B1_template_rules,B1,5000,59.6608,47.0132,36.4464,50.0629,130.04,26.8985
-internal_5000,"Internal 5,000-unit run",B2_generic_llm,B2,5000,73.7571,52.3302,41.9689,59.3819,115.37,17.579499999999996
-internal_5000,"Internal 5,000-unit run",B3_jira_enhancer,B3,5000,88.1772,66.972,68.7602,76.9614,74.49,0.0
-swebench_lite_test,SWE-bench Lite test,B0_manual,B0,300,60.3884,30.6189,35.2115,45.1633,187.03,32.726099999999995
-swebench_lite_test,SWE-bench Lite test,B1_template_rules,B1,300,57.7203,48.1954,35.3383,49.2673,122.78,28.622099999999996
-swebench_lite_test,SWE-bench Lite test,B2_generic_llm,B2,300,79.3551,48.394,42.7934,60.9263,139.62,16.963099999999997
-swebench_lite_test,SWE-bench Lite test,B3_jira_enhancer,B3,300,89.9199,66.6545,69.7165,77.8894,74.63,0.0
