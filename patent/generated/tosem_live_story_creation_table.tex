@@ -1,0 +1,13 @@
+\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}p{0.26\textwidth}X@{}}
+\toprule
+Evidence dimension & Observed value & Interpretation \\
+\midrule
+Deployment scope & 9 epics, 45 stories & Exercises the full Confluence-to-Jira planning path at batch level. \\
+Writeback outcome & 44 created; 1 duplicate-safe link check & Distinguishes new issue creation from reuse of an existing story. \\
+Parent-epic binding & 45/45 (100.0\%) & Confirms that every generated or checked story is attached to its intended epic. \\
+Generated-payload coverage & 44/44 new stories (100.0\%) & All newly created payloads include the evidence reference, acceptance criteria, tests, and operational criteria; the pre-existing linked record is excluded. \\
+RL outcome telemetry & 45 outcomes; reward 0.50--0.70; mean 0.5822 & Rewards vary with confidence lift instead of treating all accepted stories as a flat success. \\
+Refinement-strategy signal & Dependency-aware planning: 4, Evidence-context enrichment: 5, Acceptance-criteria enrichment: 36 & Shows which policy-selected refinement strategies were used in the live batch. \\
+Convergence signal & mean terminal loss 0.00 & The confidence-gap objective reached zero for the recorded live outcomes. \\
+\bottomrule
+\end{tabularx}

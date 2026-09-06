@@ -1,0 +1,118 @@
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\setlength{\LTpre}{4pt}
+\setlength{\LTpost}{4pt}
+\renewcommand{\arraystretch}{0.92}
+\begin{longtable}{@{}>{\raggedright\arraybackslash}p{0.31\textwidth}>{\raggedright\arraybackslash}p{0.64\textwidth}@{}}
+\caption{Comprehensive notation used in the formal models, algorithms, and evaluation.}\label{tab:notation}\\
+\toprule
+Symbol & Definition \\
+\midrule
+\endfirsthead
+\multicolumn{2}{c}{\tablename\ \thetable\ (continued)}\\
+\toprule
+Symbol & Definition \\
+\midrule
+\endhead
+\midrule
+\multicolumn{2}{r}{Continued on next page}\\
+\endfoot
+\bottomrule
+\endlastfoot
+
+\multicolumn{2}{@{}l}{\textbf{Planning, evidence, and constrained selection}}\\
+$E, E_u$ & Epic under analysis; $E_u$ is an epic unit supplied to an evaluation core. \\
+$s,s_i,s_j$ & Candidate story and indexed candidate stories. \\
+$S_{\mathrm{existing}}$ & Stories already linked to $E$. \\
+$S_{\mathrm{cand}}$ & Finite candidate-story set generated for $E$. \\
+$S_{\mathrm{new}}$ & Candidate subset proposed for possible creation. \\
+$S_{\mathrm{eligible}}$ & Duplicate-free candidates satisfying confidence, approval, validation, and policy-allow conditions. \\
+$S_{\mathrm{create}}$ & Stories successfully added to the controlled creation set. \\
+$S^*$ & Augmented plan $S_{\mathrm{existing}}\cup S_{\mathrm{new}}$. \\
+$\mathcal{D},\mathcal{D}_{\mathrm{ext}},\mathcal{D}_{\mathrm{jira}}$ & Complete evidence corpus, externally retrieved evidence, and Jira-embedded evidence. \\
+$\mathbf{m}(s)$ & Candidate metric tuple containing confidence, readiness, utility, ambiguity, risk, approval, and source hash. \\
+$C(s),C_s$ & Normalized confidence in $[0,1]$ for story $s$ and its algorithmic shorthand. \\
+$C_{10}(s),C_{10,t}$ & Displayed confidence for story $s$ and at refinement attempt $t$ on the zero-to-ten UI scale, with $C_{10}(s)=10C(s)$. \\
+$R(s),R_s,R_s(\mathbf{x})$ & Readiness of story $s$, its algorithmic shorthand, and readiness viewed as a function of evidence coverage. \\
+$U(s),\operatorname{Amb}(s),\rho(s)$ & Expected utility, ambiguity, and risk of candidate $s$. \\
+$A(s),A_s$ & Explicit human-approval indicator and its algorithmic shorthand; both are binary. \\
+$V(s),V_s$ & Validator result for schema, contradiction, and required-field checks; both are binary. \\
+$\Pi,\Pi(s),g_{\Pi}(s)$ & Versioned governance policy, its decision for $s$, and the binary policy-allow indicator. \\
+$I_{\mathrm{ctx}}(s)$ & Binary indicator that story $s$ is operating with limited external context. \\
+$I_{\mathrm{esc}}(s),I_{\mathrm{create}}(s)$ & Binary escalation-required and creation-eligibility predicates for story $s$. \\
+$h_s,H(\cdot)$ & Source-state hash stored at decision time and deterministic cryptographic hash function. \\
+$\tau_c,\tau_{10},\tau_e,\tau_r$ & Normalized creation threshold (default $0.9$), its displayed equivalent $\tau_{10}=10\tau_c$, escalation threshold, and offline replay shaping threshold ($0.8$). \\
+$y_s$ & Binary selection variable; $y_s=1$ selects $s$ for the augmented plan. \\
+$\mathbb{1}[\cdot]$ & Indicator function, equal to one when its predicate is true and zero otherwise. \\
+$\operatorname{summary}(s),\operatorname{norm}(\cdot)$ & Story summary and deterministic lowercase/alphanumeric normalization. \\
+$\sim_n,\mathcal{F}_{\mathrm{dup}}$ & Normalized-summary equivalence relation and duplicate-free candidate domain. \\
+$\lambda_{\rho},\lambda_{\mathrm{Amb}}$ & Non-negative objective weights for risk and ambiguity. \\
+$\mathrm{SP}(s),B_{\mathrm{sprint}}$ & Story-point estimate for candidate $s$ and sprint story-point budget. \\
+$\operatorname{dep}(s_i,s_j),\operatorname{team}(s),g,\operatorname{cap}_g,\operatorname{ord}(s)$ & Dependency indicator, assigned team, team index, team-capacity bound, and release-order position. \\
+$f(\cdot),\xi_{\mathrm{scope}},\xi_{\mathrm{integration}},\xi_{\mathrm{risk}},\xi_{\mathrm{unknown}}$ & Story-point mapping and normalized complexity priors were used for the initial assignment. \\
+$\mathcal{W}_{\mathrm{create}}$ & Result of the controlled creation operation on $S_{\mathrm{eligible}}$. \\
+
+\addlinespace[2pt]
+\multicolumn{2}{@{}l}{\textbf{Readiness, confidence, and calibration}}\\
+$\mathbf{x}=(x_d,x_a,x_p,x_e,x_h,x_g)$ & Binary vector of evidence for the description, acceptance criteria, dependencies, external evidence, activity history, and edge cases. \\
+$R_{\mathrm{src}}(\mathbf{x})$ & Base evidence score computed as a weighted sum of the evidence coverage vector $\mathbf{x}$. \\
+$B_{\mathrm{gen}},P_{\mathrm{gap}}$ & Bounded generated-content bonus and evidence-gap penalty. \\
+$z_i,w_i,b_{\max}$ & The quality facet of the generated content and the weight of the facet; the bounded generated bonus total. \\
+$\eta_d,\eta_a,\eta_p,\eta_e$ & Gap-penalty weights (non-negative) for missing description, acceptance criteria, dependencies, and external evidence. \\
+$\delta_C,\gamma_{\mathrm{ceiling}}$ & Bounded confidence update and the evidence-based confidence ceiling. \\
+$\operatorname{clip}(u,a,b)$ & Clipping operator $\min(\max(u,a),b)$. \\
+$\operatorname{ECE},\operatorname{Brier}$ & Expected calibration error and Brier score; both require post-delivery labels. \\
+
+\addlinespace[2pt]
+\multicolumn{2}{@{}l}{\textbf{Prompt policy, reward, and convergence}}\\
+$p_k,k$ & Prompt pack associated with arm $k$ and the arm index. \\
+$\theta_k,\widetilde\theta_{k,t}$ & Success probability of the underlying arm and its Thompson sample at attempt $t$. \\
+$\alpha_k,\beta_k$ & Soft counts of successes and failures for the Beta posterior of arm $k$. \\
+$n_k,\bar r_k$ & Number of recorded outcomes and running mean reward for arm $k$. \\
+$\mathbf{h}_t$ & Context feature state used for choosing the policy at attempt $t$. \\
+$\mathcal{K},\mathcal{K}_{\mathrm{safe}}(\mathbf{h}_t)$ & Complete set of prompt arms and the subset that satisfies every governance condition at attempt $t$. \\
+$\chi_j(k,\mathbf{h}_t)$ & Binary governance check for arm $k$ under condition $j$ and context $\mathbf{h}_t$; 1 means satisfied and 0 means rejected. \\
+$j,n_{\chi}$ & Governance-condition index and total number of governance conditions. \\
+$C^{\mathrm{before}}_{10,t},C^{\mathrm{after}}_{10,t}$ & Displayed confidence before and after the recorded outcome for selected arm $k_t$. \\
+$d_t,w_t$ & Recorded reviewer decision and writeback status for the selected arm. \\
+$r_t,q_t$ & Signed reward clipped to $[-1,1]$ and its fractional Beta success credit $q_t=(r_t+1)/2$. \\
+$T,t,k_t$ & Horizon of attempts, attempt number, and arm chosen at attempt $t$. \\
+$\ell_t,\ell_0,\ell(t),\ell(0)$ & Confidence gap at attempt $t$, its algorithmic initial value, its continuous interpolation, and the corresponding continuous-time initial gap. \\
+$\kappa,\widehat\kappa_t$ & Effective lag-convergence rate and its attempt-level estimate. \\
+$d_{\ell}(t),d_{\max}$ & Lag disturbance and its assumed absolute bound. \\
+$\mathbb{E}[\cdot],\Pr(\cdot),\arg\max$ & Expectation, probability, and maximizing-argument operators. \\
+$\mathcal{L}\{\cdot\},s_L,\Lambda_{\ell}(s_L),D_{\ell}(s_L)$ & Laplace-transform operator, Laplace-domain variable, transform of $\ell(t)$, and transform of $d_{\ell}(t)$. \\
+$\epsilon$ & Positive numerical guard for rate estimation. \\
+$\mathcal{X},\mathcal{P},\mathcal{C},\mathcal{T}_{\mathrm{audit}}$ & Connector set, prompt-policy state, retrieved context pack, and durable attempt/audit trace. \\
+
+\addlinespace[2pt]
+\multicolumn{2}{@{}l}{\textbf{Approval-bound mutation and batch outcomes}}\\
+$\mathcal{E}_a,\mathcal{E}_t$ & Approved source-bound transaction envelope and the corresponding runtime envelope evaluated immediately before mutation. \\
+$r_{\mathrm{run}},i_{\mathrm{issue}}$ & Run and issue identifiers bound into $\mathcal{E}_a$. \\
+$\nu_s,\nu_d,h_d$ & Approved source revision, draft version, and draft payload hash; the approved source hash is $h_s$. \\
+$\nu_{\Pi},h_{\Pi}$ & Approved governance-policy version and policy-snapshot hash. \\
+$\mathcal{T}_{\mathrm{target}}$ & Canonical set of allowed mutation targets. \\
+$a_{\mathrm{dec}},u_{\mathrm{rev}},t_a$ & Approval decision, reviewer identifier, and approval time. \\
+$I_{\mathrm{tx}}$ & Transaction identifier $H(\mathcal{E}_a)$. \\
+$K_{A2},K_{A3}$ & A2 payload-level idempotency key and A3 source-bound envelope key. \\
+$\mathrm{A0},\mathrm{A1},\mathrm{A2},\mathrm{A3}$ & Mutation-safety arrangements: ordinary approval/logging, source-hash conditional write, source hash with atomic idempotency, and the source-bound transaction envelope. \\
+$h_{\mathrm{current}},h_{\mathrm{expected}}$ & Runtime source hash and approved source hash expected by writeback, where $h_{\mathrm{expected}}:=h_s$. \\
+$\operatorname{permit}(\mathcal{E}_a,\mathcal{E}_t)$ & Binary mutation authorization predicate. \\
+$\operatorname{write}(s)$ & Binary write indicator; it equals one when story $s$ is written to Jira and zero otherwise. \\
+$o_s,\mathcal{B}_{\mathrm{batch}},\operatorname{status}(\mathcal{B}_{\mathrm{batch}})$ & Per-story creation outcome, candidate batch, and precedence-derived batch status. \\
+
+\addlinespace[2pt]
+\multicolumn{2}{@{}l}{\textbf{Evaluation and statistical analysis}}\\
+$\mathrm{B0},\mathrm{B1},\mathrm{B2},\mathrm{B3},m$ & Manual reference, template/rule core, one-shot drafting control, Jira Enhancer, and method index. \\
+$Q_m,\mathrm{Eff}_m,G_m,\mathrm{Composite}_m,\mathrm{Time}_m$ & Quality, efficiency, governance, composite, and time indices for method $m$. \\
+$w_Q,w_{\mathrm{Eff}},w_G$ & Fixed non-negative composite-index weights that sum to one. \\
+$\Delta$ & Formula-derived composite difference to B3 within an input set. \\
+$Q_{\mathrm{omni}}$ & Matched-study permutation omnibus statistic. \\
+$r_{rb}$ & Paired rank-biserial effect size. \\
+$n,\mathrm{SD},\mathrm{IQR},\mathrm{P90}$ & Generic sample size, sample standard deviation, interquartile range, and 90th percentile. \\
+$p,p_{\mathrm{Holm}}$ & Raw or Holm-adjusted probability value. \\
+$\mathrm{CI},\mathrm{ICC}(2,1)$ & Confidence interval and two-way random-effects absolute-agreement intraclass correlation. \\
+$\texttt{service\_mode}$ & Connector operating mode: \texttt{full-context} or \texttt{reduced-context}. \\
+\end{longtable}
+\endgroup

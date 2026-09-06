@@ -1,0 +1,5 @@
+method,label,n_runs,mean_time_to_ready_minutes,median_time_to_ready_minutes,p90_time_to_ready_minutes,std_time_to_ready_minutes,speedup_vs_b0_x
+B0_manual,B0,5000,187.8761,187.9,193.14,4.1242,1.0
+B1_template_rules,B1,5000,130.0419,132.82,135.96,6.0616,1.4447
+B2_generic_llm,B2,5000,115.3715,115.735,117.28,2.4974,1.6284
+B3_jira_enhancer,B3,5000,74.488,74.36,77.11,2.0066,2.5222

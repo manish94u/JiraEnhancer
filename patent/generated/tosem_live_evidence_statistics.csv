@@ -1,0 +1,6 @@
+metric,n,estimate,ci95_low,ci95_high,unit,evidence_class
+paired_confidence_delta,70,2.1714,1.9429,2.4,confidence_points,live_endpoint_telemetry
+positive_confidence_delta_rate,70,1.0,0.947977,1.0,proportion,live_endpoint_telemetry
+new_issue_creation_success_rate,69,1.0,0.947263,1.0,proportion,authenticated_connector_outcome
+latest_parent_epic_binding_rate,45,1.0,0.921348,1.0,proportion,authenticated_connector_outcome
+generated_payload_coverage_rate,44,1.0,0.919704,1.0,proportion,latest_wave_payload_audit

@@ -1,0 +1,3 @@
+test,metric,statistic,p_value,n_total
+Kruskal-Wallis,composite_index,18744.321734714656,0.0,20000
+One-way ANOVA,composite_index,930378.4863924617,0.0,20000

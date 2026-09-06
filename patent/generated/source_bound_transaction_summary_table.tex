@@ -1,0 +1,17 @@
+\begin{center}
+\captionof{table}{Controlled source-bound transaction ablation. Rates are scenario-balanced fault-injection outcomes, not production incidence estimates.}
+\label{tab:source-bound-causal-ablation}
+\par\vspace{0.6\baselineskip}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xcccc@{}}
+\toprule
+Arrangement & Stale & Duplicate & Unsafe & Correct \\
+\midrule
+A0 ordinary approval/log & 66.7\% & 33.3\% & 88.9\% & 11.1\% \\
+A1 source-hash conditional & 44.4\% & 22.2\% & 66.7\% & 33.3\% \\
+A2 source hash + idempotency & 44.4\% & 0.0\% & 44.4\% & 55.6\% \\
+A3 source-bound causal & 0.0\% & 0.0\% & 0.0\% & 100.0\% \\
+\bottomrule
+\end{tabularx}
+\end{center}
