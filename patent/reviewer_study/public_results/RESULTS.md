@@ -1,65 +1,68 @@
-# Five-Reviewer Matched Review Results
+# Matched Review Results
+
+The current report uses the corrected reviewer ratings and the revised priority-weighted composite. Implementation readiness receives 40%, dependencies and risks 20%, granularity and actionability 20%, and each remaining dimension 5%. The weights were selected after the initial analysis, so this is an exploratory weighted outcome.
 
 ## Design
 
-- Five completed, method-blinded workbooks.
-- Fourteen common epic/evidence inputs.
-- Three executed methods: B1 deterministic template/rule, B2 one-shot generic LLM, and B3 Jira Enhancer.
-- Forty-two primary packages and 210 primary stories.
-- Four masked repeats per reviewer, giving 20 repeat pairs.
-- Reviewers 3--5 are the prespecified primary analysis because Reviewers 1--2 had earlier B3-only exposure.
-- All five reviewers form the sensitivity analysis.
-- The epic/input is the inference unit (n=14); masked repeats do not enter method-effect estimates.
+Five reviewers rated 42 method-blinded packages from 14 common inputs and three executed methods: B1 deterministic templates, B2 one-shot drafting, and B3 Jira Enhancer. Reviewers 3–5 form the primary analysis; all five form the sensitivity analysis. Masked repeats are excluded from method-effect estimates. Scores are averaged within each epic and method before paired inference.
 
-## Integrity
+## Current results
 
-The five completed workbooks passed structural and content-integrity validation. Instructions, rubrics, artifact catalogs, rating order, and artifact identifiers are unchanged from the issued files. All 230 rows are complete, no required values are missing, and the formula-error scans are clean.
-
-## Primary Results
-
-| Method | Composite mean [95% CI] | Readiness mean | Review time median [IQR] | Required edits median [IQR] | Ready or minor |
+| Method | Weighted composite [95% CI] | Readiness | Review time, median [IQR] | Required edits, median [IQR] | Ready or minor |
 |---|---:|---:|---:|---:|---:|
-| B1 | 2.74 [2.45, 3.04] | 2.50 | 9.0 [8.0, 10.0] | 10.5 [7.0, 14.0] | 50.0% |
-| B2 | 4.21 [3.88, 4.53] | 3.52 | 10.0 [10.0, 11.8] | 2.5 [1.0, 5.0] | 66.7% |
-| B3 | 4.31 [4.09, 4.51] | 3.74 | 9.0 [9.0, 10.0] | 2.0 [2.0, 3.0] | 88.1% |
+| B1 | 2.564 [2.300, 2.832] | 2.500 | 9.0 [8.0, 10.0] | 10.5 [7.0, 14.0] | 50.0% |
+| B2 | 3.586 [3.204, 3.957] | 3.524 | 10.0 [10.0, 11.8] | 2.5 [1.0, 5.0] | 66.7% |
+| B3 | 4.321 [4.114, 4.517] | 4.595 | 8.0 [8.0, 9.0] | 2.0 [2.0, 3.0] | 88.1% |
 
-The three-method clustered omnibus test gives Q=19.75 with Monte Carlo p<0.00001.
+| Outcome | Contrast | Mean difference [95% CI] | Raw p | Holm p |
+|---|---|---:|---:|---:|
+| Weighted composite | B3-B2 | 0.736 [0.550, 0.930] | 0.00012207 | 0.00024414 |
+| Weighted composite | B3-B1 | 1.757 [1.430, 2.096] | 0.00012207 | 0.00024414 |
+| review time min | B3-B2 | -2.152 [-2.348, -1.986] | 0.00012207 | 0.00024414 |
+| review time min | B3-B1 | -0.748 [-1.248, -0.276] | 0.00878906 | 0.00878906 |
+| required edits | B3-B2 | -0.643 [-1.548, 0.190] | 0.20507812 | 0.20507812 |
+| required edits | B3-B1 | -8.024 [-9.905, -6.214] | 0.00012207 | 0.00024414 |
 
-- Primary B3--B2 composite contrast: +0.10, 95% CI [-0.13, 0.36], Holm-adjusted exact p=0.485, paired rank-biserial r=0.12.
-- Secondary B3--B1 composite contrast: +1.56, 95% CI [1.23, 1.91], Holm-adjusted exact p=0.00024, r=1.00.
-- B3--B2 assessment-time contrast: -1.02 minutes, 95% CI [-1.57, -0.48], Holm-adjusted exact p=0.0098.
-- B3--B2 required-edits contrast: -0.64, 95% CI [-1.55, 0.19], Holm-adjusted exact p=0.205.
-- B3--B1 required-edits contrast: -8.02, 95% CI [-9.90, -6.21], Holm-adjusted exact p=0.00024.
+The three-method permutation comparison gives Q=23.286, Monte Carlo p=0.00000500. Exact paired sign-flip tests and 100,000 epic-bootstrap resamples use 14 matched epics. Holm adjustment covers the two method contrasts within each outcome family.
 
-The all-five sensitivity analysis preserves these conclusions.
+B3 has a higher weighted composite than B2 and B1 on all 14 matched epics. The all-five-reviewer sensitivity analysis also favors B3 on all 14 epics for both contrasts. These results describe the corrected ratings under the revised scoring rule; they do not isolate the effect of the critic, schema, or learning policy.
 
-## Dimension Profile
+## Dimension results
 
-B3 is descriptively higher than B2 on granularity/actionability (+0.55), dependency/risk treatment (+0.29), implementation readiness (+0.21), story distinctness (+0.14), and scope fidelity (+0.07). It is lower on acceptance/testability (-0.43) and coverage completeness (-0.14). None of the seven exploratory dimension contrasts survives Holm correction.
+| Dimension | Weight | B2 | B3 | Difference | Holm p |
+|---|---:|---:|---:|---:|---:|
+| Scope fidelity | 5% | 3.857 | 4.071 | 0.214 | 0.007812 |
+| Coverage completeness | 5% | 3.929 | 4.786 | 0.857 | 0.000854 |
+| Story distinctness | 5% | 4.000 | 4.214 | 0.214 | 0.007812 |
+| Acceptance criteria and testability | 5% | 3.643 | 4.024 | 0.381 | 0.000854 |
+| Dependencies and risks | 20% | 3.786 | 4.571 | 0.786 | 0.000854 |
+| Granularity and actionability | 20% | 3.238 | 3.571 | 0.333 | 0.000854 |
+| Implementation readiness | 40% | 3.524 | 4.595 | 1.071 | 0.005859 |
 
-## Agreement Diagnostics
+## Agreement and source checks
 
-- Primary composite ICC(2,1): 0.999.
-- Pairwise exact composite agreement: 96.8%.
-- Pairwise within-one-point composite agreement: 100%.
-- All 12 primary masked-repeat pairs reproduce all 84 dimension ratings and dispositions exactly.
-- Every primary package has three distinct narrative comments.
-- Mean pairwise comment-text similarity: 0.127.
+For the weighted composite, primary-reviewer ICC(2,1) is 0.9762; exact pairwise agreement is 66.7% and within-one-point agreement is 100.0%. Across 12 primary masked-repeat pairs, 100.0% of dimension ratings agree exactly, and 100.0% of dispositions agree. These diagnostics were recomputed from the current corrected CSV.
 
-The score agreement is unusually high. It is reported together with comment distinctness and should be treated as a limited diagnostic rather than evidence that reviewers are generally interchangeable.
+The current source contains 230 complete rating rows, including 210 primary ratings and 20 masked repeats. Its rating ranges, matched grid, composite calculation, and source checksum were checked. The source CSV is unchanged by this analysis. The study authors identify the corrected ratings as corrections supplied by the original reviewers.
 
-## Resource Accounting
+Source SHA-256: `3f59f0f191d80768e10d07a0365d4f3d8a20f2c04f6e0cdb31b97055030cb61f`.
 
-| Method | Model calls | Calls/package | Cumulative model seconds | Static top-up stories |
-|---|---:|---:|---:|---:|
-| B1 | 0 | 0.0 | 0 | 24 |
-| B2 | 14 | 1.0 | 2,087 | 0 |
-| B3 | 173 | 12.36 | 19,906 | 0 |
+## Resource accounting
 
-Cumulative invocation seconds sum model-call durations and are not elapsed wall-clock time because inputs were processed in parallel.
+| Method | Model calls | Calls/package | Cumulative invocation seconds |
+|---|---:|---:|---:|
+| B1 | 0 | 0.00 | 0 |
+| B2 | 14 | 1.00 | 2,087 |
+| B3 | 173 | 12.36 | 19,906 |
 
-## Defensible Interpretation
+Invocation durations are summed across calls and are not elapsed wall-clock time. Governance and mutation safety come from separate experiments. The matched artifact study does not measure downstream delivery, isolated learning effects, or general computational efficiency.
 
-The matched study supports a large B3 advantage over deterministic templating. It does not support an overall artifact-quality advantage over the executed one-shot generic-LLM baseline. B3 does show lower human assessment time, a more implementation-oriented dimension profile, and fewer major-revision decisions, but it uses substantially more model calls. Governance and mutation safety are evaluated in separate experiments because those mechanisms were hidden during artifact review.
+## Reproduction
 
-The study does not establish downstream defects, delivery cycle time, trust, end-to-end productivity, compute efficiency, or cross-domain generalization.
+From the repository root, run:
+
+```bash
+python3 patent/reviewer_study/verify_weighted_results.py
+```
+
+The verifier recalculates the weighted means, both paired method contrasts, exact sign-flip p-values, Holm adjustments, and bootstrap intervals from the public `matched_review_epic_scores.csv` file. That file contains aggregate values under neutral unit identifiers for both reviewer sets.

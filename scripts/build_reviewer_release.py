@@ -28,6 +28,7 @@ TOP_LEVEL_FILES = (
 )
 
 PATENT_FILES = (
+    "TOSEM_ARTIFACT_README.md",
     "analyze_tosem_live_evidence.py",
     "generate_b2_b3_learning_figure.py",
     "generate_cross_dataset_comparison.py",
@@ -158,6 +159,8 @@ def build(destination: Path) -> dict[str, object]:
     _copy_filtered_tree(Path("patent/artifacts/b2_b3_pilot"), destination, {".csv", ".json", ".md"})
     _copy_filtered_tree(Path("patent/reviewer_study/public_results"), destination, {".csv", ".json", ".md", ".tex"})
     _copy_file(Path("patent/reviewer_study/build_four_mode_audit.py"), destination)
+    _copy_file(Path("patent/reviewer_study/verify_weighted_results.py"), destination)
+    _copy_file(Path("patent/artifacts/remediation/iteration_effort/matched_iteration_effort.pdf"), destination)
 
     files = sorted(path for path in destination.rglob("*") if path.is_file())
     manifest = {

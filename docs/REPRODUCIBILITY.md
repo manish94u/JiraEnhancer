@@ -1,13 +1,10 @@
 # Reproducibility guide
 
-This guide separates fully offline checks from optional or restricted steps. It
-does not require Jira, Confluence, Bitbucket, an LLM account, or private study
-workbooks for the core reviewer workflow.
+The core reviewer workflow runs locally from the released code, synthetic fixtures, and de-identified evidence. Optional steps cover public-dataset downloads, model-backed generation, and authenticated enterprise connectors.
 
 ## Environment
 
-Use Python 3.11 or newer. Create an isolated environment, then install the
-reviewer dependencies:
+Use Python 3.11 or newer. Create an isolated environment and install the reviewer dependencies:
 
 ```bash
 python3 -m venv .venv-reviewer
@@ -16,11 +13,7 @@ python3 -m pip install --upgrade pip
 python3 -m pip install -r requirements-reviewer.txt
 ```
 
-All commands below run from the repository root. The offline reviewer targets
-write regenerated outputs under `outputs/reproduced/`, which Git ignores. The
-optional public benchmark writes manuscript-ready outputs under
-`patent/generated/`. The manuscript build writes intermediates and its compiled
-copy under `patent/out_tosem/`.
+Run the commands below from the repository root. Offline reviewer targets write their outputs under `outputs/reproduced/`. The optional public benchmark writes manuscript-ready outputs under `patent/generated/`; LaTeX intermediates and the compiled paper go to `patent/out_tosem/`.
 
 ## Five-minute offline check
 
@@ -30,15 +23,9 @@ make mock-demo
 make public-artifact
 ```
 
-`make test` runs the Python unit-test suite. `make mock-demo` processes the
-bundled mock issue `DEMO-18324`. It explicitly disables live connectors, model
-calls, and the local Codex configuration. No credentials are needed.
+`make test` runs the Python unit tests. `make mock-demo` processes the bundled `DEMO-18324` fixture using deterministic local reasoning and stores the run locally.
 
-`make public-artifact` verifies only the released package under
-`patent/artifacts/tosem/`. It checks SHA-256 hashes and public schemas for
-identifiers. It also recomputes the reported counts and descriptive statistics
-from the de-identified CSV files. This verifies the released package. It does
-not recreate de-identification from private source telemetry.
+`make public-artifact` verifies the released package under `patent/artifacts/tosem/`. It checks SHA-256 hashes, schemas, identifiers, counts, and descriptive statistics against the de-identified CSV files. Exporting the confidential source telemetry is a separate access-controlled step.
 
 ## Fault-injection experiment
 
@@ -46,14 +33,7 @@ not recreate de-identification from private source telemetry.
 make fault-injection
 ```
 
-This runs the source-bound transaction experiment with the declared seed and
-2,000 trials per scenario. It writes a fresh evidence bundle to
-`outputs/reproduced/source_bound_transaction/`. The target then runs the focused
-causal-transaction unit tests.
-
-The experiment is synthetic and scenario-balanced. Its rates show behavior
-under the declared injected faults. They are not estimates of fault prevalence
-in a production Jira deployment.
+The experiment uses the declared seed, nine scenarios, 2,000 trials per scenario, and four control arrangements, giving 72,000 observations. It writes a fresh evidence bundle to `outputs/reproduced/source_bound_transaction/` and runs the focused transaction tests. The resulting rates describe behavior under these scenario-balanced injected faults.
 
 ## Public figures
 
@@ -61,98 +41,70 @@ in a production Jira deployment.
 make public-figures
 ```
 
-The command rebuilds the public figure subset in
-`outputs/reproduced/public_figures/`. The confidence and scoring figures read
-released files in `patent/artifacts/tosem/`. The arm-learning and critic-reward
-figures read the sanitized trace in `patent/artifacts/b2_b3_pilot/`. No target
-reads `runtime/`. `reproduce_public_figures.py` writes the public-figure
-manifest with output hashes. The separate B2/B3 arm-learning command writes its
-two PNG files after that manifest is created. The timeline and Laplace figures
-use the committed Pillow renderer so their layout does not change when
-Matplotlib is installed.
+The command writes figures to `outputs/reproduced/public_figures/`. The endpoint and scoring figures read the released files in `patent/artifacts/tosem/`; the arm-learning and critic-reward figures read the sanitized trace in `patent/artifacts/b2_b3_pilot/`.
 
-The terminal-confidence figure uses de-identified workflow telemetry. The
-B0--B3 distribution figures use formula-expanded sensitivity units. Those units
-inspect the declared scoring model. They are not independent production
-observations and should not be used as population-level evidence.
+`reproduce_public_figures.py` writes a manifest with output hashes. The separate B2/B3 arm-learning command then writes its two PNG files. The committed Pillow renderer keeps the timeline and Laplace layouts consistent across environments.
 
-The target also rebuilds the B2/B3 arm-selection figure. It reads the sanitized
-99-step posterior trace in `patent/artifacts/b2_b3_pilot/`. The trace contains
-arm identifiers, rewards, and posterior values. It contains no source packet,
-generated text, or held-out input identifier. This figure shows how selection
-weights changed. It is not a learning curve for human-rated quality or delivery
-performance.
+Endpoint score fields in the released telemetry are retrospective export values. The B0--B3 distribution figures use formula-expanded sensitivity units derived from reused inputs. Their purpose is to inspect the scoring equations. The 99-step arm trace records model-critic rewards and posterior values, showing how prompt-selection weights changed. Human artifact ratings are reported in the matched review below.
 
-Architecture figures are committed directly because they are design diagrams.
-Their editable sources are included with the figure assets when available.
+Architecture figures are supplied as design diagrams, with editable sources alongside the figure assets where available.
 
-## Optional public-dataset diagnostic
+## Current matched human review
 
-This step needs internet access the first time because it retrieves the public
-SWE-bench Lite test split:
+The current analysis uses reviewer-corrected ratings for 42 B1/B2/B3 packages and 210 stories from 14 common epic inputs. Reviewers 3--5 form the primary set; all five reviewers form the sensitivity analysis. Each epic is one paired inference unit. Masked repeats contribute to agreement checks.
+
+The revised composite gives implementation readiness 40%, dependencies and risks 20%, granularity and actionability 20%, and each remaining rubric dimension 5%. These weights were selected after the initial analysis and define an exploratory weighted outcome. The primary weighted means are B3=4.32 and B2=3.59, with a difference of +0.74 points (95% epic-bootstrap CI [0.55, 0.93], Holm-adjusted exact p=0.000244).
+
+The public tables in `patent/reviewer_study/public_results/` report method summaries, paired contrasts, rubric dimensions, agreement diagnostics, and resource accounting. Recalculate the current weighted contrasts from the released epic means with:
+
+```bash
+python3 patent/reviewer_study/verify_weighted_results.py
+```
+
+The command reads `matched_review_epic_scores.csv`, which contains 84 aggregate rows: 14 neutral unit identifiers, three methods, and two reviewer sets. It recomputes means, exact sign-flip p-values, Holm adjustments, and 100,000-resample paired confidence intervals. Reviewer-level ratings, narrative comments, and allocation keys remain access-controlled. The private source calculation is implemented in `patent/artifacts/remediation/weighted_quality/update_current_reports.py`.
+
+The comparison measures complete workflows: B2 used 14 model calls and B3 used 173. The corrected assessment-time records show 2.15 minutes lower mean review time for B3 (95% CI [-2.35, -1.99], Holm-adjusted exact p=0.000244).
+
+## Public-dataset diagnostic
+
+The first run retrieves the public SWE-bench Lite test split:
 
 ```bash
 make install-benchmark
 make public-benchmark
 ```
 
-The diagnostic applies the manuscript's formula-based scoring functions to
-public issue text. It is a sensitivity and transfer check. It does not execute
-the complete Jira Enhancer workflow, and it is not a compute-matched comparison
-of deployed systems.
+This diagnostic applies the declared scoring functions to public issue descriptions. It measures the sensitivity of the formulas across source texts, separately from the executed B1/B2/B3 human-review experiment.
 
 ## Build the manuscript
 
-A TeX distribution with `latexmk` is required. The build uses committed figures
-and `patent/references_2020_plus.bib`:
+Install a TeX distribution with `latexmk`, then run:
 
 ```bash
 make paper
 ```
 
-The compiled PDF and intermediate files are written to
-`patent/out_tosem/`, which Git ignores. The repository also includes the current
-47-page reviewer PDF at `patent/jiraenhancer_tosem_acm.pdf`.
+The build reads the committed figures and `patent/references_2020_plus.bib`. It writes the PDF and intermediate files to `patent/out_tosem/`. The current 44-page reviewer PDF is `patent/jiraenhancer_tosem_acm.pdf`. Figure regeneration is a separate target, so compiling the paper uses the existing publication assets.
 
-To remove LaTeX intermediate files:
+Clean the LaTeX intermediate files with:
 
 ```bash
 make paper-clean
 ```
 
-Figure regeneration is intentionally not a prerequisite for the paper build.
-This prevents a manuscript compile from reading private runtime data.
+## Evidence access
 
-## Evidence and access boundaries
+The public repository supplies code, tests, design figures, synthetic fault schedules, de-identified evidence, aggregate human-review results, and scripts for those released inputs. Enterprise source text, reviewer-level records, credentials, and live runtime state remain in access-controlled storage.
 
-The public repository includes code, tests, design figures, synthetic fault
-injection, de-identified aggregate evidence, and scripts that operate on those
-released inputs. It excludes credentials, connector logs, runtime stores,
-personal identifiers, private reviewer workbooks, and raw enterprise issue
-text.
+The four-mode audit builder accepts compatible review inputs. The B2/B3 diagnostic release provides aggregate results and a sanitized posterior trace; its enterprise packets and generated artifacts remain restricted. Each reproduction path above states the input and output that it verifies.
 
-The released four-mode audit builder may be inspected and run with compatible
-review inputs supplied by the reviewer. Other matched-review processing scripts
-and the original workbooks cannot be redistributed. The
-B2/B3 pilot release contains aggregate results and a sanitized posterior trace.
-Raw prompts, generated outputs, evaluator narratives, and enterprise source
-packets remain outside the public artifact boundary.
+## Build the reviewer release
 
-These restrictions mean that reviewers can verify the released calculations
-and rerun the offline mechanisms, but cannot recreate every empirical extraction
-from the confidential source systems.
-
-## Build the clean reviewer release
-
-The private development tree contains credentials and restricted runtime data.
-Do not publish its Git history. Build a new public tree from the reviewed
-allowlist instead:
+The release builder creates a fresh public tree from a reviewed file allowlist:
 
 ```bash
 python scripts/build_reviewer_release.py \
   --destination ../JiraEnhancer-reviewer-release
 ```
 
-The destination must be empty and outside the private source tree. The builder
-creates `RELEASE_FILE_MANIFEST.json` with a SHA-256 digest for every copied file.
-Initialize and publish Git history only from that clean destination.
+Use an empty destination outside the private source tree. The builder writes `RELEASE_FILE_MANIFEST.json` with a SHA-256 digest for each copied file. Initialize and publish the public Git history from this clean destination, keeping credentials and restricted runtime material in the private development environment.
