@@ -97,6 +97,18 @@ TEST_FILES = (
     "test_rl.py", "test_scorer.py", "test_sources.py", "test_store.py", "test_workflow.py",
 )
 EVIDENCE_FILES = {
+    "patent/artifacts/stomp-rebalance-work-log-20261103": (
+        'README.md',
+        'activity-log.jsonl',
+        'turn-summary.json',
+        'no-additional-input-windows.json',
+        'commit-metadata.json',
+        'test-results.json',
+        'SOURCE_HASHES.json',
+        'REDACTION_LOG.json',
+        'export_sanitized_work_log.py',
+        'CHECKSUMS.sha256',
+    ),
     "patent/artifacts/evaluation": (
         "analysis_summary.json", "anonymized_latest_batch_audit.csv",
         "anonymized_live_story_outcomes.csv", "comparative_5000_units.csv",

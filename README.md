@@ -102,6 +102,12 @@ make public-benchmark
 
 This diagnostic reports scoring-model sensitivity across public issue texts. Its tables and figures are written under `patent/generated/`.
 
+## Downstream development and testing work log
+
+The [sanitized rebalancing work log](patent/artifacts/stomp-rebalance-work-log-20261103/README.md) records the 2 November 2026 implementation and testing iteration: 1,083 retained event positions, including 754 command records. It preserves successful and failed outcomes, recorded user interventions, and five selected execution windows with no additional input after the initiating request or approval.
+
+The [redaction record](patent/artifacts/stomp-rebalance-work-log-20261103/REDACTION_LOG.json) explains the omitted commands, console text, identifiers and confidential operational details. Source hashes and an export script support inspection against the restricted original folder. This is a sanitized audit extract, not a raw-console archive or evidence of an entirely unattended project. The November iteration is distinct from the October scale-out validation.
+
 ## Manuscript and citation
 
 The current [63-page manuscript](patent/emse/jira_enhancer_emse.pdf) is accompanied by its LaTeX source, bibliography, tables, and figures in `patent/emse/`. Install a TeX distribution with `latexmk`, then run `make paper`; the rebuilt PDF is written to `patent/emse/.build/jira_enhancer_emse.pdf`.

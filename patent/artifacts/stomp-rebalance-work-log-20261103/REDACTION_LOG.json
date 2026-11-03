@@ -1,0 +1,38 @@
+{
+  "original_manifest_sha256": "5d6386ad1ca2a6ef82f8a617ee22e93834c2e6c9f630ba71e8dcb38c8b90408f",
+  "policy": "Structured allowlist export; raw strings are withheld rather than relying on token substitution",
+  "preserved": [
+    "All 1083 activity records and original ordering",
+    "All 754 command statuses, exit codes and supplied durations",
+    "All 145 tool statuses and supplied durations",
+    "All 12 turn boundaries and 14 user-message positions",
+    "Five source-selected no-additional-input windows and their initiating context",
+    "13 file-change records with per-file change type and diff-availability flags",
+    "11 commit hashes/timestamps and numeric per-file change statistics",
+    "All 60 retained test-suite records and static-analysis limitations"
+  ],
+  "public_copy_is_not_lossless": true,
+  "raw_reference_reports_not_publicly_reproduced": true,
+  "removed_categories": [
+    "Issue and branch identifiers",
+    "Internal URLs, host/account names and access instructions",
+    "Credentials or credential-bearing arguments if present in raw text",
+    "Personal and working-directory paths",
+    "Human identities, reviewer lists and email addresses",
+    "Chat, turn and item identifiers",
+    "Raw commands, console outputs, code/diff content and free-text report bodies"
+  ],
+  "secret_assertion": "Credential-related instructions and account details were observed; this export does not claim that a live secret value was found",
+  "source_file_count_excluding_desktop_metadata": 55,
+  "source_manifest_entries_verified": 54,
+  "withheld_counts": {
+    "assistant_message_texts": 144,
+    "command_strings_already_omitted_by_source": 650,
+    "command_strings_present_in_source": 104,
+    "desktop_metadata_files_excluded": 2,
+    "full_reference_reports": 5,
+    "output_objects_present_in_source": 53,
+    "raw_machine_test_report_copies": 42,
+    "user_texts_replaced_by_reviewed_paraphrases": 14
+  }
+}

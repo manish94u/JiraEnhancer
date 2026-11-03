@@ -1,0 +1,164 @@
+{
+  "attribution": "User-initiated development and testing with scoped approvals, access renewals and subsequent feedback",
+  "command_exit_code_counts": {
+    "0": 696,
+    "1": 44,
+    "2": 10,
+    "255": 4
+  },
+  "command_status_counts": {
+    "completed": 696,
+    "failed": 58
+  },
+  "counts": {
+    "command_execution": 754,
+    "export_metadata": 1,
+    "file_change": 13,
+    "tool_call": 145,
+    "turn": 12,
+    "user_message": 14,
+    "visible_assistant_message": 144
+  },
+  "coverage": "12 completed turns on 2026-11-02; selected historical references in source bundle; earlier history is incomplete",
+  "no_additional_input_window_count": 5,
+  "timing_limits": "Turn timestamps and individual execution durations are retained. Individual command timestamps were not supplied. Elapsed turn time includes waits.",
+  "tool_status_counts": {
+    "completed": 133,
+    "failed": 12
+  },
+  "total_activity_records": 1083,
+  "turns": [
+    {
+      "command_execution_records": 201,
+      "elapsed_minutes": 49.96,
+      "end_ist": "2026-11-02T14:09:48.000+05:30",
+      "file_change_records": 3,
+      "initiating_context_summary": "Requested review and testing of connection/subscription transfer changes in the Java client in the Mumbai validation environment.",
+      "start_ist": "2026-11-02T13:19:51.000+05:30",
+      "tool_calls": 7,
+      "turn": "T01",
+      "user_message_count": 1
+    },
+    {
+      "command_execution_records": 358,
+      "elapsed_minutes": 185.75,
+      "end_ist": "2026-11-02T17:19:38.000+05:30",
+      "file_change_records": 0,
+      "initiating_context_summary": "Explicitly approved disabling TLS certificate verification for the disposable test clients in this run after certificate validation failed; the exception was scoped to those test processes.",
+      "start_ist": "2026-11-02T14:13:53.000+05:30",
+      "tool_calls": 0,
+      "turn": "T02",
+      "user_message_count": 1
+    },
+    {
+      "command_execution_records": 30,
+      "elapsed_minutes": 10.87,
+      "end_ist": "2026-11-02T18:26:40.000+05:30",
+      "file_change_records": 0,
+      "initiating_context_summary": "Confirmed completion of the requested SSH access renewal for remaining cleanup checks after the prior session expired.",
+      "start_ist": "2026-11-02T18:15:48.000+05:30",
+      "tool_calls": 0,
+      "turn": "T03",
+      "user_message_count": 1
+    },
+    {
+      "command_execution_records": 18,
+      "elapsed_minutes": 9.29,
+      "end_ist": "2026-11-02T18:42:39.000+05:30",
+      "file_change_records": 0,
+      "initiating_context_summary": "Confirmed completion of interactive sign-in after the operator session expired, allowing the remaining temporary-resource cleanup.",
+      "start_ist": "2026-11-02T18:33:21.000+05:30",
+      "tool_calls": 0,
+      "turn": "T04",
+      "user_message_count": 1
+    },
+    {
+      "command_execution_records": 32,
+      "elapsed_minutes": 23.6,
+      "end_ist": "2026-11-02T19:07:16.000+05:30",
+      "file_change_records": 1,
+      "initiating_context_summary": "Requested pull-request review, regression/latency checks, and throughput investigation in three recorded messages.",
+      "start_ist": "2026-11-02T18:43:40.000+05:30",
+      "tool_calls": 13,
+      "turn": "T05",
+      "user_message_count": 3
+    },
+    {
+      "command_execution_records": 6,
+      "elapsed_minutes": 1.55,
+      "end_ist": "2026-11-02T19:35:27.000+05:30",
+      "file_change_records": 0,
+      "initiating_context_summary": "Questioned why event handling was affected and asked whether probing and connection migration could remain separate from that path.",
+      "start_ist": "2026-11-02T19:33:54.000+05:30",
+      "tool_calls": 0,
+      "turn": "T06",
+      "user_message_count": 1
+    },
+    {
+      "command_execution_records": 32,
+      "elapsed_minutes": 20.82,
+      "end_ist": "2026-11-02T19:58:55.000+05:30",
+      "file_change_records": 4,
+      "initiating_context_summary": "Approved the previously discussed Java event-path simplification.",
+      "start_ist": "2026-11-02T19:38:05.000+05:30",
+      "tool_calls": 20,
+      "turn": "T07",
+      "user_message_count": 1
+    },
+    {
+      "command_execution_records": 4,
+      "elapsed_minutes": 1.01,
+      "end_ist": "2026-11-02T20:08:36.000+05:30",
+      "file_change_records": 0,
+      "initiating_context_summary": "Asked whether the Python client followed the same design.",
+      "start_ist": "2026-11-02T20:07:35.000+05:30",
+      "tool_calls": 0,
+      "turn": "T08",
+      "user_message_count": 1
+    },
+    {
+      "command_execution_records": 24,
+      "elapsed_minutes": 44.12,
+      "end_ist": "2026-11-02T20:57:08.000+05:30",
+      "file_change_records": 2,
+      "initiating_context_summary": "Requested the corresponding Python changes.",
+      "start_ist": "2026-11-02T20:13:00.000+05:30",
+      "tool_calls": 63,
+      "turn": "T09",
+      "user_message_count": 1
+    },
+    {
+      "command_execution_records": 42,
+      "elapsed_minutes": 14.95,
+      "end_ist": "2026-11-02T21:29:33.000+05:30",
+      "file_change_records": 1,
+      "initiating_context_summary": "Requested another pull-request review.",
+      "start_ist": "2026-11-02T21:14:36.000+05:30",
+      "tool_calls": 7,
+      "turn": "T10",
+      "user_message_count": 1
+    },
+    {
+      "command_execution_records": 7,
+      "elapsed_minutes": 7.71,
+      "end_ist": "2026-11-02T22:35:13.000+05:30",
+      "file_change_records": 2,
+      "initiating_context_summary": "Requested documentation updates and, if checks passed, creation of pull requests with specified reviewers; reviewer identities are withheld.",
+      "start_ist": "2026-11-02T22:27:30.000+05:30",
+      "tool_calls": 27,
+      "turn": "T11",
+      "user_message_count": 1
+    },
+    {
+      "command_execution_records": 0,
+      "elapsed_minutes": 1.58,
+      "end_ist": "2026-11-02T22:40:14.000+05:30",
+      "file_change_records": 0,
+      "initiating_context_summary": "Resolved the requested reviewer-account ambiguity; the person's identity and account are withheld.",
+      "start_ist": "2026-11-02T22:38:39.000+05:30",
+      "tool_calls": 8,
+      "turn": "T12",
+      "user_message_count": 1
+    }
+  ]
+}
