@@ -1,0 +1,7 @@
+weighting,method,mean,n_epics,reviewers,primary_ratings
+priority_weighted,B1,2.5564285714285715,14,40,560
+priority_weighted,B2,3.6064285714285718,14,40,560
+priority_weighted,B3,4.147946428571428,14,40,560
+equal_weight,B1,2.736734693877551,14,40,560
+equal_weight,B2,3.724489795918367,14,40,560
+equal_weight,B3,4.283418367346939,14,40,560

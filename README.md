@@ -1,10 +1,10 @@
 # Jira Enhancer replication package
 
-Jira Enhancer turns incomplete Jira issues and epics into reviewable developer stories. It gathers linked evidence, refines drafts through bounded prompt-policy selection, and combines validation, explicit human approval, and source-bound writeback checks.
+Jira Enhancer turns incomplete Jira issues and epics into reviewable developer stories. It gathers linked evidence, refines drafts through reinforcement-learning-guided prompt-policy selection, and combines validation, explicit human approval, and source-bound writeback checks.
 
-This repository accompanies **“Jira Enhancer: A Governance-Aware Human–AI Collaboration System for Epic-to-Story Decomposition in Software Engineering.”** It contains the implementation, executable tests, analysis scripts, de-identified research inputs, aggregate reviewer results, and manuscript assets.
+This repository accompanies **“Jira Enhancer: An Empirical Evaluation of Governed Epic-to-Story Decomposition.”** It contains the implementation, executable tests, analysis scripts, de-identified research inputs, aggregate reviewer results, and manuscript assets.
 
-[Read the manuscript](patent/jiraenhancer_tosem_acm.pdf) · [Reproduction guide](docs/REPRODUCIBILITY.md) · [Matched-review results](patent/reviewer_study/public_results/RESULTS.md)
+[Read the manuscript](patent/emse/jira_enhancer_emse.pdf) · [Reproduction guide](docs/REPRODUCIBILITY.md) · [Matched-review results](patent/reviewer_study/public_results/RESULTS.md)
 
 ![Jira Enhancer architecture](patent/images/system_architecture_embedded.png)
 
@@ -29,11 +29,11 @@ make reviewer-check
 | [`src/jira_enhancer/`](src/jira_enhancer/) | Application, synthetic demonstration fixtures, connectors, scoring, prompt selection, approval, and writeback controls |
 | [`tests/`](tests/) | Unit, workflow, prompt-policy, and transaction tests |
 | [`openapi/`](openapi/) | API and event contracts |
-| [`patent/artifacts/tosem/`](patent/artifacts/tosem/) | De-identified field tables and formula-generated sensitivity inputs |
+| [`patent/artifacts/evaluation/`](patent/artifacts/evaluation/) | De-identified field tables and formula-generated sensitivity inputs |
 | [`patent/artifacts/b2_b3_pilot/`](patent/artifacts/b2_b3_pilot/) | Aggregate held-out diagnostic results and sanitized model-critic posterior trace |
 | [`patent/reviewer_study/public_results/`](patent/reviewer_study/public_results/) | Matched-review aggregates, exact-test calculations, reliability summaries, resource counts, and radar plot |
 | [`patent/generated/`](patent/generated/) and [`patent/images/`](patent/images/) | Research result tables, publication figures, and architecture diagrams |
-| [`patent/jiraenhancer_tosem_acm.tex`](patent/jiraenhancer_tosem_acm.tex) | Current manuscript source, with the bibliography and compiled PDF alongside it |
+| [`patent/emse/jira_enhancer_emse.tex`](patent/emse/jira_enhancer_emse.tex) | Current manuscript source, with the bibliography and compiled PDF alongside it |
 | [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) | Input definitions, commands, seeds, outputs, and manuscript-build instructions |
 | [`RELEASE_FILE_MANIFEST.json`](RELEASE_FILE_MANIFEST.json) | SHA-256 hashes of the distributed files |
 
@@ -104,8 +104,8 @@ This diagnostic reports scoring-model sensitivity across public issue texts. Its
 
 ## Manuscript and citation
 
-The current [46-page manuscript](patent/jiraenhancer_tosem_acm.pdf) is accompanied by its LaTeX source, bibliography, tables, and figures. Install a TeX distribution with `latexmk`, then run `make paper`; the rebuilt PDF is written to `patent/out_tosem/jiraenhancer_tosem_acm.pdf`.
+The current [63-page manuscript](patent/emse/jira_enhancer_emse.pdf) is accompanied by its LaTeX source, bibliography, tables, and figures in `patent/emse/`. Install a TeX distribution with `latexmk`, then run `make paper`; the rebuilt PDF is written to `patent/emse/.build/jira_enhancer_emse.pdf`.
 
-> Manish Kumar Agrawal, Sandeep Kumar, Ashok Shukla, Subham Kumar, Abhishek Gupta, and Nandagopal Srinivasan. 2026. *Jira Enhancer: A Governance-Aware Human–AI Collaboration System for Epic-to-Story Decomposition in Software Engineering.* Manuscript submitted to ACM Transactions on Software Engineering and Methodology.
+> Manish Kumar Agrawal, Sandeep Kumar, Ashok Shukla, Subham Kumar, Abhishek Gupta, and Nandagopal Srinivasan. 2026. *Jira Enhancer: An Empirical Evaluation of Governed Epic-to-Story Decomposition.* Research article. Manuscript materials and the replication artifact are available in this repository.
 
 The code and research artifact are supplied for scholarly review and reproducibility inspection under author-retained rights. Contact the authors for redistribution or reuse permissions.

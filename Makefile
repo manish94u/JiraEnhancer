@@ -2,11 +2,12 @@ PYTHON ?= python3
 LATEXMK ?= latexmk
 
 REPRO_ROOT ?= outputs/reproduced
-PUBLIC_ARTIFACT_DIR ?= patent/artifacts/tosem
+PUBLIC_ARTIFACT_DIR ?= patent/artifacts/evaluation
 PUBLIC_FIGURE_DIR ?= $(REPRO_ROOT)/public_figures
 FAULT_OUTPUT_DIR ?= $(REPRO_ROOT)/source_bound_transaction
-PAPER_OUTPUT_DIR ?= out_tosem
-PAPER_TEX ?= jiraenhancer_tosem_acm.tex
+PAPER_DIR ?= patent/emse
+PAPER_OUTPUT_DIR ?= .build
+PAPER_TEX ?= jira_enhancer_emse.tex
 
 .PHONY: help install-reviewer install-benchmark test mock-demo \
 	public-artifact fault-injection public-figures matched-review public-benchmark \
@@ -24,7 +25,7 @@ help:
 	@echo "  make reviewer-check    Run the offline reviewer checks above"
 	@echo "  make install-benchmark Install the optional public-dataset dependencies"
 	@echo "  make public-benchmark  Run the optional SWE-bench Lite sensitivity diagnostic"
-	@echo "  make paper             Compile the TOSEM manuscript from committed figures"
+	@echo "  make paper             Compile the current manuscript from committed figures"
 
 install-reviewer:
 	$(PYTHON) -m pip install -e '.[reviewer]'
@@ -79,9 +80,13 @@ reviewer-check: test public-artifact matched-review fault-injection public-figur
 # Figure generation is deliberately separate. This target compiles the paper
 # from the committed, reviewer-visible figure inputs and outputs.
 paper:
-	mkdir -p patent/$(PAPER_OUTPUT_DIR)
-	cd patent && $(LATEXMK) -pdf -interaction=nonstopmode -halt-on-error \
+	mkdir -p $(PAPER_DIR)/$(PAPER_OUTPUT_DIR)
+	cd $(PAPER_DIR) && $(LATEXMK) -pdf -interaction=nonstopmode -halt-on-error \
 		-outdir=$(PAPER_OUTPUT_DIR) $(PAPER_TEX)
+	cp $(PAPER_DIR)/$(PAPER_OUTPUT_DIR)/$(PAPER_TEX:.tex=.pdf) $(PAPER_DIR)/$(PAPER_TEX:.tex=.pdf)
+	@if [ -f $(PAPER_DIR)/$(PAPER_OUTPUT_DIR)/$(PAPER_TEX:.tex=.bbl) ]; then \
+		cp $(PAPER_DIR)/$(PAPER_OUTPUT_DIR)/$(PAPER_TEX:.tex=.bbl) $(PAPER_DIR)/$(PAPER_TEX:.tex=.bbl); \
+	fi
 
 paper-clean:
-	cd patent && $(LATEXMK) -c -outdir=$(PAPER_OUTPUT_DIR) $(PAPER_TEX)
+	cd $(PAPER_DIR) && $(LATEXMK) -c -outdir=$(PAPER_OUTPUT_DIR) $(PAPER_TEX)

@@ -1,4 +1,4 @@
-# TOSEM Evaluation Artifact
+# Evaluation and Replication Artifact
 
 This guide reproduces the matched-review statistics, verifies the released field records, and reruns the transaction-safety experiment. Run commands from the repository root after installing the analysis dependencies:
 
@@ -30,7 +30,7 @@ The comparison evaluates complete workflows: B2 used 14 drafting calls and B3 us
 python3 patent/verify_public_artifact.py
 ```
 
-The verifier reads `patent/artifacts/tosem/` and prints a JSON verification summary. It checks the SHA-256 manifests, table schemas, and reported counts and descriptive statistics against these released inputs:
+The verifier reads `patent/artifacts/evaluation/` and prints a JSON verification summary. It checks the SHA-256 manifests, table schemas, and reported counts and descriptive statistics against these released inputs:
 
 - `anonymized_live_story_outcomes.csv`: 70 terminal story endpoints from two deployment waves.
 - `anonymized_latest_batch_audit.csv`: the latest 45-story batch and its payload audit.

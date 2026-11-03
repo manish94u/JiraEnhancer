@@ -1,0 +1,14 @@
+{
+  "source_sha256_before": "61185752527cc5f5361d7c8c7c6fd55d5c62805d44d94d74dfbfb8adcaae1b6e",
+  "source_sha256_after": "61185752527cc5f5361d7c8c7c6fd55d5c62805d44d94d74dfbfb8adcaae1b6e",
+  "source_unchanged": true,
+  "source_rows": 1840,
+  "primary_ratings": 1680,
+  "excluded_masked_repeats": 160,
+  "reviewers": 40,
+  "epics": 14,
+  "packages": 42,
+  "primary_ratings_per_method": 560,
+  "public_mapping": "Sorted input order mapped to U01-U14, as in the existing public priority aggregate.",
+  "raw_rating_values_modified": false
+}

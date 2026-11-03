@@ -1,5 +1,5 @@
 {
-  "artifact": "jira-enhancer-tosem-public-reviewer-release-v1",
+  "artifact": "jira-enhancer-public-reviewer-release-v1",
   "comparative_table": {
     "design": "deterministic formula-expanded sensitivity diagnostic",
     "independence_boundary": "The 20,000 rows are not independent production observations and must not be used as population-level replication evidence.",
@@ -16,7 +16,7 @@
     "anonymized_latest_batch_audit.csv": "aad60bd53b0f77ef8ee42e31edd423099a42a39b2fd3b88678e781b6d1439949",
     "anonymized_live_story_outcomes.csv": "6700caed05bd0de66544bcdb46a26c5608f65f959e2300667195ec6c1ff83bf3",
     "comparative_5000_units.csv": "90df960658ae2c2eefc2563e235fde5e2143010e3190de3247fe324900e08ef8",
-    "manifest.json": "d1077b282fe512f3ac35b1487735c16f8c84d699a6f232a73fb799252ed1ab32"
+    "manifest.json": "cdd5069d4a9a7a5e9a8a88ec5d01c0c9b5a19787d72c513d49cbecb95189f79c"
   },
   "privacy_boundary": "The release excludes issue and epic keys, source run IDs, URLs, account names, email addresses, timestamps, summaries, reviewer identities, and raw connector telemetry."
 }

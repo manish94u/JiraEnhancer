@@ -2620,7 +2620,7 @@ def main() -> None:
             "cumulative_reward",
         ],
     )
-    _write_cumulative_live_evidence_table(GENERATED_ROOT / "tosem_cumulative_live_story_evidence_table.tex", outcome_rows)
+    _write_cumulative_live_evidence_table(GENERATED_ROOT / "cumulative_live_story_evidence_table.tex", outcome_rows)
 
     _write_simple_bar_svg(GENERATED_ROOT / "performance_confidence_readiness.svg", issue_summary)
     _write_simple_line_svg(GENERATED_ROOT / "rl_reward_loss.svg", attempt_summary)
@@ -2890,7 +2890,7 @@ def main() -> None:
                 "rl_learning_prompt_summary_csv": "generated/rl_learning_prompt_summary.csv",
                 "rl_learning_attempt_summary_csv": "generated/rl_learning_attempt_summary.csv",
                 "rl_learning_reward_loss_png": "generated/rl_learning_reward_loss.png",
-                "tosem_cumulative_live_story_evidence_table_tex": "generated/tosem_cumulative_live_story_evidence_table.tex",
+                "cumulative_live_story_evidence_table_tex": "generated/cumulative_live_story_evidence_table.tex",
                 "rl_proxy_outcomes_csv": "generated/rl_proxy_outcomes.csv",
                 "rl_prompt_summary_csv": "generated/rl_prompt_summary.csv",
                 "rl_attempt_summary_csv": "generated/rl_attempt_summary.csv",

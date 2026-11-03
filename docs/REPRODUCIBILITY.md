@@ -46,7 +46,7 @@ PYTHONPATH=src python3 -m unittest tests.test_causal_transaction -v
 make public-artifact
 ```
 
-Input: `patent/artifacts/tosem/`, including its analysis summary and de-identified CSV files.
+Input: `patent/artifacts/evaluation/`, including its analysis summary and de-identified CSV files.
 
 The verifier checks SHA-256 hashes, schemas, neutral identifiers, row counts, deployment-wave counts, creation outcomes, parent links, payload coverage, and descriptive score statistics. The released field rows represent 70 terminal outcomes: 69 created Jira stories and one linked existing record. The latest-wave audit covers 45 parent links and 44 new payloads. Endpoint confidence fields are retrospective export values.
 
@@ -146,14 +146,14 @@ The accompanying 5,000-unit files describe deterministic scoring-formula sensiti
 make paper
 ```
 
-The build reads the committed LaTeX source, bibliography, tables, and figures. It writes the PDF and intermediate files to `patent/out_tosem/`. The supplied current reviewer copy is the [46-page manuscript](../patent/jiraenhancer_tosem_acm.pdf).
+The build reads the committed LaTeX source, bibliography, tables, and figures in `patent/emse/`. It writes the PDF and intermediate files to `patent/emse/.build/`. The supplied current reviewer copy is the [63-page manuscript](../patent/emse/jira_enhancer_emse.pdf).
 
 The TeX command can also be run directly:
 
 ```bash
-cd patent
+cd patent/emse
 latexmk -pdf -interaction=nonstopmode -halt-on-error \
-  -outdir=out_tosem jiraenhancer_tosem_acm.tex
+  -outdir=.build jira_enhancer_emse.tex
 ```
 
 Figure generation and manuscript compilation are separate commands, allowing the supplied figure assets to be used directly. `make paper-clean` removes LaTeX intermediate files.

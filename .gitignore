@@ -32,7 +32,7 @@ backups/
 *.log
 
 # Private or identifiable study material. Only the deliberate,
-# de-identified patent/artifacts/tosem package is releaseable.
+# de-identified patent/artifacts/evaluation package is releaseable.
 patent/reviewer_study/.artifact_work/
 patent/reviewer_study/completed/
 patent/reviewer_study/completed_*/
@@ -40,7 +40,7 @@ patent/reviewer_study/private/
 patent/reviewer_study/private_*/
 patent/reviewer_study/results_*/
 patent/reviewer_study/node_modules/
-patent/out_tosem/
+patent/out_manuscript/
 patent/tmp/
 patent/presentation/outputs/
 patent/presentation/tmp/
@@ -49,7 +49,7 @@ patent/generated/.cache/
 patent/generated/.mplcache/
 
 # Raw enterprise-derived generated exports. Public releases use the
-# de-identified files under patent/artifacts/tosem instead.
+# de-identified files under patent/artifacts/evaluation instead.
 patent/generated/b1_core_run_details.csv
 patent/generated/b2_core_run_details.csv
 patent/generated/comparative_5000_epic_metrics.csv
@@ -60,10 +60,10 @@ patent/generated/performance_item_metrics.csv
 patent/generated/rl_decisions.csv
 patent/generated/rl_learning_outcomes.csv
 patent/generated/rl_proxy_outcomes.csv
-patent/generated/tosem_live_story_creation_by_epic.csv
-patent/generated/tosem_live_story_creation_rl.csv
-patent/generated/tosem_live_story_creation_rows.csv
-patent/generated/tosem_live_story_creation_summary.json
+patent/generated/live_story_creation_by_epic.csv
+patent/generated/live_story_creation_rl.csv
+patent/generated/live_story_creation_rows.csv
+patent/generated/live_story_creation_summary.json
 
 # LaTeX intermediate files (the source, committed figures, and an intentional
 # final PDF may still be versioned).

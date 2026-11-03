@@ -1,16 +1,16 @@
 {
-  "artifact": "jira-enhancer-tosem-live-evidence-v1",
+  "artifact": "jira-enhancer-live-evidence-v1",
   "bootstrap_replicates": 50000,
   "files": {
     "analysis_summary.json": "a3e66c580b192713b74c27343ed9c5604a26de75f4fb050ebf4ee0166c03f683",
     "anonymized_latest_batch_audit.csv": "aad60bd53b0f77ef8ee42e31edd423099a42a39b2fd3b88678e781b6d1439949",
     "anonymized_live_story_outcomes.csv": "6700caed05bd0de66544bcdb46a26c5608f65f959e2300667195ec6c1ff83bf3"
   },
-  "generated_by": "analyze_tosem_live_evidence.py",
+  "generated_by": "analyze_live_evidence.py",
   "privacy_boundary": "Issue keys, epic keys, summaries, URLs, account names, email addresses, and timestamps are excluded.",
   "seed": 20260809,
   "source_file_hashes": {
     "rl_learning_outcomes.csv": "14501cbb4e16565567a656a4fe6d9b57757e3125654525db17e4f9504433c169",
-    "tosem_live_story_creation_rows.csv": "49c4e9127a18f04f79323400957e628cf0c3f97940c055e8ebf123def9f380a5"
+    "live_story_creation_rows.csv": "49c4e9127a18f04f79323400957e628cf0c3f97940c055e8ebf123def9f380a5"
   }
 }

@@ -1,0 +1,141 @@
+{
+  "analysis": "primary_all_40_fixed_weight_sensitivity",
+  "software": {
+    "numpy_version": "2.5.4",
+    "random_generator": "numpy.random.PCG64"
+  },
+  "source_sha256": "61185752527cc5f5361d7c8c7c6fd55d5c62805d44d94d74dfbfb8adcaae1b6e",
+  "dimensions": [
+    "scope_fidelity",
+    "coverage_completeness",
+    "story_distinctness",
+    "acceptance_testability",
+    "dependency_risk_treatment",
+    "granularity_actionability",
+    "implementation_readiness"
+  ],
+  "weight_schemes": {
+    "priority_weighted": {
+      "scope_fidelity": 0.05,
+      "coverage_completeness": 0.05,
+      "story_distinctness": 0.05,
+      "acceptance_testability": 0.05,
+      "dependency_risk_treatment": 0.2,
+      "granularity_actionability": 0.2,
+      "implementation_readiness": 0.4
+    },
+    "equal_weight": {
+      "scope_fidelity": "1/7",
+      "coverage_completeness": "1/7",
+      "story_distinctness": "1/7",
+      "acceptance_testability": "1/7",
+      "dependency_risk_treatment": "1/7",
+      "granularity_actionability": "1/7",
+      "implementation_readiness": "1/7"
+    }
+  },
+  "weighting_status": "Both analyses are exploratory; this sensitivity analysis applies one fixed alternative without searching weights.",
+  "equal_weight_computation": "Sum of the seven dimension means divided by 7; never seven rounded 14.3% weights.",
+  "unit_of_inference": "14 paired epic clusters; each cell averages all 40 primary reviewer ratings; masked repeats excluded.",
+  "bootstrap": {
+    "resamples": 100000,
+    "interval": "95% percentile",
+    "seeds": {
+      "B3-B2": 20261313,
+      "B3-B1": 20261314
+    },
+    "resampling": "Whole paired epics, same seeds for both weighting schemes."
+  },
+  "multiplicity": {
+    "main": "Holm adjustment over the two method contrasts separately within each weighting.",
+    "additional_sensitivity": "Holm adjustment over all four weighting-by-method contrasts; this does not correct post-analysis selection of weights or rating corrections."
+  },
+  "method_means": {
+    "priority_weighted": {
+      "B1": 2.5564285714285715,
+      "B2": 3.6064285714285718,
+      "B3": 4.147946428571428
+    },
+    "equal_weight": {
+      "B1": 2.736734693877551,
+      "B2": 3.724489795918367,
+      "B3": 4.283418367346939
+    }
+  },
+  "priority_reference_validation": {
+    "matched_cells": 42,
+    "absolute_tolerance": 1e-12,
+    "reference_sha256": "4ca368595c92a1bd2bc579f072821d28a1fc44809865137e19d7f8990f495934"
+  },
+  "comparisons": [
+    {
+      "weighting": "priority_weighted",
+      "contrast": "B3-B2",
+      "n_epics": 14,
+      "B3_mean": 4.147946428571428,
+      "baseline_mean": 3.6064285714285718,
+      "mean_difference": 0.541517857142857,
+      "ci95_low": 0.5087500000000001,
+      "ci95_high": 0.5730357142857141,
+      "exact_sign_flip_p": 0.0001220703125,
+      "positive_epics": 14,
+      "negative_epics": 0,
+      "tied_epics": 0,
+      "bootstrap_seed": 20261313,
+      "holm_p_two_contrasts_within_weighting": 0.000244140625,
+      "holm_p_four_contrast_sensitivity": 0.00048828125
+    },
+    {
+      "weighting": "priority_weighted",
+      "contrast": "B3-B1",
+      "n_epics": 14,
+      "B3_mean": 4.147946428571428,
+      "baseline_mean": 2.5564285714285715,
+      "mean_difference": 1.5915178571428574,
+      "ci95_low": 1.2045535714285716,
+      "ci95_high": 1.983839285714286,
+      "exact_sign_flip_p": 0.0001220703125,
+      "positive_epics": 14,
+      "negative_epics": 0,
+      "tied_epics": 0,
+      "bootstrap_seed": 20261314,
+      "holm_p_two_contrasts_within_weighting": 0.000244140625,
+      "holm_p_four_contrast_sensitivity": 0.00048828125
+    },
+    {
+      "weighting": "equal_weight",
+      "contrast": "B3-B2",
+      "n_epics": 14,
+      "B3_mean": 4.283418367346939,
+      "baseline_mean": 3.724489795918367,
+      "mean_difference": 0.5589285714285713,
+      "ci95_low": 0.5469387755102038,
+      "ci95_high": 0.571173469387755,
+      "exact_sign_flip_p": 0.0001220703125,
+      "positive_epics": 14,
+      "negative_epics": 0,
+      "tied_epics": 0,
+      "bootstrap_seed": 20261313,
+      "holm_p_two_contrasts_within_weighting": 0.000244140625,
+      "holm_p_four_contrast_sensitivity": 0.00048828125
+    },
+    {
+      "weighting": "equal_weight",
+      "contrast": "B3-B1",
+      "n_epics": 14,
+      "B3_mean": 4.283418367346939,
+      "baseline_mean": 2.736734693877551,
+      "mean_difference": 1.546683673469388,
+      "ci95_low": 1.2099489795918372,
+      "ci95_high": 1.8732142857142853,
+      "exact_sign_flip_p": 0.0001220703125,
+      "positive_epics": 14,
+      "negative_epics": 0,
+      "tied_epics": 0,
+      "bootstrap_seed": 20261314,
+      "holm_p_two_contrasts_within_weighting": 0.000244140625,
+      "holm_p_four_contrast_sensitivity": 0.00048828125
+    }
+  ],
+  "interpretation": "The comparison assesses sensitivity to replacing the priority weights with uniform weights on the same corrected ratings. It does not independently validate the rating corrections, eliminate all post hoc selection concerns, or isolate workflow components."
+}

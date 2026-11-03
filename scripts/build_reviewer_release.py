@@ -28,17 +28,36 @@ TOP_LEVEL_FILES = (
 )
 
 PATENT_FILES = (
-    "TOSEM_ARTIFACT_README.md",
+    "ARTIFACT_README.md",
     "generate_b2_b3_learning_figure.py",
     "generate_cross_dataset_comparison.py",
     "generate_patent_results.py",
-    "jiraenhancer_tosem_acm.pdf",
-    "jiraenhancer_tosem_acm.tex",
     "references_2020_plus.bib",
     "reproduce_public_figures.py",
     "run_public_benchmark_eval.py",
     "run_source_bound_transaction_experiment.py",
     "verify_public_artifact.py",
+)
+
+EMSE_FILES = (
+    "jira_enhancer_emse.tex",
+    "jira_enhancer_emse.pdf",
+    "jira_enhancer_emse.bbl",
+    "references.bib",
+    "sn-jnl.cls",
+    "sn-basic.bst",
+    "Makefile",
+    "fig_system_architecture_embedded.png",
+    "fig_system_control_flow_embedded.png",
+    "fig_agentic_module_story_issue_enhancer.png",
+    "fig_agentic_module_epic_breaker.png",
+    "fig_agentic_module_prompt_generator.png",
+    "fig_agentic_module_rl_controller.png",
+    "fig_matched_iteration_effort.pdf",
+    "fig_matched_review_weighted_radar.pdf",
+    "fig_b2_b3_arm_learning.png",
+    "fig_b2_b3_critic_reward_heatmap.png",
+    "fig_measured_review_composite_components.pdf",
 )
 
 IMAGE_FILES = (
@@ -78,7 +97,7 @@ TEST_FILES = (
     "test_rl.py", "test_scorer.py", "test_sources.py", "test_store.py", "test_workflow.py",
 )
 EVIDENCE_FILES = {
-    "patent/artifacts/tosem": (
+    "patent/artifacts/evaluation": (
         "analysis_summary.json", "anonymized_latest_batch_audit.csv",
         "anonymized_live_story_outcomes.csv", "comparative_5000_units.csv",
         "manifest.json", "public_release_manifest.json",
@@ -98,6 +117,14 @@ EVIDENCE_FILES = {
         "matched_review_reliability_table.tex", "matched_review_weighted_radar.pdf",
         "matched_review_weighted_radar.png", "iteration_story_survival.csv",
         "iteration_epic_survival.csv", "matched_iteration_effort.pdf", "matched_iteration_effort.png",
+    ),
+    "patent/artifacts/remediation/weight_sensitivity_20261103": (
+        "README.txt", "CHECKSUMS.sha256", "analyze_weight_sensitivity.py",
+        "plot_measured_review_composite_components.py", "public_epic_dimension_means.csv",
+        "reference_priority_epic_scores.csv", "epic_scores.csv", "method_means.csv",
+        "comparisons.csv", "results.json", "source_validation.json",
+        "measured_review_composite_components.pdf", "measured_review_composite_components.png",
+        "measured_review_composite_components.json", "measured_review_dimension_statistics.csv",
     ),
 }
 
@@ -148,6 +175,8 @@ def build(destination: Path) -> dict[str, object]:
 
     for name in PATENT_FILES:
         _copy_file(Path("patent") / name, destination)
+    for name in EMSE_FILES:
+        _copy_file(Path("patent/emse") / name, destination)
     for name in IMAGE_FILES:
         _copy_file(Path("patent/images") / name, destination)
     for name in GENERATED_FILES:

@@ -1,0 +1,82 @@
+{
+  "figure": "measured_review_composite_components",
+  "source_rating_sha256": "61185752527cc5f5361d7c8c7c6fd55d5c62805d44d94d74dfbfb8adcaae1b6e",
+  "aggregate_sha256": "9961689ce4ffb7dc9123dc201a8deda2137ec250f520e88a12226601baafde1e",
+  "priority_reference_sha256": "4ca368595c92a1bd2bc579f072821d28a1fc44809865137e19d7f8990f495934",
+  "input_files_unchanged": true,
+  "sample": {
+    "epics": 14,
+    "reviewers": 40,
+    "methods": [
+      "B1",
+      "B2",
+      "B3"
+    ],
+    "primary_ratings_per_method": 560,
+    "masked_repeats_excluded": 160
+  },
+  "composite": {
+    "weights": {
+      "scope_fidelity": 0.05,
+      "coverage_completeness": 0.05,
+      "story_distinctness": 0.05,
+      "acceptance_testability": 0.05,
+      "dependency_risk_treatment": 0.2,
+      "granularity_actionability": 0.2,
+      "implementation_readiness": 0.4
+    },
+    "status": "exploratory; weights selected after initial analysis",
+    "statistics": [
+      {
+        "method": "B1",
+        "composite_mean": 2.5564285714285715,
+        "composite_q1": 2.1215625,
+        "composite_median": 2.4643750000000004,
+        "composite_q3": 3.0062499999999996,
+        "n_epics": 14
+      },
+      {
+        "method": "B2",
+        "composite_mean": 3.6064285714285718,
+        "composite_q1": 3.0021875000000002,
+        "composite_median": 3.9000000000000004,
+        "composite_q3": 4.189375,
+        "n_epics": 14
+      },
+      {
+        "method": "B3",
+        "composite_mean": 4.147946428571428,
+        "composite_q1": 3.6071875,
+        "composite_median": 4.439375,
+        "composite_q3": 4.676875000000001,
+        "n_epics": 14
+      }
+    ]
+  },
+  "violin": {
+    "kernel": "Gaussian KDE via matplotlib.violinplot",
+    "bandwidth_factor": 0.45,
+    "points": 150,
+    "interpretation": "descriptive density of 14 epic means, with all 14 observations displayed"
+  },
+  "dimension_intervals": {
+    "method": "95% percentile epic bootstrap",
+    "resamples": 100000,
+    "seed": 20261103,
+    "rng": "PCG64",
+    "pairing": "same resampled epic indices used for every dimension and method",
+    "scope": "intervals for individual method means, not paired contrasts and not multiplicity-adjusted"
+  },
+  "design": {
+    "width_inches": 5.15,
+    "height_inches": 4.05,
+    "png_dpi": 300,
+    "minimum_font_points": 7,
+    "pdf": "vector with embedded TrueType fonts"
+  },
+  "software": {
+    "numpy": "2.5.4",
+    "matplotlib": "3.11.2"
+  },
+  "caption_recommendation": "Measured matched-review outcomes from the corrected 40-reviewer dataset. (a) Distributions of priority-weighted package scores across 14 matched epics for B1 (template), B2 (one-shot drafting), and B3 (Jira Enhancer). Each colored point is an epic-level mean over 40 reviewers; violins are descriptive density estimates, dark bars span the interquartile range, white markers show medians, and numeric labels show method means. (b) Means for the seven observed requirement dimensions on the anchored 1\u20135 scale, with 95% percentile confidence intervals from 100,000 epic-bootstrap resamples. Each method has 560 primary ratings; masked repeats are excluded. The priority weights were selected after the initial analysis, so the composite comparison is exploratory. These measured outcomes are distinct from the formula-generated scoring checks in Appendix A."
+}

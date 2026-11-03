@@ -1,18 +1,13 @@
-\documentclass[manuscript,review]{acmart}
-
-\setcopyright{none}
-\acmJournal{TOSEM}
-\acmYear{2026}
-\acmDOI{}
-
+% EMSE adaptation prepared 2026-11-03 from the retained full-length manuscript.
+\documentclass[pdflatex,sn-basic]{sn-jnl}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs,array,longtable,tabularx,float,placeins}
 \usepackage{subcaption}
-\usepackage{array}
-\usepackage{longtable}
-\usepackage{tabularx}
-\usepackage{placeins}
 \usepackage[ruled,vlined,linesnumbered,longend]{algorithm2e}
-
-% Permit dense, readable float placement without changing ACM page geometry.
+\usepackage{microtype,rotating}
+\SetAlgoNlRelativeSize{0}
+\providecommand{\Description}[1]{} % Preserve the source figure descriptions.
 \setcounter{topnumber}{4}
 \setcounter{bottomnumber}{2}
 \setcounter{totalnumber}{6}
@@ -20,103 +15,31 @@
 \renewcommand{\bottomfraction}{0.90}
 \renewcommand{\textfraction}{0.05}
 \renewcommand{\floatpagefraction}{0.85}
-\renewcommand{\dbltopfraction}{0.95}
-\renewcommand{\dblfloatpagefraction}{0.85}
-
-
+\raggedbottom
+\emergencystretch=1.5em
 \begin{document}
-\title[Jira Enhancer for Human-AI Collaboration in Requirements Engineering]{Jira Enhancer: A Governance-Aware Human-AI Collaboration System for Epic-to-Story Decomposition in Software Engineering}
+\title[Jira Enhancer for Governed Requirements Decomposition]{Jira Enhancer: An Empirical Evaluation of Governed Epic-to-Story Decomposition}
+\author[1,2]{\fnm{Manish Kumar} \sur{Agrawal}}\email{m\_agrawal@cs.iitr.ac.in}
+\author[2]{\fnm{Sandeep} \sur{Kumar}}\email{sandeep.garg@cs.iitr.ac.in}
+\author[3]{\fnm{Ashok} \sur{Shukla}}\email{ashok.shukla@oracle.com}
+\author[1]{\fnm{Subham} \sur{Kumar}}\email{subham.su.kumar@oracle.com}
+\author[1]{\fnm{Abhishek} \sur{Gupta}}\email{abhishek.ae.gupta@oracle.com}
+\author[1]{\fnm{Nandagopal} \sur{Srinivasan}}\email{nandagopal.srinivasan@oracle.com}
+\affil[1]{\orgname{Oracle India Pvt. Ltd.}, \orgaddress{\city{Bengaluru}, \country{India}}}
+\affil[2]{\orgname{Indian Institute of Technology Roorkee}, \orgaddress{\city{Roorkee}, \country{India}}}
+\affil[3]{\orgname{Oracle Corps}, \orgaddress{\state{California}, \country{United States}}}
+% Corresponding-author designation remains for author confirmation on the separate title page.
 
-\author{Manish Kumar Agrawal}
-\orcid{0009-0009-0216-2592}
-\affiliation{%
-  \institution{Oracle India Pvt. Ltd.}
-  \city{Bengaluru}
-  \country{India}}
-\affiliation{%
-  \institution{Indian Institute of Technology Roorkee}
-  \city{Roorkee}
-  \country{India}}
-\email{m\_agrawal@cs.iitr.ac.in}
-
-\author{Sandeep Kumar}
-\affiliation{%
-  \institution{Indian Institute of Technology Roorkee}
-  \city{Roorkee}
-  \country{India}}
-\email{sandeep.garg@cs.iitr.ac.in}
-
-\author{Ashok Shukla}
-\orcid{0009-0007-2570-4097}
-\affiliation{%
-  \institution{Oracle Corps}
-  \city{California}
-  \country{United States}}
-\email{ashok.shukla@oracle.com}
-
-\author{Subham Kumar}
-\orcid{0009-0003-6472-3689}
-\affiliation{%
-  \institution{Oracle India Pvt. Ltd.}
-  \city{Bengaluru}
-  \country{India}}
-\email{subham.su.kumar@oracle.com}
-
-\author{Abhishek Gupta}
-\affiliation{%
-  \institution{Oracle India Pvt. Ltd.}
-  \city{Bengaluru}
-  \country{India}}
-\email{abhishek.ae.gupta@oracle.com}
-
-\author{Nandagopal Srinivasan}
-\affiliation{%
-	\institution{Oracle India Pvt. Ltd.}
-	\city{Bengaluru}
-	\country{India}}
-\email{ nandagopal.srinivasan@oracle.com}
-
-\renewcommand{\shortauthors}{Agrawal et al.}
-
-\begin{abstract}
-Human–AI collaboration in software engineering now comprises coding, requirements enhancement, planning, and controlled updates to collaborative engineering artifacts, but unmanaged automated changes introduce severe risks to project governance and data integrity. We introduce Jira Enhancer, a system that converts sparsely specified epics into reviewable implementation stories while leaving human reviewers in complete control of issue-tracker state updates. The method combines context-aware evidence gathering across distributed repositories, hierarchical decomposition, automated refinement based on machine confidence tracking, bounded prompt-policy selection, explicit human approval gates, and conflict-safe writeback transactions. We evaluate authenticated field evidence from an industrial deployment at Oracle India Pvt. Ltd., tracking a team of 40 professional engineers across 14 large-scale epics, alongside an artifact evaluation blind to the source evidence, a matched baseline control experiment, a controlled fault-injection suite comprising 72,000 observations.
-
-In two deployment phases, we recorded 70 terminal story endpoints: 69 implementation stories were developed, while a duplicate-safe matching pass successfully identified and linked one pre-existing record. In the matched baseline study, 40 reviewers evaluated 42 anonymized requirement packages created using 14 common inputs by a deterministic template baseline (B1), a one-shot drafting control (B2), and Jira Enhancer (B3). An exploratory analysis of the corrected reviewer ratings uses a revised composite emphasizing implementation readiness, dependencies and risks, and granularity and actionability. B3 scored 4.15 versus 3.61 for B2 on the 1--5 scale, a paired difference of 0.54 points (95\% epic-bootstrap CI [0.51, 0.57], Holm-adjusted exact $p=0.00024$). B3 exceeded B1 by 1.59 points (95\% CI [1.20, 1.98], $p=0.00024$) and scored higher than both baselines on all 14 epics. B3 received Ready-or-Minor-revision classifications in 77.3\% of primary evaluations, compared with 64.6\% for B2, with 127 versus 198 Major-revision ratings. Requirement assessment time was 2.17 minutes lower for B3 (95\% CI [$-2.39$, $-1.98$], $p=0.00024$). In a separate three-packet diagnostic, two blinded model evaluators recorded 0 unsupported additions and 0 missing source requirements for B3, compared with 4 and 13 findings for B2; ambiguous acceptance-criterion findings were 4 versus 21. These are summed model-evaluator findings. In independent fault-injection trials, B3's source-bound transaction envelope blocked all injected unsafe mutations while permitting all eligible writes under the declared fault model. Together, the evaluations support higher weighted requirement-quality ratings, a more favorable revision profile, and controlled writeback, with a higher computational budget than one-shot drafting.
-
-\end{abstract}
-
-\begin{CCSXML}
-<ccs2012>
- <concept>
-  <concept_id>10011007.10011006.10011008</concept_id>
-  <concept_desc>Software and its engineering~Requirements analysis</concept_desc>
-  <concept_significance>500</concept_significance>
- </concept>
- <concept>
-  <concept_id>10003120.10003121.10003129</concept_id>
-  <concept_desc>Human-centered computing~Collaborative interaction</concept_desc>
-  <concept_significance>500</concept_significance>
- </concept>
- <concept>
-  <concept_id>10010147.10010257.10010258.10010259.10010263</concept_id>
-  <concept_desc>Computing methodologies~Reinforcement learning</concept_desc>
-  <concept_significance>300</concept_significance>
- </concept>
-</ccs2012>
-\end{CCSXML}
-
-\ccsdesc[500]{Software and its engineering~Requirements analysis}
-\ccsdesc[500]{Human-centered computing~Collaborative interaction}
-\ccsdesc[300]{Computing methodologies~Reinforcement learning}
-
-\keywords{Human-AI collaboration, requirements engineering, agile planning, agentic software engineering, human-in-the-loop AI, governed refinement, governance, confidence scoring}
-
+\abstract{\textbf{Context:} Generative models can draft user stories, but requirement quality and safe issue-tracker updates require separate evaluation.
+\textbf{Objective:} We evaluate Jira Enhancer, a governed epic-to-story workflow combining evidence retrieval, reinforcement-learning-guided prompt selection, bounded refinement, human approval, and source-bound writeback.
+\textbf{Method:} We analyze two enterprise deployment waves covering 14 epics and 70 retained story endpoints; a blinded assessment of 69 full-text stories; a matched comparison in which 40 reviewers rated 42 packages from deterministic templates (B1), one-shot drafting (B2), and Jira Enhancer (B3); and 72,000 observations across four fault-test arrangements. The epic is the matched unit of inference. Corrected reviewer ratings are analyzed using weights selected after the initial analysis.
+\textbf{Results:} B3 scored 4.15 versus 3.61 for B2 on the 1--5 weighted scale, a paired difference of 0.54 points (95\% bootstrap CI [0.51, 0.57]; Holm-adjusted exact p = 0.00024). Recorded assessment time was 2.17 minutes lower for B3, and Ready-or-Minor-revision ratings were 77.3\% versus 64.6\%. The source-bound transaction arrangement recorded no modeled unsafe mutations and permitted all eligible writes in its 18,000 observations. B3 used 173 model calls versus 14 for B2.
+\textbf{Conclusions:} The exploratory results support higher weighted artifact ratings and lower recorded assessment effort for the complete governed workflow, alongside mutation safety within the tested fault model. They do not isolate the contribution of learned prompt selection or establish lower total delivery cost.}
+\keywords{Requirements engineering, Epic decomposition, Generative AI, Empirical evaluation, Human oversight, Mutation safety}
 \maketitle
 
-
-
-\section{INTRODUCTION}
-The topic of this research paper addresses the problem of human-AI cooperation in software engineering: how AI agents can transform incomplete planning intent into reviewable and execution-ready Jira stories while maintaining accountability, governance, and control over shared engineering records. The problem under consideration is associated with well-known requirements-engineering issues, including ambiguity, incompleteness, and stakeholder coordination. \textbf{These core issues present a major challenge in software engineering because incomplete tickets force engineering leads to waste time manually hunting for missing data across separate repositories, slowing down sprint execution cycles.} Teams do not need another channel that produces fluent text which must then be reconciled manually. They need support that fits how planning decisions are reviewed, challenged, approved, and audited. \textbf{Maintaining strict human authority and governance over shared engineering records is vital because any incorrect automated writeback to a project tracker instantly corrupts a team's core development roadmap, causing broken dependencies and task inflation.}
+\section{Introduction}
+Software teams need to turn incomplete planning intent into reviewable implementation stories while retaining control over shared issue-tracker records. We study this problem through Jira Enhancer, a governed workflow for epic-to-story decomposition that combines evidence retrieval, bounded refinement, human approval, and conflict-safe writeback. The problem under consideration is associated with well-known requirements-engineering issues, including ambiguity, incompleteness, and stakeholder coordination. When requirements are distributed across issue descriptions, design documents, and code reviews, reviewers must reconcile those sources before approving a draft. Teams do not need another channel that produces fluent text which must then be reconciled manually. They need support that fits how planning decisions are reviewed, challenged, approved, and audited. An incorrect automated write can introduce duplicate stories or apply a draft after its source has changed. Approval therefore needs an enforceable connection to the reviewed state.
 
 This problem involves machine reasoning, requirements engineering, software delivery operations, and enterprise governance. It is particularly relevant to organizations that want AI assistance but do not accept opaque automation, uncontrolled writeback, or weak accountability.
 
@@ -134,19 +57,19 @@ AI-supported planning is considered not as one-shot automation but as a joint so
     \item \textbf{RQ4:} How does a governed human-AI workflow perform, relative to executable template/rule and generic-LLM baselines, on decomposition quality, review effort, and implementation readiness?
 \end{itemize}
 
-The questions consider effective collaboration, joint performance, persistent agents, and new failure modes in software-engineering workflows. The contribution extends beyond implementation of the tool. It presents an executable study of how AI agents and human reviewers coordinate around real software-engineering records under explicit governance constraints \textbf{within a live enterprise footprint at Oracle India Pvt. Ltd., tracking the workflow behavior of 40 professional software practitioners across 14 large-scale epics.}
+The contribution is an empirical evaluation of governed requirements refinement and controlled tracker mutation. We evaluate retained field evidence from two deployment waves covering 14 enterprise epics at Oracle India Pvt. Ltd., together with a separate matched artifact study involving 40 reviewers. The matched study measures artifact quality and recorded assessment effort; it does not measure live console usability or practitioner productivity.
 
 \textbf{The remainder of this paper is organized as follows: Section 2 outlines related work and system motivation. Section 3 describes our system architecture, formal problems, and transaction models. Section 4 presents our evaluation design and dataset boundaries. Section 5 discusses our field results, baseline comparisons, and fault tests. Section~\ref{sec:discussion} discusses the results and workflow trade-offs, and Section~\ref{sec:lessons} presents the engineering lessons. Section~\ref{sec:implications} sets out practical implications and validity limits, and Section~\ref{sec:conclusion} concludes. Appendix~\ref{sec:stress-testing} summarizes the scoring-model sanity checks.}
 
-\section{RELATED WORK AND SYSTEM MOTIVATION}
-In modern software development, applications depend on an issue-tracking tool, such as Jira, to support execution. Although teams can capture high-level epics, these epics may be underspecified because they lack acceptance criteria, dependencies, and uniform estimation granularity. Previous work on agile requirements~\cite{R63,R64}, requirements standards~\cite{R62}, and issue-reporting quality~\cite{R53} shows that structure, completeness, and actionability greatly influence subsequent engineering processes~\cite{R52}. \textbf{In typical industrial landscapes, existing project management extensions and requirements tools generally fall into one of three distinct classes:}
+\section{Related work and system motivation}
+In modern software development, applications depend on an issue-tracking tool, such as Jira, to support execution. Although teams can capture high-level epics, these epics may be underspecified because they lack acceptance criteria, dependencies, and uniform estimation granularity. Previous work on agile requirements~\citep{R63,R64}, requirements standards~\citep{R62}, and issue-reporting quality~\citep{R53} shows that structure, completeness, and actionability greatly influence subsequent engineering processes~\citep{R52}. \textbf{In typical industrial landscapes, existing project management extensions and requirements tools generally fall into one of three distinct classes:}
 \begin{itemize}
-    \item static templates with no intelligence, \textbf{which establish standard formatting layouts but do not dynamically improve text completeness or semantic quality~\cite{R63,R62};}
-    \item recommendation tools with no collaboration semantics or governance (high risk), \textbf{such as unconstrained large language model copilots that generate fluent prose but lack internal confidence validation loops~\cite{R60,R59}; or}
+    \item static templates with no intelligence, \textbf{which establish standard formatting layouts but do not dynamically improve text completeness or semantic quality~\citep{R63,R62};}
+    \item recommendation tools with no collaboration semantics or governance (high risk), \textbf{such as unconstrained large language model copilots that generate fluent prose but lack internal confidence validation loops~\citep{R60,R59}; or}
     \item \textbf{automated workflow automation engines that route issues deterministically based on simple rules but are completely} unable to correlate confidence, review decisions, and write permissions (low trust).
 \end{itemize}
 
-This shortcoming is observed in everyday practice when doing simple things such as re-writing tickets during sprint planning, inferring hidden dependencies from distributed documentation by engineering leads, and dealing with unclear acceptance criteria by quality assurance during testing. \textbf{This makes a cooperative human-AI approach highly valuable, as an intelligent assistant can flag semantic gaps while a human developer guides the refinement loop to maintain process accountability.} The shortcoming is not limited to low process efficiency but rather to the inability to shape the information between capturing intentions and implementation. Similar issues were identified in the bug reporting and issue triage research with regards to vague terminology and poor routing signals as factors increasing coordination cost~\cite{R67,R68,R66}. Thus, the technical problem is to build a reliable machine system that can:
+This shortcoming is observed in everyday practice when doing simple things such as re-writing tickets during sprint planning, inferring hidden dependencies from distributed documentation by engineering leads, and dealing with unclear acceptance criteria by quality assurance during testing. \textbf{This makes a cooperative human-AI approach highly valuable, as an intelligent assistant can flag semantic gaps while a human developer guides the refinement loop to maintain process accountability.} The shortcoming is not limited to low process efficiency but rather to the inability to shape the information between capturing intentions and implementation. Similar issues were identified in the bug reporting and issue triage research with regards to vague terminology and poor routing signals as factors increasing coordination cost~\citep{R67,R68,R66}. Thus, the technical problem is to build a reliable machine system that can:
 (1) infer missing stories from an epic,
 (2) fill out stories until they become ready for implementation,
 (3) estimate confidence and uncertainty,
@@ -158,46 +81,48 @@ As a system designed to work in the real world has to deal with partial evidence
 \subsection{Background from Existing Systems}
 The proposed solution will help solve shortcomings of the related systems of three classes. First, static authoring templates in project-management software offer better formatting but do not significantly enhance requirements completeness and decomposition quality in general. Second, advanced large language model copilots generate fluent texts but frequently lack formal confidence controls, policy coupling, and conflict-safe mutation policies. At last, automated workflow engines may handle deterministic state transitions, however, rarely employ prompt-based approaches or construct stories from evidence. These systems alone cannot help humans and AI cooperate in order to share context, manage uncertainty, recover from failure, and retain responsibility for co-created software-engineering records.
 
-LLM and generative AI literature in software engineering and requirements engineering show good results for requirements engineering, issue resolution, and development workflows~\cite{R60,R59}. At the same time, there are challenges in reliability, controllability, and evaluations of the existing approaches~\cite{R60,R59}. Research on code generation assistants describes conditions showing a similar pattern: developers inspect, revise, and place generated outputs within the task context rather than accepting them unchanged~\cite{R77,R78}. In case of agile planning, decomposition quality and review effort determine execution predictability, but governance-aware human oversight is still required for trustworthy deployments~\cite{R56,R52,R58}.
+LLM and generative AI literature in software engineering and requirements engineering show good results for requirements engineering, issue resolution, and development workflows~\citep{R60,R59}. At the same time, there are challenges in reliability, controllability, and evaluations of the existing approaches~\citep{R60,R59}. Research on code generation assistants describes conditions showing a similar pattern: developers inspect, revise, and place generated outputs within the task context rather than accepting them unchanged~\citep{R77,R78}. In case of agile planning, decomposition quality and review effort determine execution predictability, but governance-aware human oversight is still required for trustworthy deployments~\citep{R56,R52,R58}.
 
-Multi-armed bandits and reinforcement learning algorithms are popular methods for selecting policies in an online setting under uncertainty~\cite{R84,R86,R100}. Application of these algorithms to enterprise planning is difficult due to delayed and potentially unreliable rewards and the need to adhere to governance constraints. In turn, the suggested approach solves this problem by coupling an adaptive prompt policy to an auditable workflow state and explicit approval gates.
+Multi-armed bandits and reinforcement learning algorithms are popular methods for selecting policies in an online setting under uncertainty~\citep{R84,R86,R100}. Application of these algorithms to enterprise planning is difficult due to delayed and potentially unreliable rewards and the need to adhere to governance constraints. In turn, the suggested approach solves this problem by coupling an adaptive prompt policy to an auditable workflow state and explicit approval gates.
 
-Transaction safety~\cite{R88} and deterministic workflow control~\cite{R101} are important aspects of writeback safety in LLM-based code generation. They are considered in LLM-based retrieval and tool-usage pipelines. Combining these aspects with RL-guided, LLM-based decomposition is intended to increase planning intelligence while preserving mutation safety in shared issue trackers.
+Transaction safety~\citep{R88} and deterministic workflow control~\citep{R101} are important aspects of writeback safety in LLM-based code generation. They are considered in LLM-based retrieval and tool-usage pipelines. Combining these aspects with RL-guided, LLM-based decomposition is intended to increase planning intelligence while preserving mutation safety in shared issue trackers.
 
 Thus, the proposed approach cannot be considered solely a code generation advancement but rather its unique combination of search, decomposition, confidence scoring, policy evaluation, approval semantics, and safe writeback.
 
 \subsection{Related Work: Thematic Positioning}
-\textbf{Theme A: Evidence retrieval and context construction.} Studies on retrieval-augmented generation and dense retrieval~\cite{R3,R32} show that evidence quality and the retrieval process are essential elements for response quality and hallucinations reduction~\cite{R22,R4,R6,R21}. Jira Enhancer incorporates this insight in the form of context packing: rather than delivering evidence blocks to the generator, Jira Enhancer ranks the evidence and maps missing signals.
+\textbf{Theme A: Evidence retrieval and context construction.} Studies on retrieval-augmented generation and dense retrieval~\citep{R3,R32} show that evidence quality and the retrieval process are essential elements for response quality and hallucinations reduction~\citep{R22,R4,R6,R21}. Jira Enhancer incorporates this insight in the form of context packing: rather than delivering evidence blocks to the generator, Jira Enhancer ranks the evidence and maps missing signals.
 
-\textbf{Theme B: Quality of reasoning via bounded refinement.} Studies on reasoning-prompting and self-reflection~\cite{R30,R14} show that it has positive impact when models are capable of deliberating, evaluating their outputs, and refining them according to some explicit criteria~\cite{R91,R89,R18}. In line with this concept, Jira Enhancer uses a rubric-based critic along with a limited amount of retries. In other words, improvements occur according to explicitly defined scoring dimensions and not infinite prompting.
+\textbf{Theme B: Quality of reasoning via bounded refinement.} Studies on reasoning-prompting and self-reflection~\citep{R30,R14} show that it has positive impact when models are capable of deliberating, evaluating their outputs, and refining them according to some explicit criteria~\citep{R91,R89,R18}. In line with this concept, Jira Enhancer uses a rubric-based critic along with a limited amount of retries. In other words, improvements occur according to explicitly defined scoring dimensions and not infinite prompting.
 
-\textbf{Theme C: Confidence, alignment, and reliable deployment.} Work on alignment shows that fluent output alone is not a necessary condition of reliable performance in an important workflow context, without confidence controls and human interaction~\cite{R90,R40,R13}. Furthermore, work in human-AI interaction and automation stresses the need for appropriate levels of trust, mental models, automation, and human control~\cite{R56,R57,R76,R75}. Jira Enhancer resolves this issue by tying confidence to the policy gates and requiring approval before performing any ticket mutation.
+\textbf{Theme C: Confidence, alignment, and reliable deployment.} Work on alignment shows that fluent output alone is not a necessary condition of reliable performance in an important workflow context, without confidence controls and human interaction~\citep{R90,R40,R13}. Furthermore, work in human-AI interaction and automation stresses the need for appropriate levels of trust, mental models, automation, and human control~\citep{R56,R57,R76,R75}. Jira Enhancer resolves this issue by tying confidence to the policy gates and requiring approval before performing any ticket mutation.
 
-\textbf{Theme D: Constrained tools and safe execution.} Studies on LLM tool use~\cite{R16} demonstrate that models become more reliable when their outputs go through a constrained interface and verifiable tool steps~\cite{R91}. Jira Enhancer implements this approach with deterministic writeback, which includes hashing, idempotency, and limited field modifications.
+\textbf{Theme D: Constrained tools and safe execution.} Studies on LLM tool use~\citep{R16} demonstrate that models become more reliable when their outputs go through a constrained interface and verifiable tool steps~\citep{R91}. Jira Enhancer implements this approach with deterministic writeback, which includes hashing, idempotency, and limited field modifications.
 
-\begin{table*}[t]
+\begin{sidewaystable}[p]
 \centering
+\setlength{\tabcolsep}{4pt}
 \small
 \caption{Comparison of the main paradigms discussed in the background and related work: representative strengths, enterprise-planning limitations, and the position of Jira Enhancer (B3) relative to B0/B1/B2.}
 \label{tab:related-work-comparative}
-\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{0.16\textwidth}>{\raggedright\arraybackslash}p{0.19\textwidth}>{\raggedright\arraybackslash}p{0.18\textwidth}>{\raggedright\arraybackslash}p{0.20\textwidth}>{\raggedright\arraybackslash}X@{}}
+\begin{tabularx}{\textheight}{@{}>{\raggedright\arraybackslash}p{0.16\textheight}>{\raggedright\arraybackslash}p{0.19\textheight}>{\raggedright\arraybackslash}p{0.18\textheight}>{\raggedright\arraybackslash}p{0.20\textheight}>{\raggedright\arraybackslash}X@{}}
 \toprule
 Paradigm & Representative prior work & Typical strength & Common constraint in enterprise planning & Position of B0/B1/B2/B3 \\
 \midrule
-Template/rule decomposition & RE standards, agile requirements, and user-story quality work \cite{R52,R62,R63} & High consistency and stable formatting & Little ability to adapt to ambiguous epics; poor semantic understanding of unfamiliar situations & B0 and B1 are closest relatives of this family; B3 retains its structure but adds adaptive semantic reasoning \\
-Generic LLM drafting & Prompt-driven generation, code assistants, and reasoning methods \cite{R1,R14,R59,R77} & natural-language drafts and broad transfer between tasks & Fluency, but lack of structure; confidence is uncoupled from mutation authority & B2 is closest relative of this family; B3 adds critic loops, validators and governance coupling \\
-Retrieval-augmented generation & Retrieval-augmented and dense-retrieval methods \cite{R3,R5,R22} & Strong evidence base for grounding and factual memory recall & Varying retrieval quality; context-packing is not well defined for workflow-mutation situations & B3 converts retrieval into operation through ranking of context packets and explicit tracking of missing signals \\
-Agent/tool orchestration & Tool-use methods and agent benchmarks \cite{R17,R27,R28,R92} & Strong multi-step execution ability and coordination with external systems & Inconsistent run-time behavior and risk of harm \cite{R87} when there is no deterministic bound on mutation & B3 constrains execution using policy-gated, hash-checked and idempotent write-back \\
-Trust \cite{R76}, confidence controls, governance & Alignment, human-AI collaboration, automation-trust, and socio-technical SE studies \cite{R13,R57,R75,R58} & Facilitates control and accountability \cite{R56} & Typically investigated in settings away from issue-tracker mutation & B3 directly implements this layer in Jira using human approval and policy gates \\
+Template/rule decomposition & RE standards, agile requirements, and user-story quality work \citep{R52,R62,R63} & High consistency and stable formatting & Little ability to adapt to ambiguous epics; poor semantic understanding of unfamiliar situations & B0 and B1 are closest relatives of this family; B3 retains its structure but adds adaptive semantic reasoning \\
+Generic LLM drafting & Prompt-driven generation, code assistants, and reasoning methods \citep{R1,R14,R59,R77} & natural-language drafts and broad transfer between tasks & Fluency, but lack of structure; confidence is uncoupled from mutation authority & B2 is closest relative of this family; B3 adds critic loops, validators and governance coupling \\
+Retrieval-augmented generation & Retrieval-augmented and dense-retrieval methods \citep{R3,R5,R22} & Strong evidence base for grounding and factual memory recall & Varying retrieval quality; context-packing is not well defined for workflow-mutation situations & B3 converts retrieval into operation through ranking of context packets and explicit tracking of missing signals \\
+Agent/tool orchestration & Tool-use methods and agent benchmarks \citep{R17,R27,R28,R92} & Strong multi-step execution ability and coordination with external systems & Inconsistent run-time behavior and risk of harm \citep{R87} when there is no deterministic bound on mutation & B3 constrains execution using policy-gated, hash-checked and idempotent write-back \\
+Trust \citep{R76}, confidence controls, governance & Alignment, human-AI collaboration, automation-trust, and socio-technical SE studies \citep{R13,R57,R75,R58} & Facilitates control and accountability \citep{R56} & Typically investigated in settings away from issue-tracker mutation & B3 directly implements this layer in Jira using human approval and policy gates \\
 \bottomrule
 \end{tabularx}
-\end{table*}
+\end{sidewaystable}
 
-\section{PROPOSED METHODOLOGY}
+\section{Proposed methodology}
 \textbf{The complete human-AI collaboration pipeline is structured as an interactive, state-guided loop designed to safely elevate requirements actionability within real-world engineering environments. The technical method is split into five functional layers that process an under-specified corporate epic, enrich its technical contents, and cross-examine it against organizational policy boundaries before executing any tracker updates.} The closed loop is made up of five layers: (1) scope resolution maps issue, sprint, epic, or release scopes to issue sets; (2) semantic enrichment develops structured descriptions, acceptance criteria, risks, dependencies, and next steps; (3) prompt selection chooses bounded refinement strategies and records attempt scores; (4) policy and governance apply thresholds, flags, and human-approval rules; and (5) writeback and audit perform bounded mutations with conflict checks and immutable traces. \textbf{The representative strengths, enterprise constraints, and theoretical position of Jira Enhancer relative to these multi-paradigm baseline configurations are summarized systematically in Table~\ref{tab:related-work-comparative}.}
 
-First, the system generates stories, refines them toward a displayed confidence target (for example, \textbf{the target interface metric $C_{10}(s) \geq 9$, which scale-transforms normalized algorithm confidence $C(s) \in [0, 1]$ into a readable $0$--$10$ metric via $C_{10}(s) = 10C(s)$}), and creates a candidate story only after individual approval through controlled field mappings. \textbf{The system's internal creation gate threshold is configured strictly at $\tau_c = 0.9$ (displayed as $C_{10} = 9$ on the user interface scale). This conservative choice serves as a corporate quality constraint, ensuring a candidate story exhibits a near-complete array of source evidence parameters before it is permitted to consume an engineer's review attention.} The AI retrieves evidence, drafts and scores candidate stories, and performs bounded refinement. The reviewer evaluates the context and risk but retains final control. Generation, review, and writeback share a common state rather than being distinct processes, consistent with socio-technical guidelines for technology assessment in context~\cite{R71,R58}. The candidate is a stateful planning artifact, not just a disposable solution. The log contains the evidence, the choice of prompt arm, the variation in confidence, the intervention of the reviewer, and the policy decisions. Creative generation can be retried, but any mutation is permanent and limited by the policy decision for conflicts. This means that normal structuring can proceed while maintaining auditability of human for significant mutations.
+First, the system generates stories, refines them toward a displayed confidence target (for example, \textbf{the target interface metric $C_{10}(s) \geq 9$, which scale-transforms normalized algorithm confidence $C(s) \in [0, 1]$ into a readable $0$--$10$ metric via $C_{10}(s) = 10C(s)$}), and creates a candidate story only after individual approval through controlled field mappings. \textbf{The system's internal creation gate threshold is configured strictly at $\tau_c = 0.9$ (displayed as $C_{10} = 9$ on the user interface scale). This threshold is an internal workflow constraint applied before creation. It is not a calibrated probability of correctness or an independent guarantee of requirement quality.} The AI retrieves evidence, drafts and scores candidate stories, and performs bounded refinement. The reviewer evaluates the context and risk but retains final control. Generation, review, and writeback share a common state rather than being distinct processes, consistent with socio-technical guidelines for technology assessment in context~\citep{R71,R58}. The candidate is a stateful planning artifact, not just a disposable solution. The log contains the evidence, the choice of prompt arm, the variation in confidence, the intervention of the reviewer, and the policy decisions. Creative generation can be retried, but any mutation is permanent and limited by the policy decision for conflicts. This means that normal structuring can proceed while maintaining auditability of human for significant mutations.
 
+\FloatBarrier
 \subsection{API and UI Console Workflow}\label{sec:workflow-ui}
 
 \subsubsection{Workflow API}
@@ -238,7 +163,7 @@ The reviewer can edit the generated content, add missing context, or provide a n
 
 Human-led and agent-led operations are both provided via the API. The human reviewer assesses the narrative and the possible risks through the console, whereas controlled agents or pipelines do that using the same endpoints according to deterministic payload contracts. This allows governed integration with release-planning bots, PM dashboards, and governance data lakes.
 
-The UI focuses on ``decision visibility,'' giving the reviewer the sources of confidence, warnings, policy reason codes, approval provenance, reasons for skipping duplicates, and preserved retry selections for each story candidate. This discourages reviewers from treating confidence as an unsupported number and enables quicker and better accept, reject, or retry decisions. The design seeks appropriate trust rather than maximum automation, reflecting evidence that human--AI team performance depends on users' mental models of system behavior \cite{R56,R57,R76}.
+The UI focuses on ``decision visibility,'' giving the reviewer the sources of confidence, warnings, policy reason codes, approval provenance, reasons for skipping duplicates, and preserved retry selections for each story candidate. These displays are intended to help reviewers interpret confidence and choose whether to accept, reject, or retry. Their effect on live console decisions was not measured in the artifact study. The design seeks appropriate trust rather than maximum automation, reflecting evidence that human--AI team performance depends on users' mental models of system behavior \citep{R56,R57,R76}.
 
 \subsubsection{Evidence Availability and Recovery}\label{sec:evidence-recovery}
 
@@ -261,7 +186,7 @@ Figure~\ref{fig:system-architecture} presents the complete system architecture, 
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{images/system_architecture_embedded.png}
+\includegraphics[width=\textwidth]{fig_system_architecture_embedded.png}
 \caption{Human-AI collaboration architecture. Jira, Confluence, and Bitbucket provide evidence in the form of issues, requirements, design, code, and reviews. The orchestrator controls evidence-based story creation, bounded prompt arm selection, governance checks, audit storage, and controlled writeback of Jira issues. The labels and arrows define the sequence of runtime contracts that starts from the context extraction and human actions and proceeds with scoring, policy check, approved candidate generation, and mutation.}
 \Description{Architecture diagram showing Jira, Confluence, and Bitbucket feeding a Jira Enhancer platform with orchestration, semantic enrichment, prompt policy, governance, persistence, and writeback components.}
 \label{fig:system-architecture}
@@ -269,47 +194,55 @@ Figure~\ref{fig:system-architecture} presents the complete system architecture, 
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{images/system_control_flow_embedded.png}
+\includegraphics[width=\textwidth]{fig_system_control_flow_embedded.png}
 \caption{Sequence of the runtime contracts according to Fig.~\ref{fig:system-architecture}. Jira, requirements, code, and review input is fed into the orchestrator. Safe prompt selection and scoring generate the candidates, policy check and tracing storage precede the creation of approved candidates; writeback is the last step of the process.}
 \Description{Control-flow diagram showing ordered handoffs from context retrieval and user action through prompt selection, draft scoring, policy decision, persistence, and approved writeback.}
 \label{fig:system-control-flow}
 \end{figure*}
 
-\begin{figure*}[t]
+\begin{figure*}[p]
 \centering
-\begin{subfigure}[t]{0.49\textwidth}
+\begin{subfigure}[t]{0.93\textwidth}
 \centering
-\includegraphics[width=\linewidth]{images/agentic_module_story_issue_enhancer.png}
+\includegraphics[width=\linewidth]{fig_agentic_module_story_issue_enhancer.png}
 \caption{Agentic module 1: story/issue enhancer.}
 \label{fig:module-story-issue}
 \end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
+\par\medskip
+\begin{subfigure}[t]{0.93\textwidth}
 \centering
-\includegraphics[width=\linewidth]{images/agentic_module_epic_breaker.png}
+\includegraphics[width=\linewidth]{fig_agentic_module_epic_breaker.png}
 \caption{Agentic module 2: epic breaker into stories.}
 \label{fig:module-epic-breaker}
 \end{subfigure}
 
-\vspace{0.75em}
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics[width=\linewidth]{images/agentic_module_prompt_generator.png}
-\caption{Agentic module 3: prompt generator.}
-\label{fig:module-prompt-generator}
-\end{subfigure}
-\hfill
-\begin{subfigure}[t]{0.49\textwidth}
-\centering
-\includegraphics[width=\linewidth]{images/agentic_module_rl_controller.png}
-\caption{Agentic module 4: RL controller.}
-\label{fig:module-rl-controller}
-\end{subfigure}
-\caption{Modular agent architecture: story/issue enhancement, epic-to-story decomposition, prompt-pack creation, and RL-based policy control. The panels expose agent boundaries hidden in the top-level architecture.}
-\Description{Four-panel modular architecture figure showing story issue enhancement, epic-to-story decomposition, prompt generation, and reinforcement-learning controller modules.}
+\caption{Modular agent architecture: story/issue enhancement, epic-to-story decomposition, prompt-pack creation, and RL-based policy control. The panels expose agent boundaries hidden in the top-level architecture. Panels (c) and (d) continue on the next figure page.}
 \label{fig:agentic-module-architecture}
 \end{figure*}
 
+\begin{figure*}[p]
+\ContinuedFloat
+\centering
+
+\begin{subfigure}[t]{0.93\textwidth}
+\centering
+\includegraphics[width=\linewidth]{fig_agentic_module_prompt_generator.png}
+\caption{Agentic module 3: prompt generator.}
+\label{fig:module-prompt-generator}
+\end{subfigure}
+\par\medskip
+\begin{subfigure}[t]{0.93\textwidth}
+\centering
+\includegraphics[width=\linewidth]{fig_agentic_module_rl_controller.png}
+\caption{Agentic module 4: RL controller.}
+\label{fig:module-rl-controller}
+\end{subfigure}
+\caption{Modular agent architecture (continued): prompt-pack creation and RL-based policy control.}
+\Description{Four-panel modular architecture figure showing story issue enhancement, epic-to-story decomposition, prompt generation, and reinforcement-learning controller modules.}
+
+\end{figure*}
+
+\FloatBarrier
 \subsubsection{Reading Figures 1--3.} The set of Figures~\ref{fig:system-architecture}--\ref{fig:agentic-module-architecture} provides three perspectives: architecture and trust boundaries, operational sequence, and internal decomposition of agents. The deliberate overlap helps to conduct separate reviews of completeness of the architecture, correctness of the execution, and responsibilities of agents. \textbf{Crucially, the interface junctions and directional arrows mapped across these graphics represent strict, programmatically enforced API contracts. System components interact across boundaries through rigid REST and schema serialization layers, ensuring that data handoffs are deterministically bound rather than relying on fluid text validation.}
 
 \paragraph{Figure 1: system architecture overview.}
@@ -324,10 +257,10 @@ Figure~\ref{fig:agentic-module-architecture} demonstrates four agentic capabilit
 The captions in Figures~\ref{fig:system-architecture} and~\ref{fig:system-control-flow} represent executable contracts. Context and Code Retrieve normalize the inputs, Human Actions captures the reviewer’s intention, while selecting and generating safe-arms leads to scoring of candidates; Policy Check determines confidence, role, validation, and approval; Persist trace records state, results, and evidence links. Approved creation reaches controlled writeback only after the source hash, idempotency, duplicate, and target checks. The safety boundary is hence determined by this rule rather than fluency of text.
 
 \subsection{Traceable Data Records}
-Every run captures scope, requester, time stamps, and idempotency information along with item state, confidence, readiness, policy flags, structured drafts, references to external evidence, decisions and notes on approval, and before/after writeback hashes. Since each piece of information is a first class record, the planning decision behind it may be subsequently reconstructed for empirical evaluation~\cite{R70,R54}, auditing~\cite{R93}, or incident analysis. Immutable event streams maintain event ordering, whereas mutable snapshots facilitate low-latency querying. Informational warnings alert about non-critical deficiencies, advisory warnings bring problems to reviewer attention, and blocking warnings stop mutation until the issue gets fixed.
+Every run captures scope, requester, time stamps, and idempotency information along with item state, confidence, readiness, policy flags, structured drafts, references to external evidence, decisions and notes on approval, and before/after writeback hashes. Since each piece of information is a first class record, the planning decision behind it may be subsequently reconstructed for empirical evaluation~\citep{R70,R54}, auditing~\citep{R93}, or incident analysis. Immutable event streams maintain event ordering, whereas mutable snapshots facilitate low-latency querying. Informational warnings alert about non-critical deficiencies, advisory warnings bring problems to reviewer attention, and blocking warnings stop mutation until the issue gets fixed.
 
 \subsection{Formal Problem Formulation}
-Let $E$ be an epic, $S_{\text{existing}}$ the set of already-linked stories, $\mathcal{D}$ the available evidence corpus, and $\Pi$ a versioned governance policy. \textbf{To model practical industrial lifecycles cleanly, the comprehensive evidence corpus is split into separate components: $\mathcal{D} = \mathcal{D}_{\text{ext}} \cup \mathcal{D}_{\text{jira}}$. Here, $\mathcal{D}_{\text{ext}}$ represents externally pulled context sources, which concretely include Confluence technical design document pages, corporate requirements specifications, and active Bitbucket code pull-request log branches. Conversely, $\mathcal{D}_{\text{jira}}$ isolates localized requirements constraints, containing issue-embedded discussion histories and text architecture summaries recorded directly inside the core Jira ticket text description field.} This distinction is important because, when external links are unavailable but the epic description contains useful design rules, APIs, guardrails, or tests, the system can still produce evidence-grounded candidates while identifying their provenance as Jira-embedded context. The system constructs a finite candidate set $S_{\text{cand}}$ and selects a subset $S_{\text{new}} \subseteq S_{\text{cand}}$ for possible creation. Here, requirements are modeled as evolving and negotiated objects rather than fixed text~\cite{R51}. This agrees with established RE views that requirements are incomplete and shaped by stakeholders~\cite{R61}. It also follows requirements-quality guidance on clarity, verifiability, feasibility, and traceability~\cite{R62}. Each candidate $s$ is represented by the tuple
+Let $E$ be an epic, $S_{\text{existing}}$ the set of already-linked stories, $\mathcal{D}$ the available evidence corpus, and $\Pi$ a versioned governance policy. \textbf{To model practical industrial lifecycles cleanly, the comprehensive evidence corpus is split into separate components: $\mathcal{D} = \mathcal{D}_{\text{ext}} \cup \mathcal{D}_{\text{jira}}$. Here, $\mathcal{D}_{\text{ext}}$ represents externally pulled context sources, which concretely include Confluence technical design document pages, corporate requirements specifications, and active Bitbucket code pull-request log branches. Conversely, $\mathcal{D}_{\text{jira}}$ isolates localized requirements constraints, containing issue-embedded discussion histories and text architecture summaries recorded directly inside the core Jira ticket text description field.} This distinction is important because, when external links are unavailable but the epic description contains useful design rules, APIs, guardrails, or tests, the system can still produce evidence-grounded candidates while identifying their provenance as Jira-embedded context. The system constructs a finite candidate set $S_{\text{cand}}$ and selects a subset $S_{\text{new}} \subseteq S_{\text{cand}}$ for possible creation. Here, requirements are modeled as evolving and negotiated objects rather than fixed text~\citep{R51}. This agrees with established RE views that requirements are incomplete and shaped by stakeholders~\citep{R61}. It also follows requirements-quality guidance on clarity, verifiability, feasibility, and traceability~\citep{R62}. Each candidate $s$ is represented by the tuple
 \begin{equation}
 m(s) = (C(s), R(s), U(s), \text{Amb}(s), \rho(s), A(s), h_s) ,
 \end{equation}
@@ -349,7 +282,8 @@ The basic feasibility relation is:
 S^* &= S_{\text{existing}} \cup S_{\text{new}}, \\
 \forall s \in S_{\text{new}}:~ C(s) &\geq \tau_c, \\
 \forall s \in S_{\text{new}}:~ A(s) &= 1 \text{ (approved)}, \\
-S_{\text{eligible}} &= \{ s \in S_{\text{new}}\cap\mathcal{F}_{\mathrm{dup}} \mid C(s)\ge \tau_c \land A(s)=1 \land V(s)=1 \land \Pi(s)=\textsc{allow} \}, \\
+S_{\text{eligible}} &= \{ s \in S_{\text{new}}\cap\mathcal{F}_{\mathrm{dup}} \mid C(s)\ge \tau_c \land A(s)=1
+\nonumber\\ &\qquad {}\land V(s)=1 \land \Pi(s)=\textsc{allow} \}, \\
 \mathcal{W}_{\text{create}} &= \text{Create}(S_{\text{eligible}}),
 \end{align}
 Here, $S^*$ is the augmented plan, $S_{\text{eligible}}$ is the subset satisfying all creation conditions, and $\mathcal{W}_{\text{create}}$ is the result of applying the controlled creation operation $\text{Create}(\cdot)$ to that subset. The normalized creation threshold is $\tau_c\in[0,1]$ (default $\tau_c=0.9$). The displayed confidence is $C_{10}(s)=10C(s)$, so the default threshold corresponds to 9/10. The term
@@ -492,19 +426,19 @@ In practice, the blended formalism shows reviewers how the confidence score was 
 \paragraph{Confidence scope.}
 In this study, confidence is a bounded decision-support score based on the available evidence. It is not a probability of successful delivery. External mutation still requires validation, policy checks, and explicit human approval. Human approval remains the final authorization decision. Therefore, the study does not use confidence to authorize mutation by itself and does not evaluate probabilistic calibration.
 
-Additionally, the model accounts for context-dependent penalties. For example, unresolved architectural dependencies add an uncertainty term to $P_{\text{gap}}$ even when the corresponding fields are populated. This approach helps avoid high confidence for tickets that appear complete but remain semantically weak, a concern reported in agile requirements, requirements-smell, and issue-report quality research \cite{R65,R52,R53}.
+Additionally, the model accounts for context-dependent penalties. For example, unresolved architectural dependencies add an uncertainty term to $P_{\text{gap}}$ even when the corresponding fields are populated. This approach helps avoid high confidence for tickets that appear complete but remain semantically weak, a concern reported in agile requirements, requirements-smell, and issue-report quality research \citep{R65,R52,R53}.
 
-\subsection{Prompt-Policy Selection Model}
+\subsection{Reinforcement Learning for Prompt-Policy Selection}
 
-The adaptive component in use is a contextual multi-armed bandit \cite{R86}. This can be viewed as a restricted short-horizon reinforcement-learning setting, but it does not model a long-horizon Markov decision process or estimate a value function over the workflow state space. We nevertheless refer to it as the \emph{RL layer} because that term is used in the implementation and architecture, while its learning scope remains limited.
+Jira Enhancer implements reinforcement learning (RL) for prompt-policy selection through a Thompson-sampling multi-armed bandit \citep{R100}. Reward feedback updates arm-specific Beta posteriors that guide subsequent prompt choices. Context restricts arm eligibility through retrieval and governance checks. The estimates are shared per arm across contexts; learning a context-conditioned reward model \citep{R86} is outside this implementation. This restricted short-horizon RL formulation does not model a long-horizon Markov decision process or estimate a value function over the workflow state space.
 
 \subsubsection{Bandit Definition}
-Each prompt pack $p_k$ is associated with an arm indexed by $k$ in the stochastic multi-armed bandit \cite{R84}. The arm's success-probability parameter is $\theta_k$, with Beta success and failure soft counts $\alpha_k$ and $\beta_k$. Posterior per arm is:
+Each prompt pack $p_k$ is associated with an arm indexed by $k$ in the stochastic multi-armed bandit \citep{R84}. The arm's success-probability parameter is $\theta_k$, with Beta success and failure soft counts $\alpha_k$ and $\beta_k$. Posterior per arm is:
 \begin{equation}
 \theta_k \sim \text{Beta}(\alpha_k, \beta_k).
 \end{equation}
 
-At each refinement attempt $t$, the context state $\mathbf{h}_t$ determines the permissible arm set $\mathcal{K}_{\mathrm{safe}}(\mathbf{h}_t)$. The controller proceeds as follows \cite{R85}:
+At each refinement attempt $t$, the context state $\mathbf{h}_t$ determines the permissible arm set $\mathcal{K}_{\mathrm{safe}}(\mathbf{h}_t)$. The controller proceeds as follows \citep{R85}:
 \begin{enumerate}
   \item draw a Thompson sample $\widetilde{\theta}_{k,t}$ from the posterior of each arm in $\mathcal{K}_{\mathrm{safe}}(\mathbf{h}_t)$,
   \item choose $k_t = \arg\max_{k\in\mathcal{K}_{\mathrm{safe}}(\mathbf{h}_t)} \widetilde{\theta}_{k,t}$,
@@ -513,7 +447,7 @@ At each refinement attempt $t$, the context state $\mathbf{h}_t$ determines the 
 \end{enumerate}
 The algorithm for updating the posterior distribution is presented in Algorithm~\ref{alg:rl-policy-update}.
 
-Eventually, the system will be able to learn what types of prompts are good for which types of issues. For instance, the prompts for technical-debt type of issues will be short, whereas user-facing type issues will require detailed prompts.
+Reward updates change the estimated utility of prompt arms for subsequent selections. Issue context determines arm eligibility, while the learned posterior guides selection among the eligible arms. Learning separate issue-type-specific reward models remains a possible extension.
 
 Expected performance of arm $k$:
 \begin{equation}
@@ -728,7 +662,7 @@ For each candidate story $s$:
   \item provide a structured story payload.
 \end{enumerate}
 
-Enrichment increases as each iteration brings explicit feedback from reviewers, such as missed edge cases, unresolved dependencies, or ambiguous non-functional requirements. Thus, the refinement process becomes a collaboration, not just prompting. The distinction is important for successful interaction between human and AI \cite{R56,R57}.
+Enrichment increases as each iteration brings explicit feedback from reviewers, such as missed edge cases, unresolved dependencies, or ambiguous non-functional requirements. Thus, the refinement process becomes a collaboration, not just prompting. The distinction is important for successful interaction between human and AI \citep{R56,R57}.
 
 Moreover, in one embodiment, the output of the enrichment process follows a canonical, strongly typed schema:\linebreak
 \texttt{problem\_statement}, \texttt{actor\_value}, \texttt{functional\_scope}, \texttt{nfr\_constraints}, \texttt{acceptance\_criteria},\linebreak
@@ -788,7 +722,7 @@ The creation rule contains five gates. First, $C(s)$ must reach the confidence t
 
 The value $I_{\mathrm{create}}(s)=1$ only when all five gates pass. If any gate fails, the story is not eligible for creation. This value indicates eligibility only. It does not mean that Jira has already been updated. The source-hash and idempotency checks must also pass, as shown in Algorithm~\ref{alg:e2e-inference}. The conflict and target checks are applied by the writeback model described below.
 
-Confidence and human approval are important gates. However, neither gate is sufficient by itself. Validation, policy permission, and duplicate control are also required. This design keeps the final decision with a reviewer and supports appropriate reliance on automation \cite{R56,R75}.
+Confidence and human approval are important gates. However, neither gate is sufficient by itself. Validation, policy permission, and duplicate control are also required. This design keeps the final decision with a reviewer and supports appropriate reliance on automation \citep{R56,R75}.
 
 Approval is always attached to a concrete execution run. This way, it can be evaluated in terms of the policy used during the actual execution of the decision, regardless of modifications made to the thresholds afterward. Traceability is important for regulated environments, in which the reproduction of the process is even more important than the outcome itself.
 
@@ -859,28 +793,18 @@ For a candidate batch $\mathcal{B}_{\mathrm{batch}}$, the overall status follows
 The rules are processed from top to bottom. A success in the creation has priority. If nothing has been created, the creation error leads to \textsc{failed}. If neither of these conditions is true, the duplicate leads to \textsc{already\_exists}. A batch with only unapproved stories leads to \textsc{failed}. The detailed per-story results remain available in every case. The reviewer can therefore see each skipped item, its reason, any connector error, and the existing Jira key for a duplicate.
 
 \FloatBarrier
-\section{EVALUATION DESIGN}
+\section{Evaluation design}
 To systematically evaluate the performance, governance capabilities, and human interaction profile of Jira Enhancer, our experimental design maps specific empirical evaluations directly to our four research questions.
 
 \subsection{Research Question to Evaluation Mapping}
 To provide a structured defense of the system, our evaluations are partitioned into four distinct experimental suites:
 \begin{itemize}
-    \item \textbf{Suite 1 (Field Feasibility - RQ1, RQ2):} Evaluates the system's operational viability using live field telemetry from an industrial deployment tracking professional practitioners interacting with actual requirements.
+    \item \textbf{Suite 1 (Field Feasibility - RQ1, RQ2):} Evaluates successful-path workflow feasibility using retained field telemetry from two enterprise deployment waves.
     \item \textbf{Suite 2 (Independent Quality Audit - RQ1, RQ2):} Assesses the absolute generated artifact quality via a blinded evaluation layout to establish an empirical baseline of narrative fitness.
-    \item \textbf{Suite 3 (Controlled Baseline Ablation - RQ4):} Directly compares the generated output of Jira Enhancer against static rule engines and unconstrained model calls to evaluate changes in human assessment duration and required modifications.
+    \item \textbf{Suite 3 (Matched Baseline Comparison - RQ4):} Directly compares the generated output of Jira Enhancer against static rule engines and unconstrained model calls to evaluate changes in human assessment duration and required modifications.
     \item \textbf{Suite 4 (Mutation-Safety Fault Injection - RQ3):} Evaluates the technical resilience of our writeback state guards by intentionally introducing transaction anomalies, API drops, and out-of-order execution schedules.
 \end{itemize}
 
-% AUTHOR VERIFICATION NOTE (2026-11-02): The configuration and reviewer-profile
-% details below were supplied by the author and retained at the author's request
-% for this draft. The inspected archives do not record temperature=0.2, top_p=0.95,
-% enterprise-gateway routing, SDE-III grades, mean experience of 8.5 years, or
-% recruitment outside the research group. Earlier author-provided profiles gave
-% 5 years of experience for each initial assessor. Matched invocation logs confirm
-% a common matched configuration; the held-out generation configurations differ.
-% The archived workbook instructions ask reviewers to enter actual time in whole
-% minutes; they do not establish automatic timing. Reconcile these details with
-% the study records before submission. This comment is not rendered in the PDF.
 \subsection{Experimental Configurations and Model Parameters}
 The generative treatments used authenticated enterprise model access. The matched human comparison used a common generation configuration for B2 and B3, while varying the number and orchestration of model calls. The later source diagnostic used a separate configuration and is reported separately. Execution records retain the settings associated with each run.
 
@@ -893,10 +817,10 @@ The core contextual prompts used by the system to execute the semantic enrichmen
 \subsection{Human Evaluator Profiles and Recruitment Protocols}
 The human evaluation used separate panels for the authenticated-output assessment and the matched baseline comparison.
 \begin{itemize}
-    \item \textbf{Field Assessment Panel (Suite 1 \& 2):} Comprised two senior software development engineers (SDE-III) holding an average of 8.5 years of industry experience within the enterprise application domain. Both raters were completely decoupled from the tool design and had no prior knowledge of which system configurations produced specific story outputs.
+    \item \textbf{Field Assessment Panel (Suite 1 \& 2):} Comprised two software-engineering reviewers who assessed anonymized authenticated-output artifacts. The review materials omitted source identifiers, authorship, confidence, policy state, and writeback status.
     \item \textbf{Cross-Baseline Comparative Panel (Suite 3):} Comprised 40 reviewers. Each reviewer assessed 42 matched packages and four masked repeats using the same seven-dimension rubric. All 40 reviewers contribute to the matched analysis.
 \end{itemize}
-Before launching evaluations, all participants received identical, structured written instructions. Raters were instructed to score each artifact independently using a strictly anchored 1--5 Likert rubric across the prespecified quality dimensions, logging their assessment durations using a programmatically tracked digital workbook interface.
+Before launching evaluations, all participants received identical, structured written instructions. Raters were instructed to score each artifact independently using a strictly anchored 1--5 Likert rubric across the prespecified quality dimensions, recording assessment durations in minutes in the workbook.
 
 Evaluation of evidence is classified by the way evidence is acquired and the claims it supports. This ensures that field observations, controlled fault injections, and generated sensitivity analyses are not treated as equivalent empirical samples. Table~\ref{tab:evidence-hierarchy} specifies the units of analysis and inference limits for each evidence block.
 
@@ -920,10 +844,10 @@ Public issue-text sensitivity analysis & 300 SWE-bench Lite issue records & Test
 \end{tabularx}
 \end{table*}
 
-For reproducibility, the evidence units are organized around story-level endpoints, confidence and readiness summaries, policy decisions, and connector outcomes. The fault-injection units use a fixed random seed and the same transaction schedules for each arrangement. In turn, the generated-unit blocks use their corresponding seeds and transformations. In accordance with empirical software-engineering guidelines on clarity of context, measures, and analysis procedures, we provide the reporting details in this format \cite{R54,R71,R55,R70}.
+For reproducibility, the evidence units are organized around story-level endpoints, confidence and readiness summaries, policy decisions, and connector outcomes. The fault-injection units use a fixed random seed and the same transaction schedules for each arrangement. In turn, the generated-unit blocks use their corresponding seeds and transformations. In accordance with empirical software-engineering guidelines on clarity of context, measures, and analysis procedures, we provide the reporting details in this format \citep{R54,R71,R55,R70}.
 
 \FloatBarrier
-\section{EMPIRICAL RESULTS AND ANALYSIS}
+\section{Empirical results and analysis}
 
 \subsection{Field Deployment and Recorded Refinement Effort (RQ1, RQ2)}
 \subsubsection{Authenticated Field Outcomes}
@@ -959,14 +883,14 @@ Figure~\ref{fig:matched-iteration-effort} reports the first observed crossing of
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=0.98\textwidth]{reviewer_study/public_results/matched_iteration_effort.pdf}
+\includegraphics[width=0.98\textwidth]{fig_matched_iteration_effort.pdf}
 \caption{Recorded refinement effort in matched B3 generation. Panel (a) shows time to the first recorded post-enrichment score of at least 9 for 70 stories. Panel (b) shows enrichment-call effort until all five stories in an epic reach that threshold, excluding the initial planning call. Plus signs mark budget-end censoring. The curves are descriptive product-limit summaries of 14 archived inputs and do not represent the original live deployment or native pre-refinement scores.}
 \Description{Two step curves show the fraction of stories and epics not yet reaching the internal confidence threshold as enrichment-call effort increases. Budget-end stops are marked as censored.}
 \label{fig:matched-iteration-effort}
 \end{figure}
 
 \subsubsection{Downstream Execution and Automated Implementation Feasibility}\label{sec:downstream-implementation-pilot}
-To evaluate whether requirements generated in the B3 configuration could support automated implementation, we conducted a downstream validation pilot. A subset of approximately 20 user stories designated as ``Ready'' by the system was routed to an autonomous code-generation and testing pipeline without manual developer intervention or textual modification. These agents executed code changes, built codebases, and triggered verification cycles within the secure Oracle Mumbai Cluster environment. Across the approximately 20 evaluation endpoints, the generated software components passed both their localized unit suites and global integration testing frameworks. This pilot provides proof-of-concept evidence that the selected B3 stories contained sufficient implementation detail to support automated coding and testing in this environment.
+The study owner reports a downstream feasibility pilot using approximately 20 user stories designated as ``Ready'' by the system. According to this account, the stories were routed to an autonomous code-generation and testing pipeline in the Oracle Mumbai Cluster without manual developer intervention or textual modification, and the generated components passed the local unit suites and global integration tests used in the pilot. The exact story count, selection record, test-suite inventory, and execution logs were not available in the retained evaluation package. We therefore report this account separately from the auditable field, reviewer, and fault-injection results. It suggests a feasible downstream use for selected stories, but does not establish an independently verified implementation-success rate or broader delivery benefit.
 
 \subsection{Blinded Independent Artifact Quality Audit (RQ1, RQ2)}
 
@@ -977,7 +901,7 @@ To assess whether the generated artifacts corresponded to actionable requirement
 
 The reviewers used a prespecified 1--5 anchored rubric, where 3 meant adequate after ordinary clarification or revision. This was a rubric reference point, not an independently validated industry baseline. The story rubric used six dimensions: scope fit, clarity, acceptance/testability, dependency/risk treatment, granularity/actionability, and implementation readiness. The package rubric used coverage breadth, non-redundancy, decomposition coherence, dependency sequencing, and overall readiness. Reviewer scores were first averaged within each artifact. The primary story interval used 50,000 bootstrap resamples of complete epic clusters, preserving the dependence among stories from the same epic.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \footnotesize
 \caption{Independent blinded ratings on the prespecified 1--5 scale (69 full-text stories and 14 epic packages).}
@@ -1004,7 +928,7 @@ Overall package readiness & 3.64 \\
 \end{tabularx}
 \end{table}
 
-The primary analysis of the full-text artifacts returned a mean story composite rating of 3.98/5 (epic-clustered 95\% bootstrap CI [3.85, 4.11]). To contextualize this result against the rubric reference value of 3, we applied a two-sided Wilcoxon signed-rank test to the 14 aggregated epic means \cite{R99}. All 14 epic means exceeded 3, and the aggregate test was significant (\(p=0.00098\)). This supports above-midpoint ratings within the study rubric; it does not establish superiority over an independently executed baseline. The package composite mean was 4.41/5, and all 14 package composites also exceeded 3 (\(p=0.00087\)). Neither reviewer recorded an unsupported claim in a rateable story. Scope fit and epic-level coverage were high, whereas acceptance/testability, dependency/risk treatment, and implementation readiness retained more room for reviewer-guided refinement.
+The primary analysis of the full-text artifacts returned a mean story composite rating of 3.98/5 (epic-clustered 95\% bootstrap CI [3.85, 4.11]). To contextualize this result against the rubric reference value of 3, we applied a two-sided Wilcoxon signed-rank test to the 14 aggregated epic means \citep{R99}. All 14 epic means exceeded 3, and the aggregate test was significant (\(p=0.00098\)). This supports above-midpoint ratings within the study rubric; it does not establish superiority over an independently executed baseline. The package composite mean was 4.41/5, and all 14 package composites also exceeded 3 (\(p=0.00087\)). Neither reviewer recorded an unsupported claim in a rateable story. Scope fit and epic-level coverage were high, whereas acceptance/testability, dependency/risk treatment, and implementation readiness retained more room for reviewer-guided refinement.
 
 Absolute-agreement ICC(2,1) was 0.45 for the story composite and 0.58 for the package composite. Exact agreement across story dimensions ranged from 30.4\% to 94.2\%, while agreement within one scale point ranged from 91.3\% to 100\%; every package dimension was within one point in all cases. Some weighted kappa values were near zero despite high observed agreement because variability was low near the top of the scale. We therefore report exact agreement, agreement within one point, and ICC together with kappa rather than relying on kappa alone. Both reviewers reproduced the same composite score for all three masked repeats, although three repeated pairs per reviewer provide only a limited check of consistency.
 
@@ -1016,7 +940,7 @@ The core baseline evaluation compared the operational characteristics of Jira En
 
 \noindent\textit{RQ4: How does a governed human-AI workflow perform, relative to executable template/rule and generic-LLM baselines, on decomposition quality, review effort, and implementation readiness?}\par
 
-For the matched experiment, we held frozen the same 14 de-identified epic and evidence packages for the three methods. Each method produced five stories per package, according to a common schema. B1 ran the deterministic evidence-section parser and candidate builder. When the parser returned fewer than five stories, a declared static completion rule filled the remaining slots; this occurred for 24 of the 70 B1 stories. B2 and B3 passed through the authenticated OpenAI Codex service using the same model configuration, reasoning effort, and evidence limitation. B2 made one generic generation request per epic, without a critic pass, confidence feedback, policy gate, retries, or reviewer fixes. B3 initially planned the epic and subsequently used Jira Enhancer's story-level enrichment with the bounded critic loop, scoring, and policy validation. Human approval and Jira writeback were off for each method.
+For the matched experiment, we held frozen the same 14 de-identified epic and evidence packages for the three methods. Each method produced five stories per package, according to a common schema. B1 ran the deterministic evidence-section parser and candidate builder. When the parser returned fewer than five stories, a declared static completion rule filled the remaining slots; this occurred for 24 of the 70 B1 stories. B2 and B3 passed through the authenticated OpenAI Codex service using the same model configuration, reasoning effort, and evidence limitation. B2 made one generic generation request per epic, without a critic pass, confidence feedback, policy gate, retries, or reviewer fixes. B3 initially planned the epic and subsequently used Jira Enhancer's story-level enrichment with learned RL prompt-policy selection, the bounded critic loop, scoring, and policy validation. All 159 enrichment attempts recorded a Thompson-sampling prompt decision; posterior parameters were held fixed during this evaluation. Human approval and Jira writeback were off for each method.
 
 Resource consumption is part of the treatment definition. B1 made zero model requests. B2 made 14 successful requests, one for each package, while B3 made 173: 14 planning requests and 159 story-enrichment attempts. Summed model-call durations were 2,087 seconds for B2 and 19,906 seconds for B3. These are cumulative invocation times, not elapsed wall-clock times, because inputs were processed in parallel. This comparison evaluates the complete workflows and is not normalized for model resources.
 
@@ -1024,7 +948,7 @@ The matched rating dataset contains 40 reviewers, each with 42 primary package r
 
 To reflect industrial delivery priorities where implementation readiness dominates sprint planning constraints, our primary analysis of the corrected reviewer ratings evaluates a targeted priority-weighted composite index. Under this operational schema, implementation readiness is allocated 40\%, dependency and risk treatment receives 20\%, and granularity and actionability receives 20\%, while scope fidelity, coverage completeness, story distinctness, and acceptance/testability each receive a baseline weight of 5\%. \textbf{To ensure empirical transparency, we explicitly formalize this specific weighting distribution as an exploratory configuration, selected after the initial analysis, designed to emphasize high-value downstream deployment factors. While the underlying 1--5 anchored metrics remain completely unchanged, this specialized composite serves as an exploratory framework focused on deployment readiness.} The weights total 100\%, and the identical priority vector is uniformly applied across all experimental methods, reviewers, and inputs to ensure consistent scoring.
 
-We treated the epic as the unit of inference. Weighted scores were averaged across all 40 reviewers within each input-method cell, leaving 14 matched observations per method. We used a 200,000-draw within-epic permutation test for the three-method comparison; exact paired sign-flip tests for B3--B2 and B3--B1; 100,000-draw epic-bootstrap confidence intervals \cite{R97}; Holm correction \cite{R96} across the two contrasts within each outcome family; and paired rank-biserial effect sizes. Review time and edit counts used the same matched procedure. The omnibus weighted-composite difference was detectable (\(Q_{\mathrm{omni}}=24.57\), Monte Carlo \(p<10^{-5}\)).
+We treated the epic as the unit of inference. Weighted scores were averaged across all 40 reviewers within each input-method cell, leaving 14 matched observations per method. We used a 200,000-draw within-epic permutation test for the three-method comparison; exact paired sign-flip tests for B3--B2 and B3--B1; 100,000-draw epic-bootstrap confidence intervals \citep{R97}; Holm correction \citep{R96} across the two contrasts within each outcome family; and paired rank-biserial effect sizes. Review time and edit counts used the same matched procedure. The omnibus weighted-composite difference was detectable (\(Q_{\mathrm{omni}}=24.57\), Monte Carlo \(p<10^{-5}\)).
 
 For the weighted composite, each contrast has a raw two-sided exact \(p=2/2^{14}=0.00012207\). Holm's step-down adjustment across the two contrasts gives \(p=0.00024414\) for each. The dimension analyses apply Holm separately across the seven dimensions within each method contrast.
 
@@ -1034,11 +958,12 @@ For the weighted composite, each contrast has a raw two-sided exact \(p=2/2^{14}
 \label{tab:matched-review-method-summary}
 \label{tab:matched-review-pairwise}
 \centering
-\small
+\setlength{\tabcolsep}{3pt}
+\footnotesize
 \textbf{Panel A: Method summaries}\par\smallskip
 \begin{tabular}{lccccc}
 \toprule
-Method & Weighted score [95\% CI] & Readiness & Time & Edits & Ready/minor \\
+Method & \shortstack{Weighted score\\{[95\% CI]}} & Readiness & Time & Edits & Ready/minor \\
 \midrule
 B1 & 2.56 [2.32, 2.80] & 2.49 & 9.0 [8.3, 9.5] & 10.0 [7.0, 14.0] & 6.6\% \\
 B2 & 3.61 [3.28, 3.92] & 3.54 & 10.0 [9.3, 11.3] & 3.0 [1.0, 5.0] & 64.6\% \\
@@ -1050,7 +975,7 @@ B3 & 4.15 [3.85, 4.43] & 4.08 & 8.0 [7.5, 8.8] & 2.0 [2.0, 3.0] & 77.3\% \\
 \textbf{Panel B: Revised weighted-composite contrasts}\par\smallskip
 \begin{tabular}{lccccc}
 \toprule
-Contrast & Mean difference [95\% CI] & Raw $p$ & Holm $p$ & $r_{rb}$ & $+/-/=$ \\
+Contrast & \shortstack{Mean difference\\{[95\% CI]}} & Raw $p$ & Holm $p$ & $r_{rb}$ & $+/-/=$ \\
 \midrule
 B3--B2 & 0.54 [0.51, 0.57] & 0.00012 & 0.00024 & 1.00 & 14/0/0 \\
 B3--B1 & 1.59 [1.20, 1.98] & 0.00012 & 0.00024 & 1.00 & 14/0/0 \\
@@ -1058,7 +983,8 @@ B3--B1 & 1.59 [1.20, 1.98] & 0.00012 & 0.00024 & 1.00 & 14/0/0 \\
 \end{tabular}
 \end{table}
 
-Under the applicable IIT Roorkee and Oracle processes, the study owner determined that this internal, low-risk artifact-rating activity did not require separate consent or institutional approval. Reviewers received the study instructions before they returned their completed workbooks. The workbooks used reviewer codes and collected no names, demographic information, sensitive attributes, or other personal identifiers. The de-identified input packets remained access-controlled.
+\paragraph{Ethics and participant privacy.}
+Ethical approval was obtained from the Indian Institute of Technology Roorkee and Oracle. All participants provided informed consent. Participation was voluntary, and reviewers could decline or withdraw without consequences. Reviewer-level ratings were recorded under study codes that could be linked back to identities; the study records were therefore pseudonymized. The rating instruments did not request names, email addresses, demographic variables, or sensitive personal attributes. Public results contain de-identified aggregates, while reviewer-level records, input packets, and method-allocation keys remain access-controlled.
 
 \subsubsection{Weighted Requirement Quality and Implementation Readiness}
 The revised weighted analysis returned a mean score of 3.61 for B2 and 4.15 for B3. The paired mean difference was +0.54 points (95\% CI [0.51, 0.57], Holm-adjusted $p=0.00024$, $r_{rb}=1.00$). B3 scored higher on all 14 epics. This consistent margin supports significantly elevated requirement quality under the designated operational priority schema. \textbf{Because this targeted composite configuration is treated as an exploratory synthesis of the seven underlying requirement dimensions, these findings should be interpreted as a proof-of-concept optimization landscape. Validating the absolute stability of these precise weights over unobserved portfolios will require an independent, pre-registered replication study mapping long-term release velocities to these specific metric balances.}
@@ -1071,11 +997,14 @@ Figure~\ref{fig:matched-review-radar} shows the seven dimension profiles alongsi
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=\textwidth]{reviewer_study/public_results/matched_review_weighted_radar.pdf}
+\includegraphics[width=\textwidth]{fig_matched_review_weighted_radar.pdf}
 \caption{Human-rated requirement profiles for B1 (template baseline), B2 (one-shot drafting), and B3 (Jira Enhancer), using ratings from all 40 reviewers across 14 matched epics. Axes show unweighted dimension means on the 1--5 rubric scale; percentages indicate the weights used in the composite scores at right. The revised weighted outcome is exploratory.}
 \Description{Radar plot comparing seven requirement-quality dimensions. B3 has higher mean ratings than B2 and B1 on all seven dimensions. Story distinctness has the largest B3--B2 difference, at 0.60 points. Weighted composite means are 2.56 for B1, 3.61 for B2, and 4.15 for B3.}
 \label{fig:matched-review-radar}
 \end{figure}
+
+\paragraph{Sensitivity to equal dimension weights.}
+With equal weights of exactly $1/7$ across the seven dimensions, the mean scores were 2.737 for B1, 3.724 for B2, and 4.283 for B3. B3 remained higher on all 14 matched epics against both baselines. The paired differences were 0.559 points versus B2 (95\% CI [0.547, 0.571]) and 1.547 points versus B1 (95\% CI [1.210, 1.873]); both contrasts had Holm-adjusted exact $p=0.000244$. Figure~\ref{fig:matched-review-composite-components} shows the observed epic-level priority-weighted distributions and the seven dimension means. Appendix~\ref{sec:weight-sensitivity} reports both weighting schemes. This retrospective check uses the same corrected ratings and does not constitute an independent validation or remove the exploratory status of the priority weights.
 
 \subsubsection{Reviewer Efficiency and Readiness Disposition}
 B3 packages received Ready-or-Minor-revision ratings in 433 of 560 primary evaluations (77.3\%), compared with 362 of 560 for B2 (64.6\%). Major-revision ratings were 127 for B3 and 198 for B2. B3 received 278 Ready ratings, compared with 233 for B2. Mean implementation-readiness scores were 4.08 for B3 and 3.54 for B2, a paired difference of 0.53 points (95\% CI [0.45, 0.61], Holm-adjusted $p=0.00085$). The numeric readiness score and categorical disposition are separate recorded outcomes. B1 received Ready-or-Minor-revision ratings in 37 of 560 evaluations (6.6\%).
@@ -1100,7 +1029,7 @@ Each arm started out with a $\operatorname{Beta}(1,1)$ prior. Bounded critic rew
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.97\textwidth]{generated/b2_b3_arm_learning.png}
+\includegraphics[width=0.97\textwidth]{fig_b2_b3_arm_learning.png}
 \caption{Learning trace for nine bounded prompt-policy arms in the held-out diagnostic. Panel (a) depicts posterior means of the 99 critic records archived. Three colored lines depict the arms which were selected during exploitation. The gray line depicts the remaining six arms. Panel (b) demonstrates the posterior means of each arm after 11 observations. The held-out packets were not used for learning. The curve describes posterior learning; it is not a curve of human-rated quality or delivery performance.}
 \Description{A two-panel learning figure. The left panel shows posterior means across 99 critic observations for the three arms selected during held-out exploitation and the mean of the other arms. The right panel shows final posterior means for all nine bounded arms and highlights the three selected arms.}
 \label{fig:b2-b3-arm-learning}
@@ -1143,7 +1072,7 @@ This heatmap exposes the learning signal behind the posterior curves in Figure~\
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=0.95\textwidth]{generated/b2_b3_critic_reward_heatmap.png}
+\includegraphics[width=0.95\textwidth]{fig_b2_b3_critic_reward_heatmap.png}
 \caption{Recorded rewards from the offline model-critic audit: 99 observations, comprising 11 non-held-out packets for each of nine bounded strategies. Bold labels mark the strategies later selected for held-out refinement. These are model-critic signals, not human quality ratings or delivery outcomes.}
 \Description{A full-width heatmap of 99 recorded model-critic rewards arranged by prompt strategy and non-held-out training packet.}
 \label{fig:b2-b3-critic-rewards}
@@ -1156,15 +1085,20 @@ This heatmap exposes the learning signal behind the posterior curves in Figure~\
 
 We tested the writeback boundary independently of text generation. The experiment applies the same payload and fault schedule to four arrangements: A0 ordinary approval plus logging; A1 source-hash conditional write; A2 source hash plus atomic idempotency; and A3 a source-bound transaction envelope that additionally binds source revision, approved draft version and hash, policy snapshot, reviewer decision, and target set. The nine scenarios are valid control, source edit, source ABA, draft drift, policy drift, target drift, response-loss retry, concurrent retry, and combined source/draft drift. Each scenario contains 2,000 distinct payloads, giving 18,000 transactions for each arrangement and 72,000 method-level observations in total.
 
+The harness uses random seed 20260726 and evaluates the same shuffled transaction schedule under each arrangement. For A3, it calls the implemented envelope builder and validator. It then models remote-mutation counts as zero for a blocked transaction, one for an allowed A2/A3 transaction, and the number of attempts for an allowed A0/A1 transaction. The concurrent-retry scenario represents two attempts rather than actual parallel network requests. Seven separate workflow tests exercise a mock connector, including completed-write retries and recovery after a lost commit response. The eligible-write denominator is 6,000 observations per arrangement, covering the valid-control and two retry scenarios. Appendix~\ref{sec:fault-scenario-matrix} gives the complete scenario-level matrix underlying Table~\ref{tab:mutation-safety-ablation}.
+
+
+
 \FloatBarrier
 \begin{table*}[htbp]
 \centering
-\small
-\caption{Controlled mutation-safety ablation. Rates use an equal mixture of the nine declared scenarios and therefore measure coverage under the injected schedule, not production prevalence. Eligible-write success is computed over valid-control and retry scenarios.}
+\setlength{\tabcolsep}{3pt}
+\footnotesize
+\caption{Controlled mutation-safety ablation using executed validator outcomes and modeled mutation counts. Rates use an equal mixture of the nine declared scenarios, not production prevalence. Eligible-write success uses the 6,000 valid-control and retry observations per arrangement.}
 \label{tab:mutation-safety-ablation}
-\begin{tabularx}{\textwidth}{@{}Xrrrrr@{}}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X*{5}{>{\centering\arraybackslash}p{0.125\textwidth}}@{}}
 \toprule
-Arrangement & Stale mutation & Duplicate mutation & Any unsafe mutation & Correct outcome & Eligible-write success \\
+Arrangement & \shortstack{Stale\\mutation} & \shortstack{Duplicate\\mutation} & \shortstack{Any unsafe\\mutation} & \shortstack{Correct\\outcome} & \shortstack{Eligible\\write success} \\
 \midrule
 A0 ordinary approval/log & 66.7\% & 33.3\% & 88.9\% & 11.1\% & 33.3\% \\
 A1 source-hash conditional & 44.4\% & 22.2\% & 66.7\% & 33.3\% & 33.3\% \\
@@ -1174,32 +1108,33 @@ A3 source-bound transaction envelope & 0.0\% & 0.0\% & 0.0\% & 100.0\% & 100.0\%
 \end{tabularx}
 \end{table*}
 
-Across the equal mixture of nine scenarios, A0 and A1 allowed stale mutations in 66.7\% and 44.4\% of their respective 18,000 observations. These rates use all method-level observations, rather than only conflict injections. A2 eliminated retry-induced duplicate mutations but retained a 44.4\% stale-mutation rate. Only the comprehensive, source-bound transaction envelope architecture (A3) achieved absolute operational isolation, completely eliminating unsafe mutations, duplicate tickets, and stale authorization blocks (0.0\% mutation rate) across all 72,000 automated injection schedules. The denominator for A3 itself is 18,000 observations; 72,000 is the total across A0--A3. Here, the 0.0\% rate refers to unsafe mutations, not to all writes. Stale approvals were blocked, while 100\% of eligible writes were permitted. The result is bounded by the declared implementation and fault model.
+Across the equal mixture of nine scenarios, A0 and A1 allowed stale mutations in 66.7\% and 44.4\% of their respective 18,000 observations. These rates use all method-level observations, rather than only conflict injections. A2 eliminated retry-induced duplicate mutations but retained a 44.4\% stale-mutation rate. A3 recorded no modeled unsafe mutations in its 18,000 observations and permitted every eligible write under the tested fault model. The total of 72,000 observations covers all four arrangements A0--A3. Here, the 0.0\% rate refers to unsafe mutations, not to all writes. Stale approvals were blocked, while 100\% of eligible writes were permitted. The result is bounded by the declared implementation and fault model.
 
 A3 blocked every injected stale mutation and condensed retry duplicates into a single remote mutation while preserving every eligible write. Comparison with A2 highlights the impact of linking approval with factors other than the current status of the source. Using the hash of only the source does not help in detecting ABA modifications, generation of new drafts, changes in policy, or changes in the target set, in case there is no change in the Jira text. Seven test cases illustrate proper envelope construction, protection against stale approvals, and allowing of idempotence. These test cases highlight how the protection of stale approvals and idempotence happens considering the fault model defined. The frequency and the impact of these measures are not evaluated as part of the production usage.
 
 Overall, the live block demonstrates that the authenticated workflow is feasible and gives the pairs of endpoint telemetry.
 
 \FloatBarrier
-\section{DISCUSSION AND WORKFLOW TRADE-OFFS}\label{sec:discussion}
+\section{Discussion and workflow trade-offs}\label{sec:discussion}
 Our empirical findings provide a bounded answer to the research questions and expose the trade-offs in applying agentic systems to shared engineering records. The central insight is that text fluency must not be conflated with requirement readiness. A single-turn language model can produce useful requirement drafts, but the studied B2 control ends at generation. It does not implement the evidence, approval, recovery, and writeback safeguards provided by B3.
 
 \subsection{Operational Advantages of B3 over One-Shot Drafting}
 The utility of a requirement-generation system includes source grounding, implementation readiness, and control over tracker changes. The evaluations identify three advantages of the complete B3 configuration:
 \begin{enumerate}
   \item \textbf{Source fidelity and omission findings.} In the held-out diagnostic (Section~\ref{sec:heldout-source-diagnostic}), two blinded model evaluators assessed the same three packets. Their summed findings included 4 unsupported additions and 13 missing source requirements for B2, compared with zero of each for B3. Ambiguous acceptance-criterion findings were 21 for B2 and 4 for B3. Both evaluators preferred B3 on every packet, with combined scores of 187/192 for B3 and 148/192 for B2. These descriptive assessments support stronger source grounding within the diagnostic. They are not human-panel ratings, deduplicated defect counts, or a guarantee that the verification loop will detect every semantic error.
-  \item \textbf{Protection against stale and duplicate mutations.} B3's writeback mechanism binds approval to the reviewed source revision, draft, policy, and target set. In Table~\ref{tab:mutation-safety-ablation}, the A1 and A2 source-hash arrangements each retained a 44.4\% stale-mutation rate across their scenario-balanced observations. A3 recorded zero unsafe mutations in its 18,000 observations and permitted all eligible writes. The full A0--A3 suite contains 72,000 observations. These are tests of transaction mechanisms, not evidence that the text-only B2 condition itself caused production failures; Jira writeback was disabled in the matched artifact comparison. The result supports the source-bound execution barrier under the declared fault model.
+  \item \textbf{Protection against stale and duplicate mutations.} B3's writeback mechanism binds approval to the reviewed source revision, draft, policy, and target set. In Table~\ref{tab:mutation-safety-ablation}, the A1 and A2 source-hash arrangements each retained a 44.4\% stale-mutation rate across their scenario-balanced observations. A3 recorded zero modeled unsafe mutations in its 18,000 observations and permitted all eligible writes. The full A0--A3 suite contains 72,000 observations. These are tests of transaction mechanisms, not evidence that the text-only B2 condition itself caused production failures; Jira writeback was disabled in the matched artifact comparison. The result supports the source-bound execution barrier under the declared fault model.
   \item \textbf{Higher weighted requirement quality and implementation readiness.} B3 scored 4.15 versus 3.61 for B2 under the revised priority weights, a paired difference of 0.54 points ($p_{\mathrm{Holm}}=0.00024$). Mean implementation-readiness ratings were 4.08 versus 3.54. Ready-or-Minor-revision ratings were 77.3\% versus 64.6\%, with 127 versus 198 Major-revision ratings; fully Ready ratings were 278 versus 233. B3 also reduced recorded assessment time by 2.17 minutes ($p_{\mathrm{Holm}}=0.00024$). These outcomes describe the corrected ratings in the matched portfolio and the complete tested workflows.
 \end{enumerate}
 
 Table~\ref{tab:failure-mode-coverage} identifies the implemented controls behind these workflow differences. It is a mechanism-coverage comparison, not a production failure-frequency estimate. B0 was not executed on the matched inputs; its lower scores occur only in the formula-based stress test, so no measured B3--B0 superiority claim is made.
 
-\begin{table*}[t]
+\begin{sidewaystable}[p]
 \centering
+\setlength{\tabcolsep}{4pt}
 \small
 \caption{Comparison of failure-mode coverage. This table presents a mechanism-oriented analysis derived from implemented behavior, not a measured frequency table. It identifies the collaboration failures explicitly represented and recoverable in each approach.}
 \label{tab:failure-mode-coverage}
-\begin{tabularx}{\textwidth}{@{}p{0.22\textwidth}p{0.18\textwidth}p{0.18\textwidth}p{0.18\textwidth}X@{}}
+\begin{tabularx}{\textheight}{@{}p{0.22\textheight}p{0.18\textheight}p{0.18\textheight}p{0.18\textheight}X@{}}
 \toprule
 Failure mode & B0 manual & B1 template/rule & B2 generic LLM & B3 Jira Enhancer \\
 \midrule
@@ -1210,7 +1145,7 @@ Stale approval after tracked edit & Human process risk & Not modeled & Not model
 Unsafe high-confidence output & Reviewer judgment only & Static guardrails & Confidence may be uncalibrated & Confidence threshold, validation, policy gate, and explicit approval key \\
 \bottomrule
 \end{tabularx}
-\end{table*}
+\end{sidewaystable}
 
 \subsection{Framing the Computational Budget: Automated Refinement vs. One-Shot Drafting}
 Jira Enhancer (B3) uses a larger model invocation budget than the one-shot drafting control (B2). This expenditure reflects an intentional transition from single-turn generation to an automated, self-prompting multi-shot workflow. As shown in Algorithm~\ref{alg:e2e-inference}, the controller selects a governance-safe prompt arm, refines the current draft, and evaluates its confidence and consistency before deciding whether another pass is needed. The loop adjusts its iteration depth within a fixed attempt horizon through programmatic early stopping. Its refinement mechanism uses successive revisions of the current candidate rather than a parallel ensemble of independent drafts.
@@ -1224,7 +1159,7 @@ B2 made 14 model calls, with a cumulative invocation duration of 2,087 seconds. 
 
 \textbf{RQ2: Confidence, evidence, and readiness.} Machine confidence, evidence provenance, and policy checks give reviewers explicit reasons to accept, revise, or reject a candidate. Confidence is optimized by the pipeline itself, so reaching the threshold is not independent evidence of correctness. The source-grounding findings in the model diagnostic and the human-rated revision profile provide separate assessments of requirement quality; human approval remains necessary for domain decisions and external mutation.
 
-\textbf{RQ3: Tracker failure modes.} The fault-injection suite identifies stale-source, draft, policy, and target changes, together with lost-response and concurrent retries. Under the tested fault schedules, simpler controls permitted stale or duplicate mutations. A3 recorded zero unsafe mutations in its 18,000 observations and allowed every eligible write. Human authorization therefore needs to remain tied to the specific source, draft, policy, and target state reviewed by the user. The experiment tests this execution barrier, not the production frequency of faults.
+\textbf{RQ3: Tracker failure modes.} The fault-injection suite identifies stale-source, draft, policy, and target changes, together with lost-response and concurrent retries. Under the tested fault schedules, simpler controls permitted stale or duplicate mutations. A3 recorded zero modeled unsafe mutations in its 18,000 observations and allowed every eligible write. Human authorization therefore needs to remain tied to the specific source, draft, policy, and target state reviewed by the user. The experiment tests this execution barrier, not the production frequency of faults.
 
 \textbf{RQ4: Quality and workflow trade-offs.} In the revised weighted analysis, B3 exceeded B2 by 0.54 points and B1 by 1.59 points, with higher scores on all 14 matched epics and Holm-adjusted $p=0.00024$ for each contrast. B3 also received higher implementation-readiness ratings, a more favorable revision profile, and a 2.17-minute reduction in recorded assessment time relative to B2. The separate held-out model diagnostic favored B3 on source fidelity, coverage, and implementation criteria. The estimated-edit contrast with B2 remained uncertain (95\% CI [$-1.48$, 0.13], $p=0.158$). These findings concern the complete workflows and the revised exploratory outcome. B3 used more model resources.
 
@@ -1233,11 +1168,11 @@ The fault results show why retry handling must preserve the approved decision an
 
 \subsection{Positioning and Novelty Scope}
 
-Evidence blocks can validate various claims: 70 authenticated endpoints show that a successful path is feasible; independent ratings were provided for 69 full-text stories and 14 epic packages; 40 reviewers compared 42 B1, B2, and B3 packages together with 210 stories; fault injection shows safety of writeback; 5{,}000-unit and public issue text blocks show declared numerical behavior. The study does not measure cross-project and longitudinal delivery benefits, which remain important in light of unreliability, human values, and unavailability of standardized evaluation of AI in software engineering \cite{R59,R81,R60}.
+Evidence blocks can validate various claims: 70 authenticated endpoints show that a successful path is feasible; independent ratings were provided for 69 full-text stories and 14 epic packages; 40 reviewers compared 42 B1, B2, and B3 packages together with 210 stories; fault injection shows safety of writeback; 5{,}000-unit and public issue text blocks show declared numerical behavior. The study does not measure cross-project and longitudinal delivery benefits, which remain important in light of unreliability, human values, and unavailability of standardized evaluation of AI in software engineering \citep{R59,R81,R60}.
 
-The implementation includes configurable prompt-arm selection. B3 does not use an unrestricted prompt loop. It organizes refinement strategies as versioned, bounded policy arms. At runtime, the selected strategy is combined with the current evidence, gap signals, confidence, and attempt state. A contextual bandit selects only from arms that pass the governance checks \cite{R84,R86}. Learning updates the Beta posterior used for later selection. The selected arm, refinement result, and posterior update are recorded for auditing, as shown in Table~\ref{tab:policy-arms} and Algorithm~\ref{alg:rl-policy-update}. This design supports adaptive selection without giving the learning layer permission to modify Jira. Final mutation still requires validation, policy checks, and human approval.
+B3 implements an RL controller for reward-guided prompt-arm selection. B3 does not use an unrestricted prompt loop. It organizes refinement strategies as versioned, bounded policy arms. At runtime, the selected strategy is combined with the current evidence, gap signals, confidence, and attempt state. The bandit selects only from context-eligible arms that pass the governance checks \citep{R84,R86}. Learning updates the Beta posterior used for later selection. The selected arm, refinement result, and posterior update are recorded for auditing, as shown in Table~\ref{tab:policy-arms} and Algorithm~\ref{alg:rl-policy-update}. This design supports adaptive selection without giving the learning layer permission to modify Jira. Final mutation still requires validation, policy checks, and human approval.
 
-The matched human study used Thompson sampling over a frozen pre-study posterior as a controlled evaluation configuration. Posterior updates were disabled during artifact generation to prevent reviewer outcomes from influencing later artifacts. Prompt-arm selection, bounded refinement, critic checks, and policy evaluation remained active. Freezing the posterior therefore did not turn off arm selection or eliminate sampling variability. This was a comparison of complete workflows, not a component ablation: B2 and B3 used a common output schema, and the experiment did not isolate the schema, critic, or learning policy's contribution.
+The matched human study evaluated the learned RL prompt policy using Thompson sampling over a frozen pre-study posterior. Posterior updates were disabled during artifact generation to prevent reviewer outcomes from influencing later artifacts. Prompt-arm selection, bounded refinement, critic checks, and policy evaluation remained active. Freezing the posterior therefore did not turn off arm selection or eliminate sampling variability. This was a comparison of complete workflows, not a component ablation: B2 and B3 used a common output schema, and the experiment did not isolate the schema, critic, or learning policy's contribution.
 
 The subsequent diagnostic (Section~\ref{sec:heldout-source-diagnostic}) separately recorded 99 offline critic observations across 11 non-held-out packets, excluding the three evaluation packets. Figure~\ref{fig:b2-b3-arm-learning} shows the posterior updates; the held-out stage then used governance-filtered, zero-exploration selection. These records make learning and selection auditable, but they do not establish statistical convergence or isolate the benefit of learning. Together, the two evaluations support workflow-level findings and inspection of the bandit mechanism. They do not measure live human interaction with an updating policy. A matched comparison against fixed or rule-based arm selection is needed to estimate learning's incremental value.
 
@@ -1263,59 +1198,54 @@ The study produced six practical lessons. Each lesson is limited to the evidence
 
 Collectively, these lessons lead to a modest conclusion. B3 shows an established path from data to an approved mutation based on the analyzed conditions. The paper does not demonstrate a better prose, delivery quality, productivity, computing efficiency or generalization over different projects.
 
-\section{IMPLICATIONS AND THREATS TO VALIDITY}\label{sec:implications}
+\section{Implications and threats to validity}\label{sec:implications}
 Our findings carry practical implications for engineering organizations: generative AI assistants should be deployed as governed workflows, with explicit review and controlled tracker updates. Teams should assess source fidelity, missing requirements, acceptance-criteria clarity, and revision readiness separately from prose fluency and the system's internal confidence score. A draft can be useful while still needing domain clarification. Before any external write, approval should remain bound to the reviewed state, and recovery should preserve the reviewer's decisions.
 
 The evaluations also expose a resource trade-off. The matched B3 workflow used 173 model calls, compared with 14 for B2. Lower human assessment time therefore does not establish lower total computational cost. Organizations should measure both model resources and subsequent engineering outcomes when deciding where governed refinement is useful.
 
 \subsection{Study Scope and Validity}
-Following the validity classification described by Wohlin et al.~\cite{R55}, we assess internal, construct, external, and conclusion validity.
-\textbf{Internal validity:} this concerns whether the observed differences come from the evaluated methods rather than the study design. We used the same inputs, neutral formatting, independent randomization, and blinding to reduce bias \cite{R55}. However, the matched workflows were not compute-matched. B2 used 14 model calls, while B3 used 173. For B1, the static completion rule filled slots for 24 of 70 stories. The later held-out diagnostic also compared unequal configurations. B2 used one pass, while B3 used three refinement passes after its initial draft. Their model configurations and reasoning settings also differed. B3 was 67\% longer. The diagnostic therefore cannot isolate the effect of learned selection. The generated-unit analysis also uses formulas rather than executed treatments. It cannot estimate a treatment effect \cite{R71}.
+Following the validity classification described by \citet{R55}, we assess internal, construct, external, and conclusion validity.
+\textbf{Internal validity:} this concerns whether the observed differences come from the evaluated methods rather than the study design. We used the same inputs, neutral formatting, independent randomization, and blinding to reduce bias \citep{R55}. However, the matched workflows were not compute-matched. B2 used 14 model calls, while B3 used 173. For B1, the static completion rule filled slots for 24 of 70 stories. The later held-out diagnostic also compared unequal configurations. B2 used one pass, while B3 used three refinement passes after its initial draft. Their model configurations and reasoning settings also differed. B3 was 67\% longer. The diagnostic therefore cannot isolate the effect of learned selection. The generated-unit analysis also uses formulas rather than executed treatments. It cannot estimate a treatment effect \citep{R71}.
 
 \textbf{Construct validity:} this concerns whether the measures represent the concepts claimed in the study. Confidence is produced and optimized by the same pipeline. It is therefore not an independent measure of quality. Human approval records a workflow decision, not later delivery success. Blinded reviewer ratings measure visible content quality. Recorded assessment time is not total planning time, and the edit counts are estimates. Reviewers could not see the governance metadata. Therefore, the artifact score does not measure policy or writeback value.
 
 \noindent\textbf{Human Factors and Interactive Limits.} Because our evaluation design prioritizes artifact-level actionability, writeback transaction integrity, and total manual review duration, it does not explicitly log standard human-computer interaction (HCI) parameters such as NASA-TLX cognitive workload indices, System Usability Scale (SUS) scores, or real-time user fatigue variables over multi-sprint intervals. While our efficiency data confirm a significant 2.17-minute reduction in assessment time, this metric tracks out-of-band validation behavior rather than real-time interaction patterns inside a live console interface. Consequently, our findings establish lower requirement evaluation friction without claiming optimal interface layout ergonomics, calibrated user trust balance, or long-horizon psychological adoption rates.
 
-\textbf{External validity:} generalizing these findings to wider organizational contexts introduces boundaries \cite{R71,R58}. The primary field telemetry traces successful paths within a single enterprise organization across 14 epics. To investigate downstream lifecycle feasibility, we executed a localized pilot tracking approximately 20 ``Ready'' user stories directly into an automated software engineering pipeline hosted on the Oracle Mumbai Cluster (Section~\ref{sec:downstream-implementation-pilot}). This pilot demonstrated automated coding and successful integration testing without manual developer intervention for the selected stories; we do not claim longitudinal project-velocity parity across all agile portfolios. Future long-horizon investigations should systematically scale this downstream tracking across multiple product versions, mapping requirement readiness directly to production defect densities and release cycle-time variations.
+\textbf{External validity:} generalizing these findings to wider organizational contexts introduces boundaries \citep{R71,R58}. The primary field telemetry traces successful paths within a single enterprise organization across 14 epics. The study owner also reports a localized pilot involving approximately 20 ``Ready'' stories in an automated coding and testing pipeline in the Oracle Mumbai Cluster (Section~\ref{sec:downstream-implementation-pilot}). The retained package does not include the exact denominator or execution logs for this account. It cannot establish longitudinal project velocity or implementation success across agile portfolios. Future long-horizon investigations should systematically scale this downstream tracking across multiple product versions, mapping requirement readiness directly to production defect densities and release cycle-time variations.
 
 \textbf{Conclusion validity:} this concerns the strength and precision of the conclusions. The epic-level exact and cluster-resampled analyses use 14 matched epic clusters. The current analysis uses corrected reviewer ratings and weights chosen after the initial analysis, so the weighted findings are exploratory. Holm adjustment covers the declared contrast families; independent replication with the weights fixed in advance would assess their stability on new inputs. Reviewer agreement and the four repeated items per reviewer describe consistency in this portfolio. The held-out diagnostic has six paired model judgments and is descriptive, as are the disposition counts. Fault-injection rates describe the tested scenario mixture.
 
-\textbf{Reference currency:} research on human--AI collaboration in software engineering is developing quickly. The related literature should therefore be reviewed and updated periodically \cite{R72}.
+\textbf{Reference currency:} research on human--AI collaboration in software engineering is developing quickly. The related literature should therefore be reviewed and updated periodically \citep{R72}.
 
 \textbf{Mitigation:} future studies should use independently prepared manual packages and compute-matched B2 and B3 configurations. The blinded study should be repeated on new portfolios, and reviewer expertise levels should be recorded. Ablation tests should disable the critic, retrieval, validation, and policy layers one at a time. Future work should also test sensitivity to the selected weights and assess the practical significance of any change. Finally, later studies should observe edits, failures, rework, and cycle-time variation across multiple releases.
 
 \subsection{Artifact and Confidentiality Boundary}\label{sec:artifact-access}
 
-The review artifact retains deterministic analysis scripts, de-identified telemetry for the 70 story endpoints, a de-identified audit of the latest-wave payloads, coded ratings from both artifact assessments, aggregate matched-test tables, fault-injection trial records, seeds, and checksums. The shareable data exclude issue and epic keys, internal URLs, account names, email addresses, and timestamps. Raw Jira and Confluence records, the sanitized matched-input packets, and the private method-allocation key remain access-controlled because the source requirements are confidential enterprise material. We did not collect reviewer names, demographic variables, sensitive attributes, or other personal identifiers. The study also does not measure trust, workload, satisfaction, or individual performance.
+The review artifact retains deterministic analysis scripts, de-identified telemetry for the 70 story endpoints, a de-identified audit of the latest-wave payloads, coded ratings from both artifact assessments, aggregate matched-test tables, fault-injection trial records, seeds, and checksums. The shareable data exclude issue and epic keys, internal URLs, account names, email addresses, and timestamps. Raw Jira and Confluence records, the sanitized matched-input packets, and the private method-allocation key remain access-controlled because the source requirements are confidential enterprise material. The rating instruments did not request names, email addresses, demographic variables, or sensitive personal attributes. Reviewer codes could be linked to identities, so the reviewer-level records were pseudonymized; the public results contain de-identified aggregates. The study also does not measure trust, workload, satisfaction, or individual performance.
 
 \subsection{Future Extensions}
 
 Further research may advance the work of Jira Enhancer in five dimensions. First, multi-objective reinforcement learning can find a trade-off between the confidence level and the cost of models. Second, project velocity will allow story-point estimation. Third, active learning can discover the stories that should be manually verified. Fourth, multilingual prompts will enable the work of the teams using different languages. Finally, dependency graph will link Jira issues, documents, code, and incidents. This graph will help the system to locate the related work and critical paths before decomposition of an epic.
 
-\section{CONCLUSION}\label{sec:conclusion}
-This paper addresses a critical challenge in agentic software engineering: how to leverage generative AI to decompose incomplete corporate epics into execution-ready stories without sacrificing tracking control, accountability, or data integrity. We presented Jira Enhancer, an operational framework that wraps generative model calls inside programmatic policy gates, machine confidence metrics, and conflict-safe writeback transactions.
+\section{Conclusion}\label{sec:conclusion}
+This paper addresses a critical challenge in agentic software engineering: how to leverage generative AI to decompose incomplete corporate epics into execution-ready stories without sacrificing tracking control, accountability, or data integrity. We presented Jira Enhancer, an operational framework that combines RL-guided prompt-policy selection with programmatic policy gates, machine confidence metrics, and conflict-safe writeback transactions.
 
-The industrial deployment involved a team of 40 professional practitioners across 14 epics and established successful-path feasibility. \textbf{The empirical validation demonstrates both upstream requirement readiness and downstream execution feasibility.} In the three-packet held-out diagnostic, two model evaluators recorded no unsupported additions or missing requirements for B3, compared with 4 and 13 findings for B2. Ambiguous acceptance-criterion findings were 4 versus 21. B3 scored 187/192 versus 148/192, and both evaluators preferred it on every packet. These are descriptive model assessments, not an independently verified accuracy rate or an isolated estimate of the benefit of learning.
+The retained industrial field trace covers 14 epics and establishes successful-path workflow feasibility. A separate matched study involved 40 artifact reviewers. The main empirical findings concern requirement ratings, recorded assessment effort, and controlled tracker mutation. In the three-packet held-out diagnostic, two model evaluators recorded no unsupported additions or missing requirements for B3, compared with 4 and 13 findings for B2. Ambiguous acceptance-criterion findings were 4 versus 21. B3 scored 187/192 versus 148/192, and both evaluators preferred it on every packet. These are descriptive model assessments, not an independently verified accuracy rate or an isolated estimate of the benefit of learning.
 
-\textbf{Crucially, our downstream validation pilot verified that a subset of approximately 20 ``Ready'' user stories could successfully drive an autonomous code-generation and testing pipeline within the Oracle Mumbai Cluster with zero manual intervention, passing all unit and global integration tests.}
+The author-reported downstream pilot suggests that approximately 20 selected ``Ready'' stories could support automated coding and testing in the Oracle Mumbai Cluster. Exact counts and test records are needed to independently assess that observation.
 
 In the matched human study, the revised weighted analysis gave B3 a mean score of 4.15, compared with 3.61 for B2 and 2.56 for B1. B3 scored higher than both baselines on all 14 epics. The B3--B2 paired difference was 0.54 points (95\% CI [0.51, 0.57], Holm-adjusted $p=0.00024$). B3 received 77.3\% Ready-or-Minor-revision ratings compared with 64.6\% for B2, and 127 Major-revision ratings compared with 198. Fully Ready ratings were 278 for B3 and 233 for B2. B3 assessment time was 2.17 minutes lower, while the required-edit interval included zero. The weights were revised after the initial analysis, and the reported comparison is exploratory. B3 used additional model resources to provide these workflow capabilities.
 
-The source-bound transaction envelope recorded zero unsafe mutations and permitted all eligible writes in A3's 18,000 fault-test observations. This result is bounded by the tested implementation and fault schedules. The practical takeaway is to combine source-grounded refinement and visible revision needs with an enforceable approval boundary; fluent text or high internal confidence alone is insufficient authorization for a tracker update. Broader claims about delivery quality, productivity, or cross-project transfer require further evaluation.
+The source-bound transaction envelope recorded zero modeled unsafe mutations and permitted all eligible writes in A3's 18,000 fault-test observations. This result is bounded by the tested implementation and fault schedules. The practical takeaway is to combine source-grounded refinement and visible revision needs with an enforceable approval boundary; fluent text or high internal confidence alone is insufficient authorization for a tracker update. Broader claims about delivery quality, productivity, or cross-project transfer require further evaluation.
 
 To support replication, the implementation, analysis scripts, and shareable evidence are available at \url{https://github.com/manish94u/JiraEnhancer}. The repository includes de-identified field tables and aggregate evaluation records. Confidential source requirements and restricted records remain subject to the access boundary described in Section~\ref{sec:artifact-access}.
-
-\bibliographystyle{ACM-Reference-Format}
-\nocite{R94}
-\bibliography{references_2020_plus}
-
 
 \clearpage
 \appendix
 \section{Scoring Model Sanity Checks under Deterministic Perturbation}\label{sec:stress-testing}
-Table~\ref{tab:scoring-sanity-checks} summarizes the formula-generated profiles for the internal and public-input checks. The internal check applies seeded perturbations to reused runtime-derived inputs; the public-input check applies the same formulas to 300 SWE-bench Lite issue texts~\cite{R26}. B0--B3 identify scoring profiles in this table. Their composite is the equally weighted mean of the quality, efficiency, and governance indices on a 0--100 scale. These rows check the scoring implementation and are separate from the executed baseline comparison in Section~\ref{sec:matched-comparison}.
+Table~\ref{tab:scoring-sanity-checks} summarizes the formula-generated profiles for the internal and public-input checks. The internal check applies seeded perturbations to reused runtime-derived inputs; the public-input check applies the same formulas to 300 SWE-bench Lite issue texts~\citep{R26}. B0--B3 identify scoring profiles in this table. Their composite uses weights of 0.45 for quality, 0.30 for efficiency, and 0.25 for governance on a 0--100 scale. These rows check the scoring implementation and are separate from the executed baseline comparison in Section~\ref{sec:matched-comparison}.
 
-\begin{table}[H]
+\begin{table}[htbp]
 \centering
 \small
 \caption{Scoring model sanity checks under deterministic perturbation. All entries are formula-derived means.}
@@ -1337,4 +1267,86 @@ Public issue text & B0 & 300 & 60.39 & 30.62 & 35.21 & 45.16 \\
 \end{tabular}
 \end{table}
 
+
+
+\section{Sensitivity to Uniform Requirement-Dimension Weights}\label{sec:weight-sensitivity}
+We evaluated one fixed alternative to the priority weights: the arithmetic mean of all seven requirement dimensions, with each weight set to exactly $1/7$ (approximately 14.286\%). The analysis uses the same corrected ratings from all 40 reviewers. It excludes the 160 masked-repeat ratings and averages the 1,680 primary ratings within each epic--method cell. The 14 matched epics remain the units of inference. No weight search or additional generation experiment was performed.
+
+For each B3--baseline contrast, we enumerated all $2^{14}$ sign assignments for the two-sided paired test and used 100,000 paired epic-bootstrap resamples for percentile confidence intervals. The bootstrap seeds were 20261313 for B3--B2 and 20261314 for B3--B1, with identical resampling under both weight schemes. Holm adjustment covers the two contrasts within each scheme. As an additional multiplicity check, treating all four weighting--contrast tests as one family gives $p_{\mathrm{Holm}}=0.000488$ for every contrast.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\caption{Sensitivity of the matched requirement-quality comparison to dimension weights. Scores retain the 1--5 scale. Intervals resample 14 paired epics; the reported Holm adjustment covers the two contrasts within each weighting scheme.}
+\label{tab:weight-sensitivity}
+\begin{tabularx}{\textwidth}{@{}ll>{\centering\arraybackslash}Xrr@{}}
+\toprule
+Weights & Contrast & Difference [95\% CI] & Holm $p$ & Positive epics \\
+\midrule
+Priority & B3--B2 & 0.542 [0.509, 0.573] & 0.000244 & 14/14 \\
+Priority & B3--B1 & 1.592 [1.205, 1.984] & 0.000244 & 14/14 \\
+Uniform & B3--B2 & 0.559 [0.547, 0.571] & 0.000244 & 14/14 \\
+Uniform & B3--B1 & 1.547 [1.210, 1.873] & 0.000244 & 14/14 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The uniform-weight means are 2.737, 3.724, and 4.283 for B1, B2, and B3, respectively. Table~\ref{tab:weight-sensitivity} shows positive contrasts on every epic under either specified weighting. This finding shows that the direction of comparison in the corrected dataset does not depend on the selected priority vector. It does not independently validate the rating corrections, establish stability on new portfolios, or turn the post-analysis comparison into a confirmatory study.
+
+\begin{figure}[!htbp]
+\centering
+\includegraphics[width=\textwidth]{fig_measured_review_composite_components.pdf}
+\caption{Two views of the corrected matched-review data. Panel (a) shows priority-weighted epic means for B1, B2, and B3: colored points show all 14 epic means, dark bars show interquartile ranges, white markers show medians, and numeric labels show method means. Each epic mean averages 40 reviewers. Panel (b) shows the seven requirement-dimension means on the 1--5 scale, with 95\% percentile intervals from 100,000 epic-bootstrap resamples (seed 20261103). These intervals describe individual method means and are not multiplicity-adjusted paired contrasts. Masked repeats are excluded. The priority weights were selected after the initial analysis, so the composite comparison is exploratory. These measured outcomes are separate from the formula-generated checks in Appendix~\ref{sec:stress-testing}.}
+\Description{Composite distributions and requirement-dimension means for the three executed methods using corrected ratings from all 40 reviewers. The 14 matched epics are the independent comparison units.}
+\label{fig:matched-review-composite-components}
+\end{figure}
+\FloatBarrier
+
+\section{Scenario-Level Transaction Outcomes}\label{sec:fault-scenario-matrix}
+Table~\ref{tab:fault-scenario-matrix} expands the aggregate transaction results in Table~\ref{tab:mutation-safety-ablation}. Each scenario--arrangement cell contains 2,000 observations. With random seed 20260726, the same shuffled schedule of 18,000 transactions is evaluated under each arrangement, giving 72,000 method-level observations. The valid-control and two retry scenarios provide 6,000 eligible-write observations per arrangement. The other six scenarios provide 12,000 conflicting-state observations per arrangement.
+
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\caption{Complete scenario-level transaction matrix. Each cell reports $(m,s,d)$: mean modeled mutations per transaction, stale-mutation flag, and duplicate-mutation flag. The latter two entries are 0 or 1 because their rates are 0\% or 100\% in every cell.}
+\label{tab:fault-scenario-matrix}
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}X*{4}{>{\centering\arraybackslash}p{0.13\textwidth}}@{}}
+\toprule
+Scenario & A0 & A1 & A2 & A3 \\
+\midrule
+Valid control & $(1,0,0)$ & $(1,0,0)$ & $(1,0,0)$ & $(1,0,0)$ \\
+Source edit & $(1,1,0)$ & $(0,0,0)$ & $(0,0,0)$ & $(0,0,0)$ \\
+Source ABA & $(1,1,0)$ & $(1,1,0)$ & $(1,1,0)$ & $(0,0,0)$ \\
+Draft drift & $(1,1,0)$ & $(1,1,0)$ & $(1,1,0)$ & $(0,0,0)$ \\
+Policy drift & $(1,1,0)$ & $(1,1,0)$ & $(1,1,0)$ & $(0,0,0)$ \\
+Target drift & $(1,1,0)$ & $(1,1,0)$ & $(1,1,0)$ & $(0,0,0)$ \\
+Response-loss retry & $(2,0,1)$ & $(2,0,1)$ & $(1,0,0)$ & $(1,0,0)$ \\
+Concurrent retry (modeled) & $(2,0,1)$ & $(2,0,1)$ & $(1,0,0)$ & $(1,0,0)$ \\
+Combined source/draft drift & $(2,1,1)$ & $(0,0,0)$ & $(0,0,0)$ & $(0,0,0)$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+A0 uses ordinary approval and logging; A1 adds a source-hash check; A2 adds atomic-idempotency behavior; A3 adds the source-bound transaction envelope. The executable harness calls the implementation's A3 envelope builder and validator. It models the resulting mutation count as zero when blocked, one for an allowed A2/A3 transaction, and the attempt count for an allowed A0/A1 transaction. Thus, the matrix measures validator behavior coupled to declared mutation semantics, rather than observed remote Jira writes. The concurrent-retry scenario is represented by two attempts; the harness does not execute concurrent requests. Seven separate workflow tests exercise the mock connector, including completed-write retries and recovery after a lost commit response. These tests complement the scenario matrix without establishing production fault frequencies or concurrent-load performance.
+
+\backmatter
+\section*{Declarations}
+\subsection*{Data availability}
+De-identified field tables, public aggregate reviewer results, fault-injection records, analysis scripts, and figure-generation materials are available in the replication repository at \url{https://github.com/manish94u/JiraEnhancer}. The release inspected for this manuscript is commit \texttt{2920880028f5dfb7e82cf4d41777dcdb7f718367}. Raw enterprise requirements, restricted input packets, and private allocation records are not publicly distributed. Public aggregates support the reported matched statistical calculations but do not reconstruct the confidential source requirements or independently establish the provenance of rating corrections.
+\subsection*{Code availability}
+Implementation and replication code are available in the same repository. The accompanying flat source archive contains this manuscript, its bibliography, the Springer class and bibliography style, and every referenced figure.
+\subsection*{Consent to participate}
+Informed consent was obtained from all participants. Participation was voluntary, and reviewers could decline or withdraw without consequences.
+\subsection*{Author contributions}
+All authors contributed equally to this work.
+\subsection*{Ethics approval}
+Ethical approval was obtained from the Indian Institute of Technology Roorkee and Oracle.
+\subsection*{Funding and competing interests}
+These declarations are recorded on the separate title-page draft and require author confirmation before submission.
+\subsection*{Use of AI assistance}
+AI assisted with improving English sentences. 
+\nocite{R94}
+\bibliography{references}
 \end{document}

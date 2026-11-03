@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the de-identified TOSEM evidence package without private inputs.
+"""Verify the de-identified evidence package without private inputs.
 
 The verifier uses only Python's standard library.  It checks the published
 SHA-256 manifests, validates the privacy-oriented table schemas, and
@@ -24,7 +24,7 @@ from typing import Any, Iterable
 
 
 HERE = Path(__file__).resolve().parent
-DEFAULT_ARTIFACT_DIR = HERE / "artifacts" / "tosem"
+DEFAULT_ARTIFACT_DIR = HERE / "artifacts" / "evaluation"
 FORBIDDEN_HEADERS = {
     "account",
     "account_name",
@@ -357,7 +357,7 @@ def _verify_summary(artifact_dir: Path) -> dict[str, Any]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Verify hashes, privacy boundaries, counts, and statistics in the public TOSEM artifact."
+        description="Verify hashes, privacy boundaries, counts, and statistics in the public evaluation artifact."
     )
     parser.add_argument(
         "--artifact-dir",

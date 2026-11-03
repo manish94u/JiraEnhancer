@@ -20,7 +20,7 @@ DEFAULT_ANALYSIS = (
     / "analysis"
     / "matched_review_analysis_summary.json"
 )
-DEFAULT_OUTPUT_ROOT = REPO_ROOT / "outputs" / "tosem_four_mode_ablation_review"
+DEFAULT_OUTPUT_ROOT = REPO_ROOT / "outputs" / "four_mode_ablation_review"
 INPUT_IDS = tuple(f"E{index:02d}" for index in range(1, 15))
 EXECUTED_METHODS = ("B1", "B2", "B3")
 ALL_METHODS = ("B0",) + EXECUTED_METHODS

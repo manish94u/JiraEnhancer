@@ -26,7 +26,7 @@ except ModuleNotFoundError as exc:  # pragma: no cover - dependency error path
 
 HERE = Path(__file__).resolve().parent
 REPO_ROOT = HERE.parent
-DEFAULT_ARTIFACT_DIR = HERE / "artifacts" / "tosem"
+DEFAULT_ARTIFACT_DIR = HERE / "artifacts" / "evaluation"
 DEFAULT_OUTPUT_DIR = REPO_ROOT / "outputs" / "reproduced" / "public_figures"
 ALL_FIGURES = (
     "confidence",

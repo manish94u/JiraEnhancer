@@ -1,0 +1,372 @@
+\begin{thebibliography}{60}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{{#1}}
+\providecommand{\urlprefix}{URL }
+\providecommand{\doi}[1]{\url{https://doi.org/#1}}
+\providecommand{\eprint}[2][]{\url{#2}}
+ \bibcommenthead
+
+\bibitem[{Ahmed et~al.(2025)Ahmed, Aleti, Cai, Chatzigeorgiou, He, Hu,
+  Pezz{\`e}, Poshyvanyk, and Xia}]{R81}
+Ahmed I, Aleti A, Cai H, et~al (2025) Artificial intelligence for software
+  engineering: The journey so far and the road ahead. ACM Transactions on
+  Software Engineering and Methodology 34(5). \doi{10.1145/3719006}
+
+\bibitem[{Amershi et~al.(2019)Amershi, Weld, Vorvoreanu, Fourney, Nushi,
+  Collisson, Suh, Iqbal, Bennett, Inkpen, Teevan, Kikin-Gil, and Horvitz}]{R56}
+Amershi S, Weld D, Vorvoreanu M, et~al (2019) Guidelines for human-ai
+  interaction. In: Proceedings of the CHI Conference on Human Factors in
+  Computing Systems. Association for Computing Machinery, New York, NY, USA, pp
+  1--13
+
+\bibitem[{Anvik et~al.(2006)Anvik, Hiew, and Murphy}]{R67}
+Anvik J, Hiew L, Murphy GC (2006) Who should fix this bug? In: Proceedings of
+  the International Conference on Software Engineering. Association for
+  Computing Machinery, New York, NY, USA, pp 361--370
+
+\bibitem[{Asai et~al.(2024)Asai, Min, Zhong, Chen, Hajishirzi, Yih, Choi,
+  Lewis, and Zettlemoyer}]{R22}
+Asai A, Min S, Zhong Z, et~al (2024) Self-rag: Learning to retrieve, generate,
+  and critique through self-reflection. In: International Conference on
+  Learning Representations (ICLR). OpenReview.net, Vienna, Austria
+
+\bibitem[{Auer et~al.(2002)Auer, Cesa-Bianchi, and Fischer}]{R84}
+Auer P, Cesa-Bianchi N, Fischer P (2002) Finite-time analysis of the multiarmed
+  bandit problem. Machine Learning 47(2--3):235--256.
+  \doi{10.1023/A:1013689704352}
+
+\bibitem[{Bansal et~al.(2019)Bansal, Nushi, Kamar, Lasecki, Weld, and
+  Horvitz}]{R57}
+Bansal G, Nushi B, Kamar E, et~al (2019) Beyond accuracy: The role of mental
+  models in human-ai team performance. In: Proceedings of the AAAI Conference
+  on Human Computation and Crowdsourcing. AAAI Press, Palo Alto, CA, USA, pp
+  2--11
+
+\bibitem[{Barke et~al.(2023)Barke, James, and Polikarpova}]{R77}
+Barke S, James MB, Polikarpova N (2023) Grounded copilot: How programmers
+  interact with code-generating models. Proceedings of the ACM on Programming
+  Languages 7(OOPSLA1):85--111
+
+\bibitem[{Bernstein and Newcomer(2009)}]{R88}
+Bernstein PA, Newcomer E (2009) Principles of Transaction Processing, 2nd edn.
+  Morgan Kaufmann, Burlington, MA, USA
+
+\bibitem[{Bettenburg et~al.(2008)Bettenburg, Just, Schr{\"o}ter, Weiss,
+  Premraj, and Zimmermann}]{R53}
+Bettenburg N, Just S, Schr{\"o}ter A, et~al (2008) What makes a good bug
+  report? In: Proceedings of the ACM SIGSOFT International Symposium on
+  Foundations of Software Engineering. Association for Computing Machinery, New
+  York, NY, USA, pp 308--318
+
+\bibitem[{Brown et~al.(2020)Brown, Mann, Ryder, Subbiah, Kaplan, Dhariwal,
+  Neelakantan, Shyam, Sastry, Askell, Agarwal, Herbert-Voss, Krueger, Henighan,
+  Child, Ramesh, Ziegler, Wu, Winter, Hesse, Chen, Sigler, Litwin, Gray, Chess,
+  Clark, Berner, McCandlish, Radford, Sutskever, and Amodei}]{R1}
+Brown TB, Mann B, Ryder N, et~al (2020) Language models are few-shot learners.
+  In: Advances in Neural Information Processing Systems (NeurIPS), vol~33.
+  Curran Associates, Inc., Red Hook, NY, USA, pp 1877--1901
+
+\bibitem[{Cao and Ramesh(2008)}]{R63}
+Cao L, Ramesh B (2008) Agile requirements engineering practices: An empirical
+  study. IEEE Software 25(1):60--67
+
+\bibitem[{Cheng et~al.(2026)Cheng, Husen, Lu, Racharak, Yoshioka, Ubayashi, and
+  Washizaki}]{R60}
+Cheng H, Husen JH, Lu Y, et~al (2026) Generative ai for requirements
+  engineering: A systematic literature review. Software: Practice and
+  Experience 56(2):141--170. \doi{10.1002/spe.70029}
+
+\bibitem[{Efron(1979)}]{R97}
+Efron B (1979) Bootstrap methods: Another look at the jackknife. The Annals of
+  Statistics 7(1):1--26. \doi{10.1214/aos/1176344552}
+
+\bibitem[{Fan et~al.(2023)Fan, Gokkaya, Harman, Lyubarskiy, Sengupta, Yoo, and
+  Zhang}]{R59}
+Fan A, Gokkaya B, Harman M, et~al (2023) Large language models for software
+  engineering: Survey and open problems. In: 2023 IEEE/ACM International
+  Conference on Software Engineering: Future of Software Engineering
+  (ICSE-FoSE). IEEE, Melbourne, Australia, pp 31--53,
+  \doi{10.1109/ICSE-FoSE59343.2023.00008}
+
+\bibitem[{Femmer et~al.(2017)Femmer, M{\'e}ndez~Fern{\'a}ndez, Wagner, and
+  Eder}]{R65}
+Femmer H, M{\'e}ndez~Fern{\'a}ndez D, Wagner S, et~al (2017) Rapid quality
+  assurance with requirements smells. Journal of Systems and Software
+  123:190--213
+
+\bibitem[{Gou et~al.(2024)Gou, Shao, Gong, Shen, Yang, Duan, and Chen}]{R91}
+Gou Z, Shao Z, Gong Y, et~al (2024) Critic: Large language models can
+  self-correct with tool-interactive critiquing. In: The Twelfth International
+  Conference on Learning Representations. OpenReview.net, Vienna, Austria,
+  \urlprefix\url{https://proceedings.iclr.cc/paper_files/paper/2024/hash/fef126561bbf9d4467dbb8d27334b8fe-Abstract-Conference.html}
+
+\bibitem[{Guu et~al.(2020)Guu, Lee, Tung, Pasupat, and Chang}]{R4}
+Guu K, Lee K, Tung Z, et~al (2020) Realm: Retrieval-augmented language model
+  pre-training. In: Proceedings of the 37th International Conference on Machine
+  Learning, Proceedings of Machine Learning Research, vol 119. PMLR, Virtual,
+  pp 3929--3938, \urlprefix\url{https://proceedings.mlr.press/v119/guu20a.html}
+
+\bibitem[{van Hee and van~der Aalst(2004)}]{R101}
+van Hee KM, van~der Aalst WMP (2004) Workflow Management: Models, Methods, and
+  Systems. The MIT Press, Cambridge, MA, USA,
+  \urlprefix\url{https://mitpress.mit.edu/9780262720465/workflow-management/}
+
+\bibitem[{Holm(1979)}]{R96}
+Holm S (1979) A simple sequentially rejective multiple test procedure.
+  Scandinavian Journal of Statistics 6(2):65--70.
+  \urlprefix\url{https://www.jstor.org/stable/4615733}
+
+\bibitem[{Inayat et~al.(2015)Inayat, Salim, Marczak, Daneva, and
+  Shamshirband}]{R64}
+Inayat I, Salim SS, Marczak S, et~al (2015) A systematic literature review on
+  agile requirements engineering practices and challenges. Computers in Human
+  Behavior 51:915--929
+
+\bibitem[{{ISO/IEC/IEEE}(2018)}]{R62}
+{ISO/IEC/IEEE} (2018) ISO/IEC/IEEE 29148:2018 Systems and Software
+  Engineering---Life Cycle Processes---Requirements Engineering. ISO/IEC/IEEE
+
+\bibitem[{Jeong et~al.(2009)Jeong, Kim, and Zimmermann}]{R68}
+Jeong G, Kim S, Zimmermann T (2009) Improving bug triage with bug tossing
+  graphs. In: Proceedings of the Joint Meeting of the European Software
+  Engineering Conference and the ACM SIGSOFT Symposium on the Foundations of
+  Software Engineering. Association for Computing Machinery, New York, NY, USA,
+  pp 111--120
+
+\bibitem[{Jiang et~al.(2021)Jiang, Araki, Ding, and Neubig}]{R90}
+Jiang Z, Araki J, Ding H, et~al (2021) How can we know when language models
+  know? on the calibration of language models for question answering.
+  Transactions of the Association for Computational Linguistics 9:962--977.
+  \doi{10.1162/tacl_a_00407}
+
+\bibitem[{Jimenez et~al.(2024)Jimenez, Yang, Wettig, Yao, Pei, Press, and
+  Narasimhan}]{R26}
+Jimenez CE, Yang J, Wettig A, et~al (2024) Swe-bench: Can language models
+  resolve real-world github issues? In: International Conference on Learning
+  Representations (ICLR). OpenReview.net, Vienna, Austria
+
+\bibitem[{Karpukhin et~al.(2020)Karpukhin, Oguz, Min, Lewis, Wu, Edunov, Chen,
+  and Yih}]{R5}
+Karpukhin V, Oguz B, Min S, et~al (2020) Dense passage retrieval for
+  open-domain question answering. In: Proceedings of the 2020 Conference on
+  Empirical Methods in Natural Language Processing (EMNLP). Association for
+  Computational Linguistics, Online, pp 6769--6781,
+  \doi{10.18653/v1/2020.emnlp-main.550},
+  \urlprefix\url{https://aclanthology.org/2020.emnlp-main.550/}
+
+\bibitem[{Khattab and Zaharia(2020)}]{R6}
+Khattab O, Zaharia M (2020) Colbert: Efficient and effective passage search via
+  contextualized late interaction over bert. In: Proceedings of the 43rd
+  International ACM SIGIR Conference on Research and Development in Information
+  Retrieval. Association for Computing Machinery, New York, NY, USA, pp 39--48,
+  \doi{10.1145/3397271.3401075}
+
+\bibitem[{Kitchenham et~al.(2002)Kitchenham, Pfleeger, Pickard, Jones, Hoaglin,
+  El~Emam, and Rosenberg}]{R70}
+Kitchenham BA, Pfleeger SL, Pickard LM, et~al (2002) Preliminary guidelines for
+  empirical research in software engineering. IEEE Transactions on Software
+  Engineering 28(8):721--734
+
+\bibitem[{Ko et~al.(2006)Ko, Myers, and Chau}]{R66}
+Ko AJ, Myers BA, Chau DH (2006) A linguistic analysis of how people describe
+  software problems. In: Proceedings of the IEEE Symposium on Visual Languages
+  and Human-Centric Computing. IEEE Computer Society, Los Alamitos, CA, USA, pp
+  127--134
+
+\bibitem[{Lee and See(2004)}]{R76}
+Lee JD, See KA (2004) Trust in automation: Designing for appropriate reliance.
+  Human Factors 46(1):50--80
+
+\bibitem[{Lewis et~al.(2020)Lewis, Perez, Piktus, Petroni, Karpukhin, Goyal,
+  K{\"u}ttler, Lewis, Yih, Rockt{\"a}schel, Riedel, and Kiela}]{R3}
+Lewis P, Perez E, Piktus A, et~al (2020) Retrieval-augmented generation for
+  knowledge-intensive nlp tasks. In: Advances in Neural Information Processing
+  Systems (NeurIPS), vol~33. Curran Associates, Inc., Red Hook, NY, USA, pp
+  9459--9474
+
+\bibitem[{Li et~al.(2010)Li, Chu, Langford, and Schapire}]{R86}
+Li L, Chu W, Langford J, et~al (2010) A contextual-bandit approach to
+  personalized news article recommendation. In: Proceedings of the 19th
+  International Conference on World Wide Web. Association for Computing
+  Machinery, New York, NY, USA, pp 661--670, \doi{10.1145/1772690.1772758}
+
+\bibitem[{Lin et~al.(2022)Lin, Hilton, and Evans}]{R40}
+Lin S, Hilton J, Evans O (2022) Truthfulqa: Measuring how models mimic human
+  falsehoods. In: Proceedings of the 60th Annual Meeting of the Association for
+  Computational Linguistics (Volume 1: Long Papers). Association for
+  Computational Linguistics, Dublin, Ireland, pp 3214--3252,
+  \doi{10.18653/v1/2022.acl-long.229},
+  \urlprefix\url{https://aclanthology.org/2022.acl-long.229/}
+
+\bibitem[{Little(1961)}]{R94}
+Little JDC (1961) A proof for the queuing formula: $l = \lambda w$. Operations
+  Research 9(3):383--387. \doi{10.1287/opre.9.3.383}
+
+\bibitem[{Liu et~al.(2024{\natexlab{a}})Liu, Lin, Hewitt, Paranjape,
+  Bevilacqua, Petroni, and Liang}]{R21}
+Liu NF, Lin K, Hewitt J, et~al (2024{\natexlab{a}}) Lost in the middle: How
+  language models use long contexts. Transactions of the Association for
+  Computational Linguistics 12:157--173
+
+\bibitem[{Liu et~al.(2024{\natexlab{b}})Liu, Yu, Zhang, Xu, Lei, Lai, Gu, Ding,
+  Men, Yang, Zhang, Deng, Zeng, Du, Zhang, Shen, Zhang, Su, Sun, Huang, Dong,
+  and Tang}]{R27}
+Liu X, Yu H, Zhang H, et~al (2024{\natexlab{b}}) Agentbench: Evaluating llms as
+  agents. In: The Twelfth International Conference on Learning Representations.
+  OpenReview.net, Vienna, Austria,
+  \urlprefix\url{https://openreview.net/forum?id=zAdUB0aCTQ}
+
+\bibitem[{Lu et~al.(2025)Lu, Holleis, Zhang, Aumayer, Nan, Bai, Ma, Ma, Li,
+  Yin, Wang, and Pang}]{R92}
+Lu J, Holleis T, Zhang Y, et~al (2025) Toolsandbox: A stateful, conversational,
+  interactive evaluation benchmark for llm tool use capabilities. In: Findings
+  of the Association for Computational Linguistics: NAACL 2025. Association for
+  Computational Linguistics, Albuquerque, New Mexico, pp 1160--1183,
+  \doi{10.18653/v1/2025.findings-naacl.65}
+
+\bibitem[{Lucassen et~al.(2016)Lucassen, Dalpiaz, van~der Werf, and
+  Brinkkemper}]{R52}
+Lucassen G, Dalpiaz F, van~der Werf JMEM, et~al (2016) Improving agile
+  requirements: The quality user story framework and tool. Requirements
+  Engineering 21(3):383--403
+
+\bibitem[{Madaan et~al.(2023)Madaan, Tandon, Gupta, Hallinan, Gao, Wiegreffe,
+  Alon, Dziri, Prabhumoye, Yang, Gupta, Majumder, Hermann, Welleck,
+  Yazdanbakhsh, and Clark}]{R89}
+Madaan A, Tandon N, Gupta P, et~al (2023) Self-refine: Iterative refinement
+  with self-feedback. In: Advances in Neural Information Processing Systems,
+  vol~36. Curran Associates, Inc., Red Hook, NY, USA, pp 46534--46594,
+  \doi{10.52202/075280-2019}
+
+\bibitem[{M{\'e}ndez~Fern{\'a}ndez and Wagner(2015)}]{R61}
+M{\'e}ndez~Fern{\'a}ndez D, Wagner S (2015) Naming the pain in requirements
+  engineering: Contemporary problems, causes, and effects in practice.
+  Information and Software Technology 57:575--590
+
+\bibitem[{Moreau and Missier(2013)}]{R93}
+Moreau L, Missier P (2013) Prov-dm: The prov data model. W3c recommendation,
+  World Wide Web Consortium, \urlprefix\url{https://www.w3.org/TR/prov-dm/}
+
+\bibitem[{Nuseibeh and Easterbrook(2000)}]{R51}
+Nuseibeh B, Easterbrook S (2000) Requirements engineering: A roadmap. In:
+  Proceedings of the Conference on the Future of Software Engineering.
+  Association for Computing Machinery, New York, NY, USA, pp 35--46
+
+\bibitem[{Ouyang et~al.(2022)Ouyang, Wu, Jiang, Almeida, Wainwright, Mishkin,
+  Zhang, Agarwal, Slama, Ray, Schulman, Hilton, Kelton, Miller, Simens, Askell,
+  Welinder, Christiano, Leike, and Lowe}]{R13}
+Ouyang L, Wu J, Jiang X, et~al (2022) Training language models to follow
+  instructions with human feedback. In: Advances in Neural Information
+  Processing Systems (NeurIPS), vol~35. Curran Associates, Inc., Red Hook, NY,
+  USA, pp 27730--27744, \doi{10.52202/068431-2011}
+
+\bibitem[{Parasuraman et~al.(2000)Parasuraman, Sheridan, and Wickens}]{R75}
+Parasuraman R, Sheridan TB, Wickens CD (2000) A model for types and levels of
+  human interaction with automation. IEEE Transactions on Systems, Man, and
+  Cybernetics - Part A: Systems and Humans 30(3):286--297
+
+\bibitem[{Ruan et~al.(2024)Ruan, Dong, Wang, Pitis, Zhou, Ba, Dubois, Maddison,
+  and Hashimoto}]{R87}
+Ruan Y, Dong H, Wang A, et~al (2024) Identifying the risks of lm agents with an
+  lm-emulated sandbox. In: The Twelfth International Conference on Learning
+  Representations. OpenReview.net, Vienna, Austria,
+  \urlprefix\url{https://openreview.net/forum?id=GEcwtMk1uA}
+
+\bibitem[{Runeson and H{\"o}st(2009)}]{R54}
+Runeson P, H{\"o}st M (2009) Guidelines for conducting and reporting case study
+  research in software engineering. Empirical Software Engineering
+  14(2):131--164
+
+\bibitem[{Russo et~al.(2018)Russo, Van~Roy, Kazerouni, Osband, and Wen}]{R85}
+Russo DJ, Van~Roy B, Kazerouni A, et~al (2018) A tutorial on thompson sampling.
+  Foundations and Trends in Machine Learning 11(1):1--96.
+  \doi{10.1561/2200000070}
+
+\bibitem[{Santhanam et~al.(2022)Santhanam, Khattab, Saad-Falcon, Potts, and
+  Zaharia}]{R32}
+Santhanam K, Khattab O, Saad-Falcon J, et~al (2022) Colbertv2: Effective and
+  efficient retrieval via lightweight late interaction. In: Proceedings of the
+  2022 Conference of the North American Chapter of the Association for
+  Computational Linguistics: Human Language Technologies. Association for
+  Computational Linguistics, Seattle, United States, pp 3715--3734,
+  \doi{10.18653/v1/2022.naacl-main.272},
+  \urlprefix\url{https://aclanthology.org/2022.naacl-main.272/}
+
+\bibitem[{Schick et~al.(2023)Schick, Dwivedi-Yu, Dess{\`i}, Raileanu, Lomeli,
+  Hambro, Zettlemoyer, Cancedda, and Scialom}]{R17}
+Schick T, Dwivedi-Yu J, Dess{\`i} R, et~al (2023) Toolformer: Language models
+  can teach themselves to use tools. In: Advances in Neural Information
+  Processing Systems (NeurIPS), vol~36. Curran Associates, Inc., Red Hook, NY,
+  USA, pp 68539--68551, \doi{10.52202/075280-2997}
+
+\bibitem[{Shinn et~al.(2023)Shinn, Cassano, Gopinath, Narasimhan, and
+  Yao}]{R30}
+Shinn N, Cassano F, Gopinath A, et~al (2023) Reflexion: Language agents with
+  verbal reinforcement learning. In: Advances in Neural Information Processing
+  Systems (NeurIPS), vol~36. Curran Associates, Inc., Red Hook, NY, USA, pp
+  8634--8652, \doi{10.52202/075280-0377}
+
+\bibitem[{Stol and Fitzgerald(2018)}]{R71}
+Stol KJ, Fitzgerald B (2018) The abc of software engineering research. ACM
+  Transactions on Software Engineering and Methodology 27(3):1--51
+
+\bibitem[{Storey et~al.(2020)Storey, Ernst, Williams, and Kalliamvakou}]{R58}
+Storey MA, Ernst NA, Williams C, et~al (2020) The who, what, how of software
+  engineering research: A socio-technical framework. Empirical Software
+  Engineering 25(5):4097--4129
+
+\bibitem[{Sutton and Barto(2018)}]{R100}
+Sutton RS, Barto AG (2018) Reinforcement Learning: An Introduction, 2nd edn.
+  The MIT Press, Cambridge, MA, USA,
+  \urlprefix\url{https://mitpress.mit.edu/9780262039246/reinforcement-learning/}
+
+\bibitem[{Vaithilingam et~al.(2022)Vaithilingam, Zhang, and Glassman}]{R78}
+Vaithilingam P, Zhang T, Glassman EL (2022) Expectation vs. experience:
+  Evaluating the usability of code generation tools powered by large language
+  models. In: Extended Abstracts of the CHI Conference on Human Factors in
+  Computing Systems. Association for Computing Machinery, New York, NY, USA, pp
+  1--7
+
+\bibitem[{Wei et~al.(2022)Wei, Wang, Schuurmans, Bosma, Ichter, Xia, Chi, Le,
+  and Zhou}]{R14}
+Wei J, Wang X, Schuurmans D, et~al (2022) Chain-of-thought prompting elicits
+  reasoning in large language models. In: Advances in Neural Information
+  Processing Systems (NeurIPS), vol~35. Curran Associates, Inc., Red Hook, NY,
+  USA, pp 24824--24837, \doi{10.52202/068431-1800}
+
+\bibitem[{Wilcoxon(1945)}]{R99}
+Wilcoxon F (1945) Individual comparisons by ranking methods. Biometrics
+  Bulletin 1(6):80--83. \doi{10.2307/3001968}
+
+\bibitem[{Wohlin(2014)}]{R72}
+Wohlin C (2014) Guidelines for snowballing in systematic literature studies and
+  a replication in software engineering. In: Proceedings of the International
+  Conference on Evaluation and Assessment in Software Engineering. Association
+  for Computing Machinery, New York, NY, USA, pp 1--10
+
+\bibitem[{Wohlin et~al.(2012)Wohlin, Runeson, H{\"o}st, Ohlsson, Regnell, and
+  Wessl{\'e}n}]{R55}
+Wohlin C, Runeson P, H{\"o}st M, et~al (2012) Experimentation in Software
+  Engineering. Springer, Berlin, Germany
+
+\bibitem[{Wu et~al.(2024)Wu, Bansal, Zhang, Wu, Li, Zhu, Jiang, Zhang, Zhang,
+  Liu, Awadallah, White, Burger, and Wang}]{R28}
+Wu Q, Bansal G, Zhang J, et~al (2024) Autogen: Enabling next-gen llm
+  applications via multi-agent conversations. In: Conference on Language
+  Modeling (COLM). OpenReview.net, Philadelphia, PA, USA,
+  \urlprefix\url{https://openreview.net/forum?id=BAakY1hNKS}
+
+\bibitem[{Yao et~al.(2023{\natexlab{a}})Yao, Yu, Zhao, Shafran, Griffiths, Cao,
+  and Narasimhan}]{R18}
+Yao S, Yu D, Zhao J, et~al (2023{\natexlab{a}}) Tree of thoughts: Deliberate
+  problem solving with large language models. In: Advances in Neural
+  Information Processing Systems (NeurIPS), vol~36. Curran Associates, Inc.,
+  Red Hook, NY, USA, pp 11809--11822, \doi{10.52202/075280-0517}
+
+\bibitem[{Yao et~al.(2023{\natexlab{b}})Yao, Zhao, Yu, Du, Shafran, Narasimhan,
+  and Cao}]{R16}
+Yao S, Zhao J, Yu D, et~al (2023{\natexlab{b}}) React: Synergizing reasoning
+  and acting in language models. In: International Conference on Learning
+  Representations (ICLR). OpenReview.net, Kigali, Rwanda
+
+\end{thebibliography}
