@@ -1,4 +1,0 @@
-prompt_id,epochs_selected,selection_share,mean_reward,mean_loss,final_confidence,convergence_epoch,alpha,beta,posterior_mean
-dependency_heavy,337,0.337,0.572002,0.00173,9.22,24,265.882362,73.117638,0.784314
-low_external_context,330,0.33,0.572918,0.004614,9.0,36,260.53151,71.46849,0.784733
-missing_acceptance_criteria,333,0.333,0.58443,0.001524,9.3916,58,264.80753,70.19247,0.79047

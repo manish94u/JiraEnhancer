@@ -46,6 +46,6 @@ The residual gain comes from cross-artifact causal binding rather than source ha
 | A2_source_hash_atomic_idempotency | duplicate_mutation | 0.0000 | [0.0000, 0.0000] | 0 / 0 | 0.00 |
 | A2_source_hash_atomic_idempotency | unsafe_mutation | 0.4444 | [0.4372, 0.4517] | 8000 / 0 | -2407.94 |
 
-## Interpretation Boundary
+## Reproduction
 
-The result demonstrates the mechanism under declared, repeatable fault schedules and supports a technical-effect argument. It does not establish a universal production effect or, by itself, a legal conclusion of non-obviousness. The strongest next evidence would repeat these fault classes through an instrumented Jira staging connector and record remote request identifiers, revisions, and mutation counts.
+Run `make fault-injection` from the repository root to reproduce the nine seeded fault scenarios, the four transaction arrangements, and the paired comparisons. The rates summarize the declared scenario-balanced test schedule; the output metadata records the seed, implementation hashes, and observation counts.

@@ -1,2 +1,0 @@
-dataset,before_method,after_method,before_mean_composite,after_mean_composite,absolute_gain,relative_gain_percent,before_p90_composite,after_p90_composite
-SWE-bench Lite test split,B2_generic_llm,B3_jira_enhancer,60.92631366666667,77.88944333333333,16.96312966666666,27.842041715298034,61.40576,78.78322

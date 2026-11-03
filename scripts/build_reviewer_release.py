@@ -29,17 +29,14 @@ TOP_LEVEL_FILES = (
 
 PATENT_FILES = (
     "TOSEM_ARTIFACT_README.md",
-    "analyze_tosem_live_evidence.py",
     "generate_b2_b3_learning_figure.py",
     "generate_cross_dataset_comparison.py",
     "generate_patent_results.py",
     "jiraenhancer_tosem_acm.pdf",
     "jiraenhancer_tosem_acm.tex",
-    "prepare_public_comparative_artifact.py",
     "references_2020_plus.bib",
     "reproduce_public_figures.py",
     "run_public_benchmark_eval.py",
-    "run_rl_epoch_simulation.py",
     "run_source_bound_transaction_experiment.py",
     "verify_public_artifact.py",
 )
@@ -57,39 +54,11 @@ IMAGE_FILES = (
 GENERATED_FILES = (
     "b2_b3_arm_learning.png",
     "b2_b3_critic_reward_heatmap.png",
-    "comparative_5000_boxplot.png",
-    "comparative_5000_component_profile_main.png",
-    "comparative_5000_execution_timeline_main.png",
     "comparative_5000_method_summary.csv",
-    "comparative_5000_radar_main.png",
-    "comparative_5000_significance_global.csv",
-    "comparative_5000_significance_pairwise.csv",
-    "comparative_5000_significance_table.tex",
-    "comparative_5000_stats.csv",
-    "comparative_5000_timing_summary.csv",
-    "comparative_5000_violin_main.png",
-    "comparative_composite.png",
-    "comparative_cross_dataset_multiplot.png",
     "comparative_cross_dataset_summary.csv",
     "comparative_cross_dataset_table.tex",
-    "laplace_convergence_surface.csv",
-    "laplace_convergence_surface.png",
-    "notation_table.tex",
-    "performance_confidence_readiness.png",
-    "public_benchmark_swebench_lite_before_after.csv",
-    "public_benchmark_swebench_lite_before_after_table.tex",
     "public_benchmark_swebench_lite_method_summary.csv",
     "public_benchmark_swebench_lite_method_summary_table.tex",
-    "public_benchmark_swebench_lite_significance_global.csv",
-    "public_benchmark_swebench_lite_significance_pairwise.csv",
-    "public_benchmark_swebench_lite_significance_table.tex",
-    "rl_confidence_lift.png",
-    "rl_epoch_1000_curve.csv",
-    "rl_epoch_1000_prompt_summary.csv",
-    "rl_epoch_1000_reward_loss.png",
-    "rl_learning_attempt_summary.csv",
-    "rl_learning_prompt_summary.csv",
-    "rl_learning_reward_loss.png",
     "source_bound_transaction_ablation.png",
     "source_bound_transaction_ablation.svg",
     "source_bound_transaction_checksums.json",
@@ -100,11 +69,37 @@ GENERATED_FILES = (
     "source_bound_transaction_summary.csv",
     "source_bound_transaction_summary_table.tex",
     "source_bound_transaction_trials.csv",
-    "tosem_cumulative_live_story_evidence_table.tex",
-    "tosem_live_evidence_statistics.csv",
-    "tosem_live_evidence_statistics_table.tex",
-    "tosem_live_story_creation_table.tex",
 )
+
+FIXTURE_FILES = ("jira_issues.json", "confluence_pages.json", "bitbucket_prs.json", "scopes.json")
+TEST_FILES = (
+    "__init__.py", "test_api.py", "test_causal_transaction.py",
+    "test_codex_orchestrator.py", "test_four_mode_audit.py", "test_reasoning.py",
+    "test_rl.py", "test_scorer.py", "test_sources.py", "test_store.py", "test_workflow.py",
+)
+EVIDENCE_FILES = {
+    "patent/artifacts/tosem": (
+        "analysis_summary.json", "anonymized_latest_batch_audit.csv",
+        "anonymized_live_story_outcomes.csv", "comparative_5000_units.csv",
+        "manifest.json", "public_release_manifest.json",
+    ),
+    "patent/artifacts/b2_b3_pilot": (
+        "README.md", "aggregate_results.json", "arm_learning_curve.csv",
+        "critic_learning_summary.json", "exploitation_summary.json",
+    ),
+    "patent/reviewer_study/public_results": (
+        "README.md", "RESULTS.md", "HOLM_RECALCULATION.md",
+        "matched_generation_resource_summary.csv", "matched_review_dimension_pairwise.csv",
+        "matched_review_dimension_summary.csv", "matched_review_epic_scores.csv",
+        "matched_review_holm_calculation.csv", "matched_review_method_summary.csv",
+        "matched_review_method_summary_table.tex", "matched_review_pairwise.csv",
+        "matched_review_pairwise_table.tex", "matched_review_quality_factor_comparison.csv",
+        "matched_review_quality_factor_table.tex", "matched_review_reliability.csv",
+        "matched_review_reliability_table.tex", "matched_review_weighted_radar.pdf",
+        "matched_review_weighted_radar.png", "iteration_story_survival.csv",
+        "iteration_epic_survival.csv", "matched_iteration_effort.pdf", "matched_iteration_effort.png",
+    ),
+}
 
 
 def _copy_file(relative: Path, destination: Path) -> None:
@@ -143,8 +138,11 @@ def build(destination: Path) -> dict[str, object]:
 
     for name in TOP_LEVEL_FILES:
         _copy_file(Path(name), destination)
-    _copy_filtered_tree(Path("src/jira_enhancer"), destination, {".py", ".json"})
-    _copy_filtered_tree(Path("tests"), destination, {".py"})
+    _copy_filtered_tree(Path("src/jira_enhancer"), destination, {".py"})
+    for name in FIXTURE_FILES:
+        _copy_file(Path("src/jira_enhancer/data") / name, destination)
+    for name in TEST_FILES:
+        _copy_file(Path("tests") / name, destination)
     _copy_filtered_tree(Path("openapi"), destination, {".yaml", ".yml"})
     _copy_file(Path("scripts/build_reviewer_release.py"), destination)
 
@@ -155,17 +153,17 @@ def build(destination: Path) -> dict[str, object]:
     for name in GENERATED_FILES:
         _copy_file(Path("patent/generated") / name, destination)
 
-    _copy_filtered_tree(Path("patent/artifacts/tosem"), destination, {".csv", ".json", ".md"})
-    _copy_filtered_tree(Path("patent/artifacts/b2_b3_pilot"), destination, {".csv", ".json", ".md"})
-    _copy_filtered_tree(Path("patent/reviewer_study/public_results"), destination, {".csv", ".json", ".md", ".tex"})
+    for directory, names in EVIDENCE_FILES.items():
+        for name in names:
+            _copy_file(Path(directory) / name, destination)
     _copy_file(Path("patent/reviewer_study/build_four_mode_audit.py"), destination)
     _copy_file(Path("patent/reviewer_study/verify_weighted_results.py"), destination)
-    _copy_file(Path("patent/artifacts/remediation/iteration_effort/matched_iteration_effort.pdf"), destination)
+    _copy_file(Path("patent/reviewer_study/plot_weighted_review_radar.py"), destination)
+    _copy_file(Path("patent/reviewer_study/plot_iteration_effort.py"), destination)
 
     files = sorted(path for path in destination.rglob("*") if path.is_file())
     manifest = {
-        "artifact": "jira-enhancer-reviewer-release-v1",
-        "history_boundary": "Fresh public history; private development Git history is excluded.",
+        "artifact": "jira-enhancer-replication-package-v2",
         "file_count": len(files),
         "files": {
             path.relative_to(destination).as_posix(): _sha256(path)

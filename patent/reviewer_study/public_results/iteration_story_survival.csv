@@ -1,0 +1,4 @@
+time,at_risk,events,censored,proportion_not_yet_observed
+1,70,2,0,0.9714285714285714
+2,68,47,0,0.3
+3,21,8,13,0.18571428571428572

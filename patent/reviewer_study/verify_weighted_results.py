@@ -19,7 +19,7 @@ from pathlib import Path
 import numpy as np
 
 DEFAULT_INPUT = Path(__file__).resolve().parent / "public_results/matched_review_epic_scores.csv"
-ANALYSES = ("primary_reviewers_3_5", "sensitivity_all_five")
+ANALYSES = ("primary_all_40",)
 METHODS = ("B1", "B2", "B3")
 UNITS = tuple(f"U{index:02d}" for index in range(1, 15))
 SEED = 20260813
@@ -62,8 +62,8 @@ def main() -> None:
         if reader.fieldnames != ["unit_id", "method", "priority_weighted", "analysis"]:
             raise ValueError("Expected only unit_id, method, priority_weighted, analysis columns.")
         rows = list(reader)
-    if len(rows) != 84:
-        raise ValueError(f"Expected 84 aggregate rows; found {len(rows)}.")
+    if len(rows) != 42:
+        raise ValueError(f"Expected 42 aggregate rows; found {len(rows)}.")
     scores = {}
     for row in rows:
         unit, method, analysis = row["unit_id"], row["method"], row["analysis"]

@@ -1,11 +1,11 @@
 {
   "experiment": "source-bound-causal-transaction-ablation-v1",
   "implementation_sha256": {
-    "patent/run_source_bound_transaction_experiment.py": "fb84d4c141a3cc011506c5068d6cea7a2312a8425f23d5db0800a7a9a7b6950a",
+    "patent/run_source_bound_transaction_experiment.py": "23295bd430cd273323863a2fc074bfedec72bbae701976b06b5570ee694c9cf1",
     "src/jira_enhancer/causal_transaction.py": "450abb1a8b8d744dcaa492523cef1efacfbcfe051529b618b373fc41489dedc0",
-    "src/jira_enhancer/services.py": "5d88d6491719105a19ad49e64048e0ad1a9cc23e9fe9bc2aeb876435e706c99f",
+    "src/jira_enhancer/services.py": "0cceb39f36f7952f696541b71deacf5d2198d9fbbc6609da5765f907795c843f",
     "src/jira_enhancer/store.py": "d355cec14068a99025285a546e0a07cf1dddde8cff375260d816034394d1d762",
-    "tests/test_causal_transaction.py": "9682a00f3aa0d2be3c8fefcd72de86a9c1940a01502d4ee159a800d1b8e61be2"
+    "tests/test_causal_transaction.py": "2d32b8afc0779c16a88ee8ae55134761a98220b6e36eb33c5d1081880634311b"
   },
   "interpretation": "Controlled fault-injection evidence; not external-customer production evidence.",
   "logical_transactions_per_method": 18000,
@@ -15,7 +15,7 @@
     "A2_source_hash_atomic_idempotency",
     "A3_source_bound_causal_transaction"
   ],
-  "python_version": "3.12.13",
+  "python_version": "3.12.14",
   "scenarios": [
     "valid_control",
     "source_edit",

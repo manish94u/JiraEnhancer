@@ -1,75 +1,59 @@
 # TOSEM Evaluation Artifact
 
-This artifact separates the manuscript's evidence into reproducible classes and provides a de-identified export of the two authenticated Jira workflow waves.
-
-## Five-Reviewer Matched Baseline Assessment
-
-The matched study compares 42 packages and 210 stories produced by B1, B2, and B3 from 14 common inputs. Five reviewers assessed the packages under an anchored seven-dimension rubric. Reviewers 3--5 form the primary set because Reviewers 1--2 had earlier B3-only exposure; all five reviewers form the sensitivity analysis.
-
-The current source is the reviewer-corrected rating table at `patent/reviewer_study/completed_matched_reviews_20260813/analysis/matched_review_unblinded_ratings.csv`. It contains 210 primary ratings and 20 masked repeats. The private method-allocation key and enterprise input packets remain access-controlled.
-
-The reported composite assigns 40% to implementation readiness, 20% to dependencies and risks, 20% to granularity and actionability, and 5% each to scope fidelity, coverage completeness, story distinctness, and acceptance/testability. These weights were selected after the initial analysis, so the weighted comparison is a revised exploratory outcome. Ratings are averaged within each epic-method cell before the 14 paired epics are compared. Masked repeats contribute to consistency diagnostics rather than method-effect estimates.
-
-Primary weighted means are B1=2.56, B2=3.59, and B3=4.32 on the 1--5 scale. B3 exceeds B2 by 0.74 points (95% epic-bootstrap CI [0.55, 0.93], Holm-adjusted exact p=0.000244), and B1 by 1.76 points ([1.43, 2.10], p=0.000244). B3 scores higher on all 14 epics in both comparisons. B3 also has 2.15 minutes lower recorded assessment time than B2 (95% CI [-2.35, -1.99], p=0.000244).
-
-Recalculate the current weighted analysis from the corrected private ratings:
+This guide reproduces the matched-review statistics, verifies the released field records, and reruns the transaction-safety experiment. Run commands from the repository root after installing the analysis dependencies:
 
 ```bash
-python3 patent/artifacts/remediation/weighted_quality/update_current_reports.py
+make install-reviewer
 ```
 
-The command writes method summaries, paired contrasts, dimension analyses, agreement diagnostics, and LaTeX tables under `patent/reviewer_study/completed_matched_reviews_20260813/analysis/`. The detailed interpretation is in `patent/reviewer_study/completed_matched_reviews_20260813/MATCHED_REVIEW_RESULTS.md`; de-identified aggregate tables are released under `patent/reviewer_study/public_results/`.
+## Matched requirement-quality comparison
 
-The public paired epic means support recalculation of both reviewer sets and method contrasts:
+The study compares 42 packages containing 210 stories, produced by B1, B2, and B3 from 14 common epic inputs. Forty reviewers contributed 1,840 ratings: 1,680 primary ratings and 160 masked repeats. The released [epic-score table](reviewer_study/public_results/matched_review_epic_scores.csv) contains 42 aggregate rows, one per epic and method. Each aggregate uses all 40 reviewers; the 14 matched epics are the units of inference. Masked repeats supply consistency diagnostics.
+
+The corrected ratings use a composite with implementation readiness at 40%, dependencies and risks at 20%, granularity and actionability at 20%, and each remaining rubric dimension at 5%. These weights were selected after the initial analysis, making this an exploratory weighted outcome. The identical weights apply to every method and reviewer, retaining the anchored 1–5 scale.
 
 ```bash
 python3 patent/reviewer_study/verify_weighted_results.py
 ```
 
-This command recomputes means, exact sign-flip tests, Holm adjustments, and paired bootstrap intervals from `public_results/matched_review_epic_scores.csv`.
+The verifier reads `patent/reviewer_study/public_results/matched_review_epic_scores.csv` and prints a JSON report with the input checksum, method means, paired differences, exact sign-flip tests, Holm adjustments, and 100,000-resample epic-bootstrap intervals.
 
-The comparison measures complete generation workflows. B2 makes one drafting request per input, while B3 applies bounded refinement and governance checks. B2 uses 14 model calls and B3 uses 173 across the 14 packages. Mutation safety is evaluated in the separate fault-injection experiment.
+The weighted means are B1=2.56, B2=3.61, and B3=4.15. B3 exceeds B2 by 0.54 points (95% CI [0.51, 0.57], Holm-adjusted p=0.000244) and B1 by 1.59 points ([1.20, 1.98], p=0.000244). B3 scores higher on all 14 epics in both contrasts. The published review-time analysis reports a 2.17-minute lower mean assessment time for B3 than B2 (95% CI [-2.39, -1.98], p=0.000244).
 
-## Live Evidence Analysis
+The [results report](reviewer_study/public_results/RESULTS.md) links these outcomes to the study design. The same directory contains method summaries, paired contrasts, dimension scores, agreement diagnostics, resource totals, and LaTeX tables. The [Holm calculation](reviewer_study/public_results/HOLM_RECALCULATION.md) explains the adjustment across the two method contrasts.
 
-Run from the repository root:
+The comparison evaluates complete workflows: B2 used 14 drafting calls and B3 used 173 planning and refinement calls across the 14 inputs.
 
-```bash
-python3 patent/analyze_tosem_live_evidence.py
-```
-
-The command validates the expected 70-story/two-wave structure, computes paired endpoint statistics with a fixed-seed bootstrap, audits the latest 45-story batch, and writes:
-
-- `patent/generated/tosem_live_evidence_statistics.csv`
-- `patent/generated/tosem_live_evidence_statistics_table.tex`
-- `patent/artifacts/tosem/anonymized_live_story_outcomes.csv`
-- `patent/artifacts/tosem/anonymized_latest_batch_audit.csv`
-- `patent/artifacts/tosem/analysis_summary.json`
-- `patent/artifacts/tosem/manifest.json`
-
-The shareable files use de-identified records. Enterprise issue text, identifiers, URLs, account data, and timestamps remain in restricted source storage.
-
-## Mutation-Safety Fault Injection
-
-Run the controlled ablation with the declared seed and scenario count:
+## Authenticated field records
 
 ```bash
-PYTHONPATH=src python3 patent/run_source_bound_transaction_experiment.py \
-  --output-dir patent/generated \
-  --trials-per-scenario 2000 \
-  --seed 20260726
+python3 patent/verify_public_artifact.py
 ```
 
-Verify the implementation-level transaction tests:
+The verifier reads `patent/artifacts/tosem/` and prints a JSON verification summary. It checks the SHA-256 manifests, table schemas, and reported counts and descriptive statistics against these released inputs:
+
+- `anonymized_live_story_outcomes.csv`: 70 terminal story endpoints from two deployment waves.
+- `anonymized_latest_batch_audit.csv`: the latest 45-story batch and its payload audit.
+- `analysis_summary.json`: the reported endpoint and audit statistics.
+- `manifest.json` and `public_release_manifest.json`: file checksums.
+- `comparative_5000_units.csv`: formula-generated scoring profiles used for the sensitivity analysis.
+
+The field records describe authenticated workflow and writeback outcomes; the generated profiles describe the scoring formulas under deterministic perturbations.
+
+## Transaction-safety experiment
 
 ```bash
-PYTHONPATH=src python3 -m pytest tests/test_causal_transaction.py -q
+make fault-injection
 ```
 
-The ablation uses the same transaction payload and fault schedule for all four arrangements. Its scenario-balanced rates describe the outcomes under the declared injected faults.
+This target runs `patent/run_source_bound_transaction_experiment.py` with seed `20260726` and 2,000 payloads per scenario, then runs the transaction unit tests. Nine fault scenarios are applied to each of four arrangements, producing 72,000 method-level observations. The arrangements receive the same payloads and fault schedules.
 
-## Study interpretation
+Outputs are written to `outputs/reproduced/source_bound_transaction/`: trial records, method and scenario summaries, paired comparisons, a metadata file, checksums, a report, an SVG figure, and a LaTeX table. A3's 18,000 observations record zero unsafe mutations and successful completion of all eligible writes under the declared fault schedules.
 
-The 70 authenticated story endpoints describe workflow execution and writeback outcomes. The matched review measures package quality, readiness, and assessment effort for B1, B2, and B3 on 14 common inputs. Its resource totals are 14 model calls for B2 and 173 for B3, so quality and review-time comparisons concern complete workflows with different computational budgets.
+## Figures
 
-The rating records support within-panel agreement and matched-epic comparisons. Reviewer-experience bands and method-origin guesses are unavailable in those records. The 5,000-unit analysis checks the scoring equations under deterministic perturbations of reused inputs, while the SWE-bench Lite analysis checks the same formulas on public issue descriptions. Delivery outcomes and production incident prevalence belong to separate evaluation settings.
+```bash
+make public-figures
+```
+
+Figures are written to `outputs/reproduced/public_figures/`. The [B2/B3 pilot guide](artifacts/b2_b3_pilot/README.md) describes the aggregate diagnostic records and the command for reproducing its posterior-learning plot and critic-reward heatmap.

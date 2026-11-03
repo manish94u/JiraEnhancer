@@ -1,10 +1,10 @@
-# Reproducibility guide
+# Reproduction guide
 
-The core reviewer workflow runs locally from the released code, synthetic fixtures, and de-identified evidence. Optional steps cover public-dataset downloads, model-backed generation, and authenticated enterprise connectors.
+Run the commands in this guide from the repository root. The package supplies executable code, synthetic test fixtures, de-identified field tables, aggregate human-review results, and scoring-model inputs. Each workflow below identifies the data it reads and the result it produces.
 
 ## Environment
 
-Use Python 3.11 or newer. Create an isolated environment and install the reviewer dependencies:
+Use Python 3.11 or newer:
 
 ```bash
 python3 -m venv .venv-reviewer
@@ -13,98 +13,151 @@ python3 -m pip install --upgrade pip
 python3 -m pip install -r requirements-reviewer.txt
 ```
 
-Run the commands below from the repository root. Offline reviewer targets write their outputs under `outputs/reproduced/`. The optional public benchmark writes manuscript-ready outputs under `patent/generated/`; LaTeX intermediates and the compiled paper go to `patent/out_tosem/`.
+The `reviewer` dependency group supplies NumPy, SciPy, pandas, Matplotlib, Pillow, and openpyxl. A POSIX shell and `make` run the convenience targets. Rebuilding the paper also requires a LaTeX distribution with `latexmk`.
 
-## Five-minute offline check
+## Run the replication checks
+
+```bash
+make reviewer-check
+```
+
+`make reviewer-check` runs the unit tests, verifies the released field artifact, recalculates the matched-review contrasts, executes the full seeded fault schedule, and regenerates the current research figures.
+
+The matched-review verifier reads the public epic means and prints a JSON result containing method means, paired differences, confidence intervals, raw exact p-values, and Holm-adjusted p-values.
+
+## Application and workflow tests
 
 ```bash
 make test
 make mock-demo
+```
+
+The test target runs `unittest` discovery over `tests/`. The demonstration processes the bundled `DEMO-18324` fixture with mock connectors and deterministic local reasoning. It writes its newly created run records to `outputs/reproduced/mock-runtime/`.
+
+To run the transaction tests alone:
+
+```bash
+PYTHONPATH=src python3 -m unittest tests.test_causal_transaction -v
+```
+
+## De-identified field outcomes
+
+```bash
 make public-artifact
 ```
 
-`make test` runs the Python unit tests. `make mock-demo` processes the bundled `DEMO-18324` fixture using deterministic local reasoning and stores the run locally.
+Input: `patent/artifacts/tosem/`, including its analysis summary and de-identified CSV files.
 
-`make public-artifact` verifies the released package under `patent/artifacts/tosem/`. It checks SHA-256 hashes, schemas, identifiers, counts, and descriptive statistics against the de-identified CSV files. Exporting the confidential source telemetry is a separate access-controlled step.
+The verifier checks SHA-256 hashes, schemas, neutral identifiers, row counts, deployment-wave counts, creation outcomes, parent links, payload coverage, and descriptive score statistics. The released field rows represent 70 terminal outcomes: 69 created Jira stories and one linked existing record. The latest-wave audit covers 45 parent links and 44 new payloads. Endpoint confidence fields are retrospective export values.
 
-## Fault-injection experiment
+## Source-bound transaction experiment
 
 ```bash
 make fault-injection
 ```
 
-The experiment uses the declared seed, nine scenarios, 2,000 trials per scenario, and four control arrangements, giving 72,000 observations. It writes a fresh evidence bundle to `outputs/reproduced/source_bound_transaction/` and runs the focused transaction tests. The resulting rates describe behavior under these scenario-balanced injected faults.
+This target runs the experiment and its focused tests. The exact experiment command is:
 
-## Public figures
+```bash
+PYTHONPATH=src python3 patent/run_source_bound_transaction_experiment.py \
+  --output-dir outputs/reproduced/source_bound_transaction \
+  --trials-per-scenario 2000 \
+  --seed 20260726
+```
+
+The schedule contains nine scenarios and four control arrangements, yielding 72,000 observations in total and 18,000 per arrangement. The script writes trial rows, scenario summaries, paired comparisons, metadata, checksums, an SVG, and a LaTeX table. The reported rates use this scenario-balanced injected-fault distribution. A3 records zero unsafe mutations and permits all eligible writes under the tested schedules.
+
+## Matched human-review calculations
+
+The study contains 40 reviewers, 14 common epic inputs, 42 B1/B2/B3 packages, and 210 stories. The rating set contains 1,680 primary ratings and 160 masked repeats. The public analysis label is `primary_all_40`.
+
+Scores are averaged over reviewers within each epic and method. The 14 matched epics are the inference units. Masked repeats are used for agreement checks.
+
+| Dimension | Composite weight |
+|---|---:|
+| Implementation readiness | 40% |
+| Dependencies and risks | 20% |
+| Granularity and actionability | 20% |
+| Scope fidelity | 5% |
+| Coverage completeness | 5% |
+| Story distinctness | 5% |
+| Acceptance and testability | 5% |
+
+The weights were selected after the initial analysis and define an exploratory weighted outcome using corrected reviewer ratings. The same weights apply to all methods and reviewers.
+
+Run:
+
+```bash
+make matched-review
+```
+
+The target executes `python3 patent/reviewer_study/verify_weighted_results.py`.
+
+Input: `patent/reviewer_study/public_results/matched_review_epic_scores.csv`. Its 42 rows contain 14 neutral unit identifiers and three methods, with each score averaged across all 40 reviewers.
+
+The verifier enumerates the exact paired sign-flip distribution and uses 100,000 paired epic-bootstrap resamples with base seed `20260813`. Holm's adjustment is applied to the B3–B2 and B3–B1 contrasts within the weighted-composite family.
+
+Expected weighted means are B1 = 2.56, B2 = 3.61, and B3 = 4.15. The B3–B2 difference is +0.54 points (95% CI [0.51, 0.57]). For each weighted contrast, two of the 16,384 sign assignments are as extreme as the observed difference: raw p = 0.0001220703125 and Holm-adjusted p = 0.000244140625.
+
+The [results summary](../patent/reviewer_study/public_results/RESULTS.md), [Holm calculation](../patent/reviewer_study/public_results/HOLM_RECALCULATION.md), and [calculation table](../patent/reviewer_study/public_results/matched_review_holm_calculation.csv) contain the aggregate results for the declared outcome families. Seven-dimension summaries, reliability statistics, revision dispositions, and resource accounting accompany those files.
+
+The recorded mean assessment-time difference is −2.17 minutes for B3 versus B2 (95% CI [−2.39, −1.98], Holm-adjusted p = 0.000244). The complete workflow comparison used 14 model calls for B2 and 173 for B3; cumulative invocation durations were 2,087 and 19,906 seconds respectively.
+
+Rebuild the radar plot from the dimension summaries:
+
+```bash
+python3 patent/reviewer_study/plot_weighted_review_radar.py
+```
+
+This writes `matched_review_weighted_radar.png` and `.pdf` under `patent/reviewer_study/public_results/`.
+
+## Research figures
 
 ```bash
 make public-figures
 ```
 
-The command writes figures to `outputs/reproduced/public_figures/`. The endpoint and scoring figures read the released files in `patent/artifacts/tosem/`; the arm-learning and critic-reward figures read the sanitized trace in `patent/artifacts/b2_b3_pilot/`.
+The target rebuilds four figures used by the current manuscript: recorded refinement effort, the matched-review radar, arm-learning posterior means, and the model-critic reward heatmap. Their inputs are the released refinement-effort tables, seven-dimension review summaries, and the sanitized model-critic trace in `patent/artifacts/b2_b3_pilot/`.
 
-`reproduce_public_figures.py` writes a manifest with output hashes. The separate B2/B3 arm-learning command then writes its two PNG files. The committed Pillow renderer keeps the timeline and Laplace layouts consistent across environments.
+The refinement-effort figure describes the recorded attempt counts for 70 stories in matched B3 generation. The radar combines raw dimension means with the declared priority weights. The held-out diagnostic tables describe model assessments of three packets; the 99-step training trace records critic rewards and posterior updates from 11 packets, supporting the arm-learning and reward-heatmap figures.
 
-Endpoint score fields in the released telemetry are retrospective export values. The B0--B3 distribution figures use formula-expanded sensitivity units derived from reused inputs. Their purpose is to inspect the scoring equations. The 99-step arm trace records model-critic rewards and posterior values, showing how prompt-selection weights changed. Human artifact ratings are reported in the matched review below.
-
-Architecture figures are supplied as design diagrams, with editable sources alongside the figure assets where available.
-
-## Current matched human review
-
-The current analysis uses reviewer-corrected ratings for 42 B1/B2/B3 packages and 210 stories from 14 common epic inputs. Reviewers 3--5 form the primary set; all five reviewers form the sensitivity analysis. Each epic is one paired inference unit. Masked repeats contribute to agreement checks.
-
-The revised composite gives implementation readiness 40%, dependencies and risks 20%, granularity and actionability 20%, and each remaining rubric dimension 5%. These weights were selected after the initial analysis and define an exploratory weighted outcome. The primary weighted means are B3=4.32 and B2=3.59, with a difference of +0.74 points (95% epic-bootstrap CI [0.55, 0.93], Holm-adjusted exact p=0.000244).
-
-The public tables in `patent/reviewer_study/public_results/` report method summaries, paired contrasts, rubric dimensions, agreement diagnostics, and resource accounting. Recalculate the current weighted contrasts from the released epic means with:
+To regenerate the latter two figures directly:
 
 ```bash
-python3 patent/reviewer_study/verify_weighted_results.py
+PYTHONPATH=src python3 patent/generate_b2_b3_learning_figure.py \
+  --output outputs/reproduced/public_figures/b2_b3_arm_learning.png \
+  --reward-output outputs/reproduced/public_figures/b2_b3_critic_reward_heatmap.png
 ```
 
-The command reads `matched_review_epic_scores.csv`, which contains 84 aggregate rows: 14 neutral unit identifiers, three methods, and two reviewer sets. It recomputes means, exact sign-flip p-values, Holm adjustments, and 100,000-resample paired confidence intervals. Reviewer-level ratings, narrative comments, and allocation keys remain access-controlled. The private source calculation is implemented in `patent/artifacts/remediation/weighted_quality/update_current_reports.py`.
+Architecture diagrams are supplied as manuscript design assets, including `patent/images/system_architecture.drawio`.
 
-The comparison measures complete workflows: B2 used 14 model calls and B3 used 173. The corrected assessment-time records show 2.15 minutes lower mean review time for B3 (95% CI [-2.35, -1.99], Holm-adjusted exact p=0.000244).
-
-## Public-dataset diagnostic
-
-The first run retrieves the public SWE-bench Lite test split:
+## Public issue-text sensitivity
 
 ```bash
 make install-benchmark
 make public-benchmark
 ```
 
-This diagnostic applies the declared scoring functions to public issue descriptions. It measures the sensitivity of the formulas across source texts, separately from the executed B1/B2/B3 human-review experiment.
+The accompanying 5,000-unit files describe deterministic scoring-formula sensitivity on generated units. The public-data command extends this check to issue descriptions: its first run retrieves the `princeton-nlp/SWE-bench_Lite` test split. The scripts apply the declared scoring formulas to public issue descriptions and write comparative statistics, tables, and figures under `patent/generated/`. The dataset cache is created under `outputs/reproduced/huggingface/`.
 
 ## Build the manuscript
-
-Install a TeX distribution with `latexmk`, then run:
 
 ```bash
 make paper
 ```
 
-The build reads the committed figures and `patent/references_2020_plus.bib`. It writes the PDF and intermediate files to `patent/out_tosem/`. The current 44-page reviewer PDF is `patent/jiraenhancer_tosem_acm.pdf`. Figure regeneration is a separate target, so compiling the paper uses the existing publication assets.
+The build reads the committed LaTeX source, bibliography, tables, and figures. It writes the PDF and intermediate files to `patent/out_tosem/`. The supplied current reviewer copy is the [46-page manuscript](../patent/jiraenhancer_tosem_acm.pdf).
 
-Clean the LaTeX intermediate files with:
-
-```bash
-make paper-clean
-```
-
-## Evidence access
-
-The public repository supplies code, tests, design figures, synthetic fault schedules, de-identified evidence, aggregate human-review results, and scripts for those released inputs. Enterprise source text, reviewer-level records, credentials, and live runtime state remain in access-controlled storage.
-
-The four-mode audit builder accepts compatible review inputs. The B2/B3 diagnostic release provides aggregate results and a sanitized posterior trace; its enterprise packets and generated artifacts remain restricted. Each reproduction path above states the input and output that it verifies.
-
-## Build the reviewer release
-
-The release builder creates a fresh public tree from a reviewed file allowlist:
+The TeX command can also be run directly:
 
 ```bash
-python scripts/build_reviewer_release.py \
-  --destination ../JiraEnhancer-reviewer-release
+cd patent
+latexmk -pdf -interaction=nonstopmode -halt-on-error \
+  -outdir=out_tosem jiraenhancer_tosem_acm.tex
 ```
 
-Use an empty destination outside the private source tree. The builder writes `RELEASE_FILE_MANIFEST.json` with a SHA-256 digest for each copied file. Initialize and publish the public Git history from this clean destination, keeping credentials and restricted runtime material in the private development environment.
+Figure generation and manuscript compilation are separate commands, allowing the supplied figure assets to be used directly. `make paper-clean` removes LaTeX intermediate files.
+
+## File verification
+
+`RELEASE_FILE_MANIFEST.json` lists the SHA-256 digest of every distributed file. The field artifact and transaction experiment also provide data-specific checksum files. Together these identify the inputs used by each replication workflow.

@@ -445,12 +445,11 @@ def _write_report(
     lines.extend(
         [
             "",
-            "## Interpretation Boundary",
+            "## Reproduction",
             "",
-            "The result demonstrates the mechanism under declared, repeatable fault schedules and supports a technical-effect argument. "
-            "It does not establish a universal production effect or, by itself, a legal conclusion of non-obviousness. "
-            "The strongest next evidence would repeat these fault classes through an instrumented Jira staging connector and record "
-            "remote request identifiers, revisions, and mutation counts.",
+            "Run `make fault-injection` from the repository root to reproduce the nine seeded fault scenarios, "
+            "the four transaction arrangements, and the paired comparisons. The rates summarize the declared "
+            "scenario-balanced test schedule; the output metadata records the seed, implementation hashes, and observation counts.",
             "",
         ]
     )
